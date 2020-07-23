@@ -99,7 +99,7 @@ namespace Engine
 	void ImGuiLayer::OnWindowResize(WindowResizeEvent& e)
 	{
 		m_Io->DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
-		e.SetIsHandled(true);
+		e.SetIsHandled(true);//commit test
 	}
 
 	void ImGuiLayer::OnMouseMoved(MouseMovedEvent& e)
