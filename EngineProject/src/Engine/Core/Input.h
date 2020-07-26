@@ -1,7 +1,7 @@
 #pragma once
 #include <Engine\Core\KeyCodes.h>
 #include <Engine\Core\MouseCodes.h>
-#include "glm.hpp"
+#include "glm/glm.hpp"
 
 namespace Engine
 {
