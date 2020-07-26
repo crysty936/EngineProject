@@ -14,6 +14,7 @@ workspace "EngineProject"
 	IncludeDir["GLFW"]="EngineProject/vendor/GLFW/include"
 	IncludeDir["Glad"]="EngineProject/vendor/Glad/include"
 	IncludeDir["Imgui"]="EngineProject/vendor/imgui"
+	IncludeDir["glm"]="EngineProject/vendor/glm"
 
 	include "EngineProject/vendor/GLFW"
 	include "EngineProject/vendor/Glad"
@@ -43,7 +44,8 @@ workspace "EngineProject"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.Imgui}"
+		"%{IncludeDir.Imgui}",
+		"%{IncludeDir.glm}"
 		}
 
 		links
@@ -109,7 +111,8 @@ workspace "EngineProject"
 		includedirs
 		{
 		"EngineProject/vendor/spdlog/include;",
-		"EngineProject/src"
+		"EngineProject/src",
+		"%{IncludeDir.glm}"
 		}
 
 		links

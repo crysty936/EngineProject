@@ -19,13 +19,13 @@ namespace Engine
 		return state == GLFW_PRESS;
 	}
 
-	Vector2D Engine::Input::GetMousePosition()
+	glm::vec2 Engine::Input::GetMousePosition()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow());
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 
-		return Vector2D((float)xPos,(float)yPos);
+		return glm::vec2((float)xPos,(float)yPos);
 	}
 
 	float Engine::Input::GetMouseX()
