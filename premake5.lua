@@ -60,7 +60,7 @@ workspace "EngineProject"
 
 		filter "system:windows"
 			cppdialect "C++17"
-			staticruntime "Off"
+			staticruntime "On"
 			systemversion "latest"
 
 			defines
@@ -79,23 +79,23 @@ workspace "EngineProject"
 				defines "ENGINE_DEBUG"
 				defines "ENABLE_ASSERTS"
 				runtime "Debug"
-				symbols "On"
+				symbols "on"
 
 		filter "configurations:Release"
 				defines "ENGINE_RELEASE"
 				runtime "Release"
-				optimize "On"
+				optimize "on"
 
 		filter "configurations:Distributable"
 				defines "ENGINE_DIST"
 				runtime "Release"
-				optimize "On"
+				optimize "on"
 
 	project "SandboxTest"
 		location "SandboxTest"
 		kind "ConsoleApp"
 		language "C++"
-		staticruntime "Off"
+		staticruntime "On"
 
 
 		
@@ -113,7 +113,8 @@ workspace "EngineProject"
 		{
 		"EngineProject/vendor/spdlog/include;",
 		"EngineProject/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"EngineProject/vendor/"
 		}
 
 		links
@@ -136,14 +137,14 @@ workspace "EngineProject"
 		filter "configurations:Debug"
 				defines "ENGINE_DEBUG"
 				runtime "Debug"
-				symbols "On"
+				symbols "on"
 
 		filter "configurations:Release"
 				defines "ENGINE_RELEASE"
 				runtime "Release"
-				optimize "On"
+				optimize "on"
 
 		filter "configurations:Distributable"
 				defines "ENGINE_DIST"
 				runtime "Release"
-				optimize "On"
+				optimize "on"

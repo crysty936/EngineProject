@@ -21,26 +21,18 @@ namespace Engine {
 
 	void Application::Init()
 	{
-		//m_Window->SetEventCallback(BIND_EVENT_SIMPLE(Application::OnEvent));
-		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
-		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_EVENT_FN(Application::OnKeyPressed));
-		EventManager::GetInstance().AddListener<KeyReleasedEvent>(BIND_EVENT_FN(Application::OnKeyReleased));
-		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_EVENT_FN(Application::OnKeyRepeat));
-		EventManager::GetInstance().AddListener<MouseButtonPressedEvent>(BIND_EVENT_FN(Application::OnMouseButtonPressed));
-		EventManager::GetInstance().AddListener<MouseButtonReleasedEvent>(BIND_EVENT_FN(Application::OnMouseButtonReleased));
-		EventManager::GetInstance().AddListener<MouseScrollEvent>(BIND_EVENT_FN(Application::OnMouseScrolled));
-		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_EVENT_FN(Application::OnMouseMoved));
-		EventManager::GetInstance().AddListener<KeyTypedEvent>(BIND_EVENT_FN(Application::OnKeyTyped));
+		Log::Init();
+		EventManager::Init();
+		m_Window->Init();
+		InitListeners();
+
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	void Application::Run()
 	{
-		Log::Init();
-		EventManager::Init();
-		m_Window->Init();
-		this->Init();
-
+		Init();
 
 		while (m_Running)
 		{
@@ -48,9 +40,14 @@ namespace Engine {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
-			{
 				layer->OnUpdate();
-			}
+
+			m_ImGuiLayer->Begin();
+
+			for (Layer* layer : m_LayerStack)
+				layer->OnImGuiDraw();
+
+			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
 		}
@@ -66,8 +63,23 @@ namespace Engine {
 	//void Application::OnEvent(EventBase& evt)
 	//{
 	//	CORE_INFO("{0}", evt);
-
 	//}
+
+	void Application::InitListeners()
+	{
+		//m_Window->SetEventCallback(BIND_EVENT_SIMPLE(Application::OnEvent));
+		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
+		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_EVENT_FN(Application::OnKeyPressed));
+		EventManager::GetInstance().AddListener<KeyReleasedEvent>(BIND_EVENT_FN(Application::OnKeyReleased));
+		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_EVENT_FN(Application::OnKeyRepeat));
+		EventManager::GetInstance().AddListener<MouseButtonPressedEvent>(BIND_EVENT_FN(Application::OnMouseButtonPressed));
+		EventManager::GetInstance().AddListener<MouseButtonReleasedEvent>(BIND_EVENT_FN(Application::OnMouseButtonReleased));
+		EventManager::GetInstance().AddListener<MouseScrollEvent>(BIND_EVENT_FN(Application::OnMouseScrolled));
+		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_EVENT_FN(Application::OnMouseMoved));
+		EventManager::GetInstance().AddListener<KeyTypedEvent>(BIND_EVENT_FN(Application::OnKeyTyped));
+	}
+
 	void Application::OnWindowResize(WindowResizeEvent& e)
 	{
 		CORE_INFO("{0}", e);

@@ -83,7 +83,7 @@
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -108,7 +108,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -130,7 +130,7 @@
       <PreprocessorDefinitions>PLATFORM_WINDOWS;BUILD_DLL;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -160,7 +160,6 @@
     <ClInclude Include="src\Engine\EventsManager\Events\KeyEvents.h" />
     <ClInclude Include="src\Engine\EventsManager\Events\MouseEvents.h" />
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Engine\OpenGL\ImGuiRenderer.h" />
     <ClInclude Include="src\Engine\Window\Window.h" />
     <ClInclude Include="src\Engine\Window\WindowsWindow.h" />
     <ClInclude Include="src\pch.h" />
@@ -447,7 +446,6 @@
     <ClCompile Include="src\Engine\EventsManager\Events\EventManager.cpp" />
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Engine\OpenGL\ImGuiRenderer.cpp" />
     <ClCompile Include="src\Engine\Window\WindowsWindow.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

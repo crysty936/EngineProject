@@ -5,6 +5,7 @@
 #include "Engine\EventsManager\Events\KeyEvents.h"
 #include "Engine\EventsManager\Events\MouseEvents.h"
 #include "Engine\Core\LayerStack.h"
+#include "Engine\Layers\ImGui\ImGuiLayer.h"
 
 namespace Engine {
 
@@ -23,6 +24,8 @@ namespace Engine {
 		inline static Application& GetInstance() { return *s_Instance; }
 
 	private:
+		void InitListeners();
+
 		void OnWindowResize(WindowResizeEvent& e);
 		void OnWindowClose(WindowCloseEvent& e);
 		void OnKeyPressed(KeyPressedEvent& e);
@@ -49,6 +52,7 @@ namespace Engine {
 				instance.SendEvent(e, layer);
 			}
 		}
+		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 		LayerStack m_LayerStack;

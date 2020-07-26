@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "Engine/EventsManager/Events/EventManager.h"
-
+#include "imgui/imgui.h"
 
 class ExampleLayer :public Engine::Layer
 {
@@ -13,6 +13,17 @@ public:
 
 
 	}
+
+	void OnImGuiDraw() override
+	{
+
+		//ImGui::Begin("Test");
+		//ImGui::Text("Hellow World");
+		//ImGui::End();
+
+
+	}
+
 
 	void OnAttach() override
 	{
@@ -47,7 +58,6 @@ public:
 	{
 		Application::Init();
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Engine::ImGuiLayer());
 	}
 
 private:

@@ -19,8 +19,8 @@
     <Filter Include="src\Engine\Layers">
       <UniqueIdentifier>{910FCDBF-FD25-CB55-469D-5677B2F29BDD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Engine\OpenGL">
-      <UniqueIdentifier>{0622D1C7-7238-CF5D-BBAF-5A7F2705A0E5}</UniqueIdentifier>
+    <Filter Include="src\Engine\Layers\ImGui">
+      <UniqueIdentifier>{7B2DE15B-E764-29F3-F06E-8D165C2550EC}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Engine\Window">
       <UniqueIdentifier>{B98500DA-259C-FE6F-6E13-8A91DA68CFF7}</UniqueIdentifier>
@@ -96,8 +96,8 @@
     <ClInclude Include="src\Engine\EventsManager\Events\MouseEvents.h">
       <Filter>src\Engine\EventsManager\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\OpenGL\ImGuiRenderer.h">
-      <Filter>src\Engine\OpenGL</Filter>
+    <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
+      <Filter>src\Engine\Layers\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Window\Window.h">
       <Filter>src\Engine\Window</Filter>
@@ -924,9 +924,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
-      <Filter>src\Engine\Layers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -950,8 +947,11 @@
     <ClCompile Include="src\Engine\EventsManager\Events\EventManager.cpp">
       <Filter>src\Engine\EventsManager\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\OpenGL\ImGuiRenderer.cpp">
-      <Filter>src\Engine\OpenGL</Filter>
+    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp">
+      <Filter>src\Engine\Layers\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
+      <Filter>src\Engine\Layers\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Window\WindowsWindow.cpp">
       <Filter>src\Engine\Window</Filter>
@@ -959,9 +959,5 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
-      <Filter>src\Engine\Layers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp" />
   </ItemGroup>
 </Project>
