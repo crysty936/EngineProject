@@ -35,7 +35,8 @@ workspace "EngineProject"
 		files
 		{
 			"%{prj.name}/src/**.h",
-			"%{prj.name}/src/**.cpp"
+			"%{prj.name}/src/**.cpp",
+			"%{prj.name}/vendor/glm/**.hpp"
 		}
 
 		includedirs
