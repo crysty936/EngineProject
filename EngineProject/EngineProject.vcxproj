@@ -159,7 +159,7 @@
     <ClInclude Include="src\Engine\EventsManager\Events\EventManager.h" />
     <ClInclude Include="src\Engine\EventsManager\Events\KeyEvents.h" />
     <ClInclude Include="src\Engine\EventsManager\Events\MouseEvents.h" />
-    <ClInclude Include="src\Engine\Layers\ImGuiLayer.h" />
+    <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Engine\OpenGL\ImGuiRenderer.h" />
     <ClInclude Include="src\Engine\Window\Window.h" />
     <ClInclude Include="src\Engine\Window\WindowsWindow.h" />
@@ -445,7 +445,8 @@
     <ClCompile Include="src\Engine\EventsManager\EventDispatcher.cpp" />
     <ClCompile Include="src\Engine\EventsManager\Events\EventBase.cpp" />
     <ClCompile Include="src\Engine\EventsManager\Events\EventManager.cpp" />
-    <ClCompile Include="src\Engine\Layers\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp" />
+    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Engine\OpenGL\ImGuiRenderer.cpp" />
     <ClCompile Include="src\Engine\Window\WindowsWindow.cpp" />
     <ClCompile Include="src\pch.cpp">

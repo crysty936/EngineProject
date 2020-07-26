@@ -96,9 +96,6 @@
     <ClInclude Include="src\Engine\EventsManager\Events\MouseEvents.h">
       <Filter>src\Engine\EventsManager\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Layers\ImGuiLayer.h">
-      <Filter>src\Engine\Layers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\OpenGL\ImGuiRenderer.h">
       <Filter>src\Engine\OpenGL</Filter>
     </ClInclude>
@@ -927,6 +924,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
+      <Filter>src\Engine\Layers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -950,9 +950,6 @@
     <ClCompile Include="src\Engine\EventsManager\Events\EventManager.cpp">
       <Filter>src\Engine\EventsManager\Events</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Layers\ImGuiLayer.cpp">
-      <Filter>src\Engine\Layers</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\OpenGL\ImGuiRenderer.cpp">
       <Filter>src\Engine\OpenGL</Filter>
     </ClCompile>
@@ -962,5 +959,9 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
+      <Filter>src\Engine\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp" />
   </ItemGroup>
 </Project>

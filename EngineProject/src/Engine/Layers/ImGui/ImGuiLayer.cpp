@@ -30,6 +30,7 @@ namespace Engine
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	}
 
 	void ImGuiLayer::OnAttach()
