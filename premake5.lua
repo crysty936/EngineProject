@@ -22,8 +22,10 @@ workspace "EngineProject"
 
 	project "EngineProject"
 		location "EngineProject"
-		kind "SharedLib"
+		kind "StaticLib"
 		language "C++"
+		cppdialect "C++17"
+		staticruntime "on"
 
 		targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 		objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -56,11 +58,13 @@ workspace "EngineProject"
 			"Imgui",
 			"opengl32.lib"
 		}
-
+		
+		defines
+		{
+			"_CRT_SECURE_NO_WARNINGS"
+		}
 
 		filter "system:windows"
-			cppdialect "C++17"
-			staticruntime "On"
 			systemversion "latest"
 
 			defines
@@ -95,6 +99,7 @@ workspace "EngineProject"
 		location "SandboxTest"
 		kind "ConsoleApp"
 		language "C++"
+		cppdialect "C++17"
 		staticruntime "On"
 
 
@@ -124,8 +129,6 @@ workspace "EngineProject"
 
 
 		filter "system:windows"
-			cppdialect "C++17"
-			staticruntime "On"
 			systemversion "latest"
 
 			defines

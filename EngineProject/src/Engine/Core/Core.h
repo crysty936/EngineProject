@@ -2,13 +2,17 @@
 
 
 #ifdef PLATFORM_WINDOWS
+#if DYNAMIC_LINK
 #ifdef BUILD_DLL
 #define ENGINE_API __declspec(dllexport)
 #else
 #define ENGINE_API __declspec(dllimport)
 #endif
 #else
-#error Hazel only supports Windows
+#define ENGINE_API
+#endif
+#else
+#error Enhine only supports Windows
 #endif
 
 
