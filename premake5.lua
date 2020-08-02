@@ -74,10 +74,10 @@ workspace "EngineProject"
 				"GLFW_INCLUDE_NONE"
 			}
 
-			postbuildcommands
-			{
-				{ "xcopy /y \"$(OutDir)EngineProject.dll\""  .. " \"$(SolutionDir)bin\\$(Configuration)\\SandboxTest\\\"" }
-			}
+			--postbuildcommands
+			--{
+				--{ "xcopy /y \"$(OutDir)EngineProject.dll\""  .. " \"$(SolutionDir)bin\\$(Configuration)\\SandboxTest\\\"" }
+			--}
 
 		filter "configurations:Debug"
 				defines "ENGINE_DEBUG"

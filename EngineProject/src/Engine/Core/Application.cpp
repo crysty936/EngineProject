@@ -68,16 +68,16 @@ namespace Engine {
 	void Application::InitListeners()
 	{
 		//m_Window->SetEventCallback(BIND_EVENT_SIMPLE(Application::OnEvent));
-		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
-		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_EVENT_FN(Application::OnKeyPressed));
-		EventManager::GetInstance().AddListener<KeyReleasedEvent>(BIND_EVENT_FN(Application::OnKeyReleased));
-		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_EVENT_FN(Application::OnKeyRepeat));
-		EventManager::GetInstance().AddListener<MouseButtonPressedEvent>(BIND_EVENT_FN(Application::OnMouseButtonPressed));
-		EventManager::GetInstance().AddListener<MouseButtonReleasedEvent>(BIND_EVENT_FN(Application::OnMouseButtonReleased));
-		EventManager::GetInstance().AddListener<MouseScrollEvent>(BIND_EVENT_FN(Application::OnMouseScrolled));
-		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_EVENT_FN(Application::OnMouseMoved));
-		EventManager::GetInstance().AddListener<KeyTypedEvent>(BIND_EVENT_FN(Application::OnKeyTyped));
+		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_FUNC_OBJ(Application::OnWindowResize));
+		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_FUNC_OBJ(Application::OnWindowClose));
+		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_FUNC_OBJ(Application::OnKeyPressed));
+		EventManager::GetInstance().AddListener<KeyReleasedEvent>(BIND_FUNC_OBJ(Application::OnKeyReleased));
+		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_OBJ(Application::OnKeyRepeat));
+		EventManager::GetInstance().AddListener<MouseButtonPressedEvent>(BIND_FUNC_OBJ(Application::OnMouseButtonPressed));
+		EventManager::GetInstance().AddListener<MouseButtonReleasedEvent>(BIND_FUNC_OBJ(Application::OnMouseButtonReleased));
+		EventManager::GetInstance().AddListener<MouseScrollEvent>(BIND_FUNC_OBJ(Application::OnMouseScrolled));
+		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_OBJ(Application::OnMouseMoved));
+		EventManager::GetInstance().AddListener<KeyTypedEvent>(BIND_FUNC_OBJ(Application::OnKeyTyped));
 	}
 
 	void Application::OnWindowResize(WindowResizeEvent& e)

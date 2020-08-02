@@ -32,7 +32,7 @@ namespace Engine
 		}
 		virtual int GetCategoryFlags() const override
 		{
-			return EventCategory::EventCategoryApplication;
+			return static_cast<int>(EventCategory::EventCategoryApplication);
 		}
 
 		//static EventType GetStaticType() { return EventType::WindowResize; }
@@ -59,7 +59,7 @@ namespace Engine
 		}
 		virtual int GetCategoryFlags() const override
 		{
-			return EventCategory::EventCategoryApplication;
+			return static_cast<int>(EventCategory::EventCategoryApplication);
 		}
 	};
 	class AppTickEvent : public EventBase
@@ -78,7 +78,7 @@ namespace Engine
 		}
 		virtual int GetCategoryFlags() const override
 		{
-			return EventCategory::EventCategoryApplication;
+			return static_cast<int>(EventCategory::EventCategoryApplication);
 		}
 	};
 	class AppUpdateEvent :public EventBase
@@ -95,7 +95,7 @@ namespace Engine
 		}
 		virtual int GetCategoryFlags() const override
 		{
-			return EventCategory::EventCategoryApplication;
+			return static_cast<int>(EventCategory::EventCategoryApplication);
 		}
 	};
 	class AppRenderEvent : public EventBase
@@ -112,7 +112,7 @@ namespace Engine
 		}
 		virtual int GetCategoryFlags() const override
 		{
-			return EventCategory::EventCategoryApplication;
+			return static_cast<int>(EventCategory::EventCategoryApplication);
 		}
 	};
 }

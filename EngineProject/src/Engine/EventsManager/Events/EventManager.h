@@ -7,8 +7,8 @@
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/EventDispatcher.h"
 
-#define BIND_EVENT_FN(fn) std::bind(&fn,this,std::placeholders::_1),this
-#define BIND_EVENT_SIMPLE(fn) std::bind(&fn,this,std::placeholders::_1)
+#define BIND_FUNC_OBJ(fn) std::bind(&fn,this,std::placeholders::_1),this
+#define BIND_FUNC_SIMPLE(fn) std::bind(&fn,this,std::placeholders::_1)
 
 
 namespace Engine

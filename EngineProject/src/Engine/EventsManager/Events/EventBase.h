@@ -15,7 +15,7 @@ namespace Engine
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
-	enum EventCategory
+	enum class EventCategory
 	{
 		None = 0,
 		EventCategoryApplication = 1 << 0,
@@ -25,6 +25,14 @@ namespace Engine
 		EventCategoryMouseButton = 1 << 4
 
 	};
+	inline bool operator&(const int& value, const EventCategory& category)
+	{
+		return static_cast<int>(static_cast<int>(category)& static_cast<int>(value));
+	}
+	inline int operator|(const EventCategory& ctg1, const EventCategory& ctg2)
+	{
+		return static_cast<int>(static_cast<int>(ctg1)|static_cast<int>(ctg2));
+	}
 
 #define STRINGIFY(eventType) #eventType
 

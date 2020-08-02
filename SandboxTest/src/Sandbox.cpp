@@ -2,7 +2,7 @@
 #include "Engine/EventsManager/Events/EventManager.h"
 #include "imgui/imgui.h"
 
-class ExampleLayer :public Engine::Layer
+class ExampleLayer : public Engine::Layer
 {
 public:
 	ExampleLayer()
@@ -17,24 +17,19 @@ public:
 	void OnImGuiDraw() override
 	{
 
-// 		ImGui::Begin("Test");
-// 		ImGui::Text("Hellow World");
-// 		ImGui::End();
-
 
 	}
-
 
 	void OnAttach() override
 	{
 		Engine::EventManager& instance = Engine::EventManager::GetInstance();
-		instance.AddListener<Engine::KeyPressedEvent>(BIND_EVENT_FN(ExampleLayer::OnKeyPressed), this);
+		instance.AddListener<Engine::KeyPressedEvent>(BIND_FUNC_OBJ(ExampleLayer::OnKeyPressed), this);
 	}
 
 	void OnDetach() override
 	{
 		Engine::EventManager& instance = Engine::EventManager::GetInstance();
-		instance.RemoveListener<Engine::KeyPressedEvent>(BIND_EVENT_FN(ExampleLayer::OnKeyPressed), this);
+		instance.RemoveListener<Engine::KeyPressedEvent>(BIND_FUNC_OBJ(ExampleLayer::OnKeyPressed), this);
 	}
 
 	void OnKeyPressed(Engine::KeyPressedEvent& e)
@@ -45,7 +40,7 @@ public:
 };
 
 
-class Sandbox :public Engine::Application
+class Sandbox : public Engine::Application
 {
 public:
 
