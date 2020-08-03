@@ -16,7 +16,7 @@ namespace Engine
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << GetStaticName() << "x: " << MouseX << ", y: " << MouseY;
+			ss << GetStaticName() << " x: " << MouseX << ", y: " << MouseY;
 			return ss.str();
 		}
 		virtual int GetCategoryFlags() const { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }

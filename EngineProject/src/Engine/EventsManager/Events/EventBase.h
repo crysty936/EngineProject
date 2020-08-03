@@ -7,14 +7,6 @@
 
 namespace Engine
 {
-	enum class EventType
-	{
-		None = 0,
-		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-		AppTick, AppUpdate, AppRender,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
-	};
-
 	enum class EventCategory
 	{
 		None = 0,
@@ -45,10 +37,8 @@ namespace Engine
 		const bool inline IsHandled() const { return m_Handled; }
 		void SetIsHandled(bool value) { m_Handled = value; }
 
-		//virtual const char* GetName() const = 0;
 		virtual std::string ToString() const = 0;
 
-		//virtual const EventType GetEventType() const = 0;
 		virtual int GetCategoryFlags() const = 0;
 
 		bool IsInCategory(EventCategory category)

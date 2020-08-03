@@ -4,7 +4,7 @@
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/Events/EventManager.h"
 #include <Engine/EventsManager/Events/MouseEvents.h>
-#include "glad\glad.h"
+#include "glad/glad.h"
 
 namespace Engine {
 
@@ -29,12 +29,19 @@ namespace Engine {
 	WindowsWindow::~WindowsWindow()
 	{
 		glfwDestroyWindow(m_Window);
+		glfwTerminate();
+	}
+
+	void WindowsWindow::Close()
+	{
+		glfwDestroyWindow(m_Window);
+		glfwTerminate();
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+		glfwPollEvents();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -59,14 +66,26 @@ namespace Engine {
 			int success = glfwInit();
 			ENGINE_CORE_ASSERT(success, "Could not initiaze GLFW");
 
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+
 			glfwSetErrorCallback(GLFWErrorCallback);
 
 			s_GLFWInitialized = true;
 		}
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		ENGINE_CORE_ASSERT(m_Window, "Could not create window");
+
+
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		ENGINE_CORE_ASSERT(status, "Failed to Initialize Glad");
+
+
+		glViewport(0, 0, m_Data.Width, m_Data.Height);
+
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -84,9 +103,15 @@ namespace Engine {
 
 				WindowResizeEvent e(width, height);
 				EventManager::GetInstance().SendEvent(e);
-				//data->Callback(evt);
-
 			});
+
+		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow * window, int width, int height)
+		{
+				glViewport(0, 0, width, height);
+
+				WindowBufferResizeEvent e(width, height);
+				EventManager::GetInstance().SendEvent(e);
+		});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 			{
@@ -94,6 +119,7 @@ namespace Engine {
 				e.window = window;
 				EventManager::GetInstance().SendEvent(e);
 			});
+
 		glfwSetKeyCallback(m_Window, [](GLFWwindow*, int keycode, int scandCode, int action, int mods)
 			{
 				EventManager& instance = EventManager::GetInstance();
@@ -156,22 +182,6 @@ namespace Engine {
 			{
 				KeyTypedEvent e = KeyTypedEvent(keycode);
 				EventManager::GetInstance().SendEvent(e);
-
 			});
-
-
-
-
-
-
-
-
-
 	}
-
-
-
-
-
-
 }

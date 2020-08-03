@@ -37,7 +37,7 @@ namespace Engine {
 		void OnMouseMoved(MouseMovedEvent& e);
 		void OnKeyTyped(KeyTypedEvent& e);
 
-
+		bool m_Running = true;
 
 		template<typename T>
 		void PropagateEvent(T& e)
@@ -54,7 +54,6 @@ namespace Engine {
 		}
 		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
-		bool m_Running = true;
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
 	};

@@ -27,13 +27,15 @@ namespace Engine {
 
 		virtual ~Window() = default;
 		
+		virtual void Close() = 0;
 		virtual void Init() = 0;
 
 		virtual void OnUpdate() = 0;
 
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
-
+		virtual bool IsRunning() const = 0;
+		virtual void SetRunning(bool value) = 0;
 
 		//virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;

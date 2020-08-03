@@ -13,13 +13,13 @@ namespace Engine {
 
 		virtual ~WindowsWindow();
 
+		void Close() override;
+
 		void OnUpdate() override;
 
 		virtual uint32_t GetWidth() const override { return m_Data.Width; }
 
 		virtual uint32_t GetHeight() const override { return m_Data.Height; }
-
-		//virtual void SetEventCallback(const EventCallbackFn& callback) override { m_Data.Callback = callback; }
 
 		virtual void SetVSync(bool enabled) override;
 
@@ -28,6 +28,9 @@ namespace Engine {
 		virtual void* GetNativeWindow() const override { return m_Window; }
 
 		virtual void Init() override;
+
+		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
+		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }
 	private:
 		void SetGlfwCallbacks();
 
@@ -39,8 +42,6 @@ namespace Engine {
 			std::string Title;
 			unsigned int Width, Height;
 			bool VSync = false;
-
-			//EventCallbackFn Callback;
 		};
 
 		WindowData m_Data;

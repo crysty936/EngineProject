@@ -43,6 +43,32 @@ namespace Engine
 // 		}
 	};
 
+	class WindowBufferResizeEvent : public EventBase
+	{
+	private:
+		unsigned int m_Width, m_Height;
+
+	public:
+		WindowBufferResizeEvent(unsigned int width, unsigned int height) :
+			m_Width(width), m_Height(height) {}
+		unsigned int GetWidth() { return m_Width; }
+		unsigned int GetHeight() { return m_Height; }
+		static std::string GetStaticName() { return "WindowBufferResizeEvent"; }
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << GetStaticName() << " " << m_Width << " " << m_Height;
+
+			return ss.str();
+		}
+
+		virtual int GetCategoryFlags() const override
+		{
+			return static_cast<int>(EventCategory::EventCategoryApplication);
+		}
+	};
+
+
 	class WindowCloseEvent : public EventBase
 	{
 	public:

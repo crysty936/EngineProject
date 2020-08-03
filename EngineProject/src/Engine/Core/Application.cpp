@@ -49,7 +49,11 @@ namespace Engine {
 
 			m_ImGuiLayer->End();
 
-			m_Window->OnUpdate();
+
+			if (m_Window->IsRunning())
+			{
+				m_Window->OnUpdate();    //render loop
+			}
 		}
 	}
 	void Application::PushLayer(Layer* layer)
@@ -60,14 +64,8 @@ namespace Engine {
 	{
 		m_LayerStack.PushOverlay(layer);
 	}
-	//void Application::OnEvent(EventBase& evt)
-	//{
-	//	CORE_INFO("{0}", evt);
-	//}
-
 	void Application::InitListeners()
 	{
-		//m_Window->SetEventCallback(BIND_EVENT_SIMPLE(Application::OnEvent));
 		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_FUNC_OBJ(Application::OnWindowResize));
 		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_FUNC_OBJ(Application::OnWindowClose));
 		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_FUNC_OBJ(Application::OnKeyPressed));
@@ -94,6 +92,11 @@ namespace Engine {
 	void Application::OnKeyPressed(KeyPressedEvent& e)
 	{
 		CORE_INFO("{0}", e);
+		if (e.GetKeyCode() == static_cast<int>(Engine::Key::Escape))
+		{
+			m_Running = false;
+		}
+
 		PropagateEvent(e);
 	}
 	void Application::OnKeyReleased(KeyReleasedEvent& e)
