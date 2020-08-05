@@ -29,18 +29,33 @@ namespace Engine {
 
 		virtual void Init() override;
 
+		void DoOpenGlStuff();
+
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
 		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }
 	private:
 		void SetGlfwCallbacks();
 
 	private:
+
+		unsigned int m_shaderProgram;
+		unsigned int m_vao;
+
+
+
+
+
+
+
+
+
 		GLFWwindow* m_Window;
 
 		struct WindowData
 		{
 			std::string Title;
-			unsigned int Width, Height;
+			unsigned int Width = 0;
+			unsigned int Height = 0;
 			bool VSync = false;
 		};
 

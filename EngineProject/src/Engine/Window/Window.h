@@ -23,8 +23,6 @@ namespace Engine {
 	class Window
 	{
 	public:
-		using EventCallbackFn = std::function<void(EventBase&)>;
-
 		virtual ~Window() = default;
 		
 		virtual void Close() = 0;
@@ -37,7 +35,6 @@ namespace Engine {
 		virtual bool IsRunning() const = 0;
 		virtual void SetRunning(bool value) = 0;
 
-		//virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
 

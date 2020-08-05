@@ -36,8 +36,8 @@ namespace Engine {
 
 		while (m_Running)
 		{
-			glClearColor(1, 0, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+// 			glClearColor(1, 0, 1, 1);
+// 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
@@ -52,7 +52,7 @@ namespace Engine {
 
 			if (m_Window->IsRunning())
 			{
-				m_Window->OnUpdate();    //render loop
+				m_Window->OnUpdate(); 
 			}
 		}
 	}
@@ -66,16 +66,16 @@ namespace Engine {
 	}
 	void Application::InitListeners()
 	{
-		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_FUNC_OBJ(Application::OnWindowResize));
-		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_FUNC_OBJ(Application::OnWindowClose));
-		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_FUNC_OBJ(Application::OnKeyPressed));
-		EventManager::GetInstance().AddListener<KeyReleasedEvent>(BIND_FUNC_OBJ(Application::OnKeyReleased));
-		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_OBJ(Application::OnKeyRepeat));
-		EventManager::GetInstance().AddListener<MouseButtonPressedEvent>(BIND_FUNC_OBJ(Application::OnMouseButtonPressed));
-		EventManager::GetInstance().AddListener<MouseButtonReleasedEvent>(BIND_FUNC_OBJ(Application::OnMouseButtonReleased));
-		EventManager::GetInstance().AddListener<MouseScrollEvent>(BIND_FUNC_OBJ(Application::OnMouseScrolled));
-		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_OBJ(Application::OnMouseMoved));
-		EventManager::GetInstance().AddListener<KeyTypedEvent>(BIND_FUNC_OBJ(Application::OnKeyTyped));
+		EventManager::GetInstance().AddListener<WindowResizeEvent>(BIND_FUNC_EVT(Application::OnWindowResize));
+		EventManager::GetInstance().AddListener<WindowCloseEvent>(BIND_FUNC_EVT(Application::OnWindowClose));
+		EventManager::GetInstance().AddListener<KeyPressedEvent>(BIND_FUNC_EVT(Application::OnKeyPressed));
+		EventManager::GetInstance().AddListener<KeyReleasedEvent>(BIND_FUNC_EVT(Application::OnKeyReleased));
+		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_EVT(Application::OnKeyRepeat));
+		EventManager::GetInstance().AddListener<MouseButtonPressedEvent>(BIND_FUNC_EVT(Application::OnMouseButtonPressed));
+		EventManager::GetInstance().AddListener<MouseButtonReleasedEvent>(BIND_FUNC_EVT(Application::OnMouseButtonReleased));
+		EventManager::GetInstance().AddListener<MouseScrollEvent>(BIND_FUNC_EVT(Application::OnMouseScrolled));
+		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(Application::OnMouseMoved));
+		EventManager::GetInstance().AddListener<KeyTypedEvent>(BIND_FUNC_EVT(Application::OnKeyTyped));
 	}
 
 	void Application::OnWindowResize(WindowResizeEvent& e)

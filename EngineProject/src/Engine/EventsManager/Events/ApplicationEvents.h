@@ -5,7 +5,6 @@
 #include "../../../../vendor/GLFW/include/GLFW/glfw3.h"
 //#include "GLFW/glfw3.h"
 
-
 namespace Engine
 {
 	class WindowResizeEvent : public EventBase
@@ -72,8 +71,11 @@ namespace Engine
 	class WindowCloseEvent : public EventBase
 	{
 	public:
-		WindowCloseEvent() = default;
-		GLFWwindow* window = 0;
+		WindowCloseEvent(GLFWwindow* _window)
+		{
+			m_Window = _window;
+		}
+		GLFWwindow* m_Window = 0;
 
 		std::string ToString() const override
 		{
@@ -87,6 +89,7 @@ namespace Engine
 		{
 			return static_cast<int>(EventCategory::EventCategoryApplication);
 		}
+		GLFWwindow* GetWindow() { return m_Window; }
 	};
 	class AppTickEvent : public EventBase
 	{

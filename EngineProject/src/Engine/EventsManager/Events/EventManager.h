@@ -7,7 +7,7 @@
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/EventDispatcher.h"
 
-#define BIND_FUNC_OBJ(fn) std::bind(&fn,this,std::placeholders::_1),this
+#define BIND_FUNC_EVT(fn) std::bind(&fn,this,std::placeholders::_1),this
 #define BIND_FUNC_SIMPLE(fn) std::bind(&fn,this,std::placeholders::_1)
 
 
@@ -15,7 +15,7 @@ namespace Engine
 {
 	using callbackContainer = std::pair<void*, std::any>;
 
-	class ENGINE_API EventManager
+	class EventManager
 	{
 	private:
 		static EventManager* s_Instance;

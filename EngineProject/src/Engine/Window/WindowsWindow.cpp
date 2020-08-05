@@ -42,6 +42,14 @@ namespace Engine {
 	{
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
+
+
+		glUseProgram(m_shaderProgram);
+
+		glBindVertexArray(m_vao);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -91,7 +99,119 @@ namespace Engine {
 		SetVSync(true);
 
 		SetGlfwCallbacks();
+
+		DoOpenGlStuff();
 	}
+
+
+	void WindowsWindow::DoOpenGlStuff()
+	{
+		float vertices[] = {
+			-0.5f,-0.5f,0.0f,
+			0.5f, -0.5f, 0.0f,
+			0.0f, 0.5f, 0.0f
+		};
+
+		unsigned int vbo;
+
+		glGenBuffers(1, &vbo);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		const char* vertexShaderSource = "#version 330 core\n"
+			"layout (location=0) in vec3 aPos;\n"
+			"void main()\n"
+			"{\n"
+			"	gl_Position=vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+			"}\0";
+
+		unsigned int vertexShader;
+		vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+		glCompileShader(vertexShader);
+
+		int success;
+
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
+		char infoLog[512];
+
+		if (!success)
+		{
+			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		}
+
+
+		const char* fragmentShaderSource = "#version 330 core\n"
+			"out vec4 FragColor;\n"
+			"void main()\n"
+			"{\n"
+			"FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
+			"}\0";
+
+		unsigned int fragmentShader;
+		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
+		if (!success)
+		{
+			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		}
+
+
+		unsigned int shaderProgram;
+		shaderProgram = glCreateProgram();
+
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
+		glLinkProgram(shaderProgram);
+
+
+		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+
+		if (!success)
+		{
+			glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		}
+
+		glUseProgram(shaderProgram);
+
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+
+		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+		//glEnableVertexAttribArray(0);
+
+		unsigned int vao;
+
+		glGenVertexArrays(1, &vao);
+
+		glBindVertexArray(vao);
+
+		m_vao = vao;
+
+		m_shaderProgram = shaderProgram;
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+		glEnableVertexAttribArray(0);
+
+
+
+
+	}
+
 
 	void WindowsWindow::SetGlfwCallbacks()
 	{
@@ -101,22 +221,21 @@ namespace Engine {
 				data->Width = width;
 				data->Height = height;
 
-				WindowResizeEvent e(width, height);
+				WindowResizeEvent e = WindowResizeEvent(width, height);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow * window, int width, int height)
-		{
+		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+			{
 				glViewport(0, 0, width, height);
 
-				WindowBufferResizeEvent e(width, height);
+				WindowBufferResizeEvent e = WindowBufferResizeEvent(width, height);
 				EventManager::GetInstance().SendEvent(e);
-		});
+			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 			{
-				WindowCloseEvent e;
-				e.window = window;
+				WindowCloseEvent e = WindowCloseEvent(window);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
@@ -128,19 +247,19 @@ namespace Engine {
 				{
 				case GLFW_PRESS:
 				{
-					auto e = KeyPressedEvent(keycode);
+					KeyPressedEvent e = KeyPressedEvent(keycode);
 					instance.SendEvent(e);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					auto e = KeyReleasedEvent(keycode);
+					KeyReleasedEvent e = KeyReleasedEvent(keycode);
 					instance.SendEvent(e);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					auto e = KeyRepeatEvent(keycode, 1);
+					KeyRepeatEvent e = KeyRepeatEvent(keycode, 1);
 					instance.SendEvent(e);
 					break;
 				}
