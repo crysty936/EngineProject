@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Application.h"
-#include "GLFW/glfw3.h"
 #include <Engine\EventsManager\Events\EventManager.h>
-#include "glad\glad.h"
+#include <GLFW/glfw3.h>
+#include <glad\glad.h>
 
 namespace Engine {
 
@@ -10,7 +10,7 @@ namespace Engine {
 
 	Application::Application()
 	{
-		ENGINE_ASSERT(!s_Instance, "Creating a second application!");
+		ENGINE_CORE_ASSERT(!s_Instance, "Creating a second application!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 	}

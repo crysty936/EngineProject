@@ -3,8 +3,8 @@
 #include "Engine/EventsManager/Events/ApplicationEvents.h"
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/Events/EventManager.h"
-#include <Engine/EventsManager/Events/MouseEvents.h>
-#include "glad/glad.h"
+#include "Engine/EventsManager/Events/MouseEvents.h"
+#include <glad/glad.h>
 
 namespace Engine {
 
@@ -40,15 +40,13 @@ namespace Engine {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwSwapBuffers(m_Window);
+		m_RenderingContext->SwapBuffers();
 		glfwPollEvents();
 
 
-		glUseProgram(m_shaderProgram);
-
-		glBindVertexArray(m_vao);
-
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+ 		glUseProgram(m_shaderProgram);
+ 		glBindVertexArray(m_vao);
+ 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	}
 
@@ -86,11 +84,9 @@ namespace Engine {
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		ENGINE_CORE_ASSERT(m_Window, "Could not create window");
 
+		m_RenderingContext = new OpenGLContext(m_Window);
 
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		ENGINE_CORE_ASSERT(status, "Failed to Initialize Glad");
-
+		m_RenderingContext->Init();
 
 		glViewport(0, 0, m_Data.Width, m_Data.Height);
 
@@ -106,7 +102,7 @@ namespace Engine {
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-		float vertices[] = {
+		constexpr float vertices[] = {
 			-0.5f,-0.5f,0.0f,
 			0.5f, -0.5f, 0.0f,
 			0.0f, 0.5f, 0.0f
@@ -115,10 +111,6 @@ namespace Engine {
 		unsigned int vbo;
 
 		glGenBuffers(1, &vbo);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		const char* vertexShaderSource = "#version 330 core\n"
 			"layout (location=0) in vec3 aPos;\n"
@@ -183,10 +175,6 @@ namespace Engine {
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
-
-		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-		//glEnableVertexAttribArray(0);
 
 		unsigned int vao;
 

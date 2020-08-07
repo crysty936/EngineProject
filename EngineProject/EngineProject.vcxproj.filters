@@ -99,12 +99,6 @@
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
       <Filter>src\Engine\Layers\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Window\Window.h">
-      <Filter>src\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Window\WindowsWindow.h">
-      <Filter>src\Engine\Window</Filter>
-    </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -924,6 +918,14 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Platform\Window\Window.h">
+      <Filter>src\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\Window\WindowsWindow.h">
+      <Filter>src\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\IRenderingContext.h" />
+    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -953,11 +955,12 @@
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
       <Filter>src\Engine\Layers\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Window\WindowsWindow.cpp">
-      <Filter>src\Engine\Window</Filter>
-    </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Platform\Window\WindowsWindow.cpp">
+      <Filter>src\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>

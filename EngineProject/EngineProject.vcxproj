@@ -134,6 +134,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Engine\Core\Application.h" />
     <ClInclude Include="src\Engine\Core\Core.h" />
@@ -151,8 +152,9 @@
     <ClInclude Include="src\Engine\EventsManager\Events\KeyEvents.h" />
     <ClInclude Include="src\Engine\EventsManager\Events\MouseEvents.h" />
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Engine\Window\Window.h" />
-    <ClInclude Include="src\Engine\Window\WindowsWindow.h" />
+    <ClInclude Include="src\Engine\Platform\Window\Window.h" />
+    <ClInclude Include="src\Engine\Platform\Window\WindowsWindow.h" />
+    <ClInclude Include="src\Engine\Renderer\IRenderingContext.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -428,6 +430,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Core\Application.cpp" />
     <ClCompile Include="src\Engine\Core\Input.cpp" />
     <ClCompile Include="src\Engine\Core\LayerStack.cpp" />
@@ -437,7 +440,7 @@
     <ClCompile Include="src\Engine\EventsManager\Events\EventManager.cpp" />
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Engine\Window\WindowsWindow.cpp" />
+    <ClCompile Include="src\Engine\Platform\Window\WindowsWindow.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

@@ -1,6 +1,6 @@
 #pragma once
 #include "Core.h"
-#include "Engine\Window\Window.h"
+#include "Engine\Platform\Window\Window.h"
 #include "Engine\EventsManager\Events\ApplicationEvents.h"
 #include "Engine\EventsManager\Events\KeyEvents.h"
 #include "Engine\EventsManager\Events\MouseEvents.h"
