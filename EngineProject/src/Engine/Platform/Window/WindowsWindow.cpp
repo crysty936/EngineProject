@@ -44,9 +44,10 @@ namespace Engine {
 		glfwPollEvents();
 
 
- 		glUseProgram(m_shaderProgram);
- 		glBindVertexArray(m_vao);
- 		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glUseProgram(m_shaderProgram);
+		glBindVertexArray(m_vertexArray);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	}
 
@@ -72,9 +73,9 @@ namespace Engine {
 			int success = glfwInit();
 			ENGINE_CORE_ASSERT(success, "Could not initiaze GLFW");
 
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			// 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			// 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			// 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
 			glfwSetErrorCallback(GLFWErrorCallback);
@@ -102,15 +103,8 @@ namespace Engine {
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-		constexpr float vertices[] = {
-			-0.5f,-0.5f,0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f
-		};
 
-		unsigned int vbo;
-
-		glGenBuffers(1, &vbo);
+		//shader stuff
 
 		const char* vertexShaderSource = "#version 330 core\n"
 			"layout (location=0) in vec3 aPos;\n"
@@ -176,25 +170,40 @@ namespace Engine {
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 
-		unsigned int vao;
 
-		glGenVertexArrays(1, &vao);
+		//vertex stuff
 
-		glBindVertexArray(vao);
+		constexpr float vertices[] = {
+		-0.5f,-0.5f,0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f
+		};
 
-		m_vao = vao;
+		unsigned int vertexArray;
+		glGenVertexArrays(1, &vertexArray);
+		glBindVertexArray(vertexArray);
+
+		unsigned int vertexBuffer;
+		glGenBuffers(1, &vertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);//set data to buffer
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);//tell openGl how the data is set
+		glEnableVertexAttribArray(0);//set starting position of data
+
+		unsigned int indexBuffer;
+		glGenBuffers(1, &indexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		unsigned int indices[3] = { 0, 1, 2 };
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+
+		m_vertexArray = vertexArray;
+		m_vertexBuffer = vertexBuffer;
+		m_indexBuffer = indexBuffer;
 
 		m_shaderProgram = shaderProgram;
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-		glEnableVertexAttribArray(0);
-
 
 
 

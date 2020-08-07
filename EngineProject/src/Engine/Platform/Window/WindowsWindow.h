@@ -41,8 +41,9 @@ namespace Engine {
 	private:
 
 		unsigned int m_shaderProgram;
-		unsigned int m_vao;
-
+		unsigned int m_vertexArray;
+		unsigned int m_vertexBuffer;
+		unsigned int m_indexBuffer;
 
 
 
