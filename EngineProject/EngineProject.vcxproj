@@ -134,6 +134,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.h" />
     <ClInclude Include="src\Engine\Renderer\Shader.h" />
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Engine.h" />

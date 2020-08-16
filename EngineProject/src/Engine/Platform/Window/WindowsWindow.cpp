@@ -5,6 +5,7 @@
 #include "Engine/EventsManager/Events/EventManager.h"
 #include "Engine/EventsManager/Events/MouseEvents.h"
 #include <glad/glad.h>
+#include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
 
 namespace Engine {
 
@@ -114,14 +115,15 @@ namespace Engine {
 		glGenVertexArrays(1, &vertexArray);
 		glBindVertexArray(vertexArray);
 
+
 		unsigned int vertexBuffer;
 		glGenBuffers(1, &vertexBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
+
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);//set data to buffer
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);//tell openGl how the data is set
 		glEnableVertexAttribArray(0);//set starting position of data
-
 
 
 		unsigned int indexBuffer;
@@ -134,6 +136,7 @@ namespace Engine {
 		};
 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 
 		m_vertexArray = vertexArray;
 		m_vertexBuffer = vertexBuffer;

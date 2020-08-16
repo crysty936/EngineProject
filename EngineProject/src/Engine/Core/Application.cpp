@@ -23,6 +23,7 @@ namespace Engine {
 	{
 		Log::Init();
 		EventManager::Init();
+		EventManager::GetInstance().SetTraceEnabled(false);
 		m_Window->Init();
 		InitListeners();
 

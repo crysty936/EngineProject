@@ -21,6 +21,7 @@ namespace Engine
 		static EventManager* s_Instance;
 		std::unordered_map<std::string, std::list<callbackContainer>*>* m_Map;
 		std::unordered_map<std::string, std::unordered_map<void*, std::list<callbackContainer>*>*>* m_TargetedMap;
+		bool m_TraceEnabled = true;
 
 		EventManager()
 		{
@@ -101,7 +102,7 @@ namespace Engine
 			}
 			else
 			{
-				CORE_TRACE("Could not find listener for {0} to remove", evtType);
+				Trace("Could not find listener for {0} to remove", evtType);
 			}
 		}
 
@@ -157,13 +158,13 @@ namespace Engine
 				}
 				else
 				{
-					CORE_TRACE("Could not find inside list for {0} event category to remove targeted event listener", evtType);
+					Trace("Could not find inside list for {0} event category to remove targeted event listener", evtType);
 				}
 
 			}
 			else
 			{
-				CORE_TRACE("Could not find inside map for {0} event category to remove targeted event listener", evtType);
+				Trace("Could not find inside map for {0} event category to remove targeted event listener", evtType);
 			}
 		}
 
@@ -174,7 +175,7 @@ namespace Engine
 			auto outValue = m_TargetedMap->find(evtType);
 			if (outValue == m_TargetedMap->end())
 			{
-				CORE_TRACE("No listener for targeted event {0} found", evtType);
+				Trace("No listener for targeted event {0} found", evtType);
 			}
 			else
 			{
@@ -191,7 +192,7 @@ namespace Engine
 				}
 				else
 				{
-					CORE_TRACE("No listener for targeted event {0} found", evtType);
+					Trace("No listener for targeted event {0} found", evtType);
 				}
 			}
 		}
@@ -212,10 +213,20 @@ namespace Engine
 			}
 			else
 			{
-				CORE_TRACE("Target for {0} not found", evtType);
+				Trace("Target for {0} not found", evtType);
 			}
 		}
-
+		template<typename FormatString, typename... Args>
+		void Trace(const FormatString& fmt, const Args &... args)
+		{
+			if (m_TraceEnabled)
+				CORE_TRACE(fmt, args...);
+		}
+		void inline SetTraceEnabled(bool value)
+		{
+			m_TraceEnabled = value;
+		}
 	};
+
 }
 
