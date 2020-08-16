@@ -926,6 +926,7 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\IRenderingContext.h" />
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Engine\Renderer\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -962,5 +963,6 @@
       <Filter>src\Engine\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
   </ItemGroup>
 </Project>
