@@ -3,6 +3,7 @@
 #include "Engine/Renderer/IRenderingContext.h"
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLContext.h"
 #include <GLFW/glfw3.h>
+#include "Engine/Renderer/Shader.h"
 
 namespace Engine {
 
@@ -40,12 +41,11 @@ namespace Engine {
 
 	private:
 
-		unsigned int m_shaderProgram;
 		unsigned int m_vertexArray;
 		unsigned int m_vertexBuffer;
 		unsigned int m_indexBuffer;
 
-
+		std::unique_ptr<Shader> m_Shader;
 
 		IRenderingContext* m_RenderingContext;
 		GLFWwindow* m_Window;

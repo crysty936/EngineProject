@@ -38,18 +38,6 @@ namespace Engine {
 		glfwTerminate();
 	}
 
-	void WindowsWindow::OnUpdate()
-	{
-		m_RenderingContext->SwapBuffers();
-		glfwPollEvents();
-
-
-		//glUseProgram(m_shaderProgram);
-		glBindVertexArray(m_vertexArray);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	}
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
@@ -73,10 +61,6 @@ namespace Engine {
 			int success = glfwInit();
 			ENGINE_CORE_ASSERT(success, "Could not initiaze GLFW");
 
-			// 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			// 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-			// 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 
@@ -99,84 +83,31 @@ namespace Engine {
 
 		DoOpenGlStuff();
 	}
+	void WindowsWindow::OnUpdate()
+	{
+		m_RenderingContext->SwapBuffers();
+		glfwPollEvents();
+
+
+
+
+		m_Shader->Bind();
+		glBindVertexArray(m_vertexArray);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		glBindVertexArray(0);
+	}
 
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
 
-		//shader stuff
-
-		const char* vertexShaderSource = "#version 330 core\n"
-			"layout (location=0) in vec3 aPos;\n"
-			"void main()\n"
-			"{\n"
-			"	gl_Position=vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-			"}\0";
-
-		unsigned int vertexShader;
-		vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-		glCompileShader(vertexShader);
-
-		int success;
-
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-		char infoLog[512];
-
-		if (!success)
-		{
-			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		}
-
-
-		const char* fragmentShaderSource = "#version 330 core\n"
-			"out vec4 FragColor;\n"
-			"void main()\n"
-			"{\n"
-			"FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
-			"}\0";
-
-		unsigned int fragmentShader;
-		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-		if (!success)
-		{
-			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		}
-
-
-		unsigned int shaderProgram;
-		shaderProgram = glCreateProgram();
-
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-
-
-		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-
-		if (!success)
-		{
-			glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		}
-
-		glUseProgram(shaderProgram);
-
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-
-
 		//vertex stuff
 
 		constexpr float vertices[] = {
-		-0.5f,-0.5f,0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		  0.5f, 0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		 -0.5f, 0.5f, 0.0f
 		};
 
 		unsigned int vertexArray;
@@ -191,22 +122,58 @@ namespace Engine {
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);//tell openGl how the data is set
 		glEnableVertexAttribArray(0);//set starting position of data
 
+
+
 		unsigned int indexBuffer;
 		glGenBuffers(1, &indexBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		unsigned int indices[3] = { 0, 1, 2 };
+
+		unsigned int indices[] = { 
+			0, 1, 3,
+			1, 2, 3
+		};
+
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-
 
 		m_vertexArray = vertexArray;
 		m_vertexBuffer = vertexBuffer;
 		m_indexBuffer = indexBuffer;
 
-		m_shaderProgram = shaderProgram;
+
+		//shader Stuff
+
+		std::string vertexShaderSrc = R"(
+			#version 330 core 
+
+			layout(location = 0) in vec3 a_Position;
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position=a_Position;
+
+				gl_Position= vec4(a_Position , 1.0);
+	
+			}
+		)";
 
 
+		std::string fragmentShaderSrc = R"(
+			#version 330 core 
 
+			layout(location = 0) out vec4 color;
+			
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(v_Position*0.5+0.5, 1.0);
+			}
+		)";
+
+		m_Shader = std::make_unique<Shader>(vertexShaderSrc, fragmentShaderSrc);
+
+		m_Shader->Bind();
 	}
 
 
