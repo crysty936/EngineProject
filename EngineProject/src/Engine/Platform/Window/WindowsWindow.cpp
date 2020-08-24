@@ -67,13 +67,17 @@ namespace Engine {
 
 			s_GLFWInitialized = true;
 		}
+
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+
+
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
 		ENGINE_CORE_ASSERT(m_Window, "Could not create window");
 
 		m_RenderingContext = new OpenGLContext(m_Window);
 
 		m_RenderingContext->Init();
-
 		glViewport(0, 0, m_Data.Width, m_Data.Height);
 
 
@@ -94,8 +98,9 @@ namespace Engine {
 
 		m_Shader->Bind();
 		glBindVertexArray(m_vertexArray);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-		glBindVertexArray(0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 
@@ -104,33 +109,78 @@ namespace Engine {
 
 		//vertex stuff
 
+		//constexpr float vertices[] = {
+		//  0.5f, 0.5f, 0.0f,					//rectangle
+		// 0.5f, -0.5f, 0.0f,
+		//-0.5f, -0.5f, 0.0f,
+		// -0.5f, 0.5f, 0.0f
+		//};
+
+// 		constexpr float vertices[] = {
+// 		 -0.5f, 0.5f, 0.0f,					//triangle
+// 		 0.0f, -0.5f, 0.0f,
+// 		-1.0f, -0.5f, 0.0f,
+// 		};
+
+// 		constexpr float vertices[] = {
+// 			0.5f,0.5f,0.0f,
+// 		   1.0f,-0.5f,0.0f,
+// 		 0.0f, -0.5f, 0.0f,
+// 
+// 		 0.0f, -0.5f, 0.0f,
+// 		-1.0f, -0.5f, 0.0f,
+// 		-0.5f, 0.5f, 0.0f,					// 2 triangles clockwise
+// 		};
+
 		constexpr float vertices[] = {
-		  0.5f, 0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		 -0.5f, 0.5f, 0.0f
+		 0.0f, -0.5f, 0.0f,
+		-1.0f, -0.5f, 0.0f,
+		 -0.5f, 0.5f, 0.0f,					// 2 triangles
+		   1.0f,-0.5f,0.0f,
+		 0.0f, -0.5f, 0.0f,
+			0.5f,0.5f,0.0f,
 		};
 
-		unsigned int vertexArray;
-		glGenVertexArrays(1, &vertexArray);
-		glBindVertexArray(vertexArray);
+		constexpr float colours[] = {
+		  1.0f, 0.0f, 0.0f,
+		  0.0f, 1.0f, 0.0f,
+		  0.0f, 0.0f, 1.0f,
+		  1.0f, 0.0f, 0.0f,
+		  0.0f, 1.0f, 0.0f,
+		  0.0f, 0.0f, 1.0f,
+		};
+
 
 
 		unsigned int vertexBuffer;
 		glGenBuffers(1, &vertexBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-
-
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);//set data to buffer
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);//tell openGl how the data is set
-		glEnableVertexAttribArray(0);//set starting position of data
+
+
+		unsigned int colorsBuffer;
+		glGenBuffers(1, &colorsBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
+
+		unsigned int vertexArray;
+		glGenVertexArrays(1, &vertexArray);
+		glBindVertexArray(vertexArray);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 
 
 		unsigned int indexBuffer;
 		glGenBuffers(1, &indexBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-		unsigned int indices[] = { 
+		unsigned int indices[] = {
 			0, 1, 3,
 			1, 2, 3
 		};
@@ -149,12 +199,15 @@ namespace Engine {
 			#version 330 core 
 
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec3 a_Color;
+
 			out vec3 v_Position;
+			out vec3 v_Color;
 
 			void main()
 			{
 				v_Position=a_Position;
-
+				v_Color=a_Color;
 				gl_Position= vec4(a_Position , 1.0);
 	
 			}
@@ -167,10 +220,11 @@ namespace Engine {
 			layout(location = 0) out vec4 color;
 			
 			in vec3 v_Position;
+			in vec3 v_Color;
 
 			void main()
 			{
-				color = vec4(v_Position*0.5+0.5, 1.0);
+				color = vec4(v_Color,1.0);
 			}
 		)";
 
