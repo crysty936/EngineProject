@@ -41,8 +41,8 @@ namespace Engine {
 
 	private:
 
-		unsigned int m_vertexArray1;
-		unsigned int m_vertexArray2;
+		class VertexArray* m_vertexArray1;
+		class VertexArray* m_vertexArray2;
 		unsigned int m_indexBuffer;
 
 		std::unique_ptr<Shader> m_Shader;

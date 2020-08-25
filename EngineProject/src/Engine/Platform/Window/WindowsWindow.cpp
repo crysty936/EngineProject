@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
 #include "Engine/Renderer/VertexBuffer.h"
+#include "Engine/Renderer/VertexArray.h"
 
 namespace Engine {
 
@@ -98,11 +99,11 @@ namespace Engine {
 
 
 		m_Shader->Bind();
-		glBindVertexArray(m_vertexArray1);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+		m_vertexArray1->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(m_vertexArray2);
+		m_vertexArray2->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	}
@@ -178,29 +179,24 @@ namespace Engine {
 
 
 
-		unsigned int vertexArray1;
-		glGenVertexArrays(1, &vertexArray1);
-		glBindVertexArray(vertexArray1);
-
+		VertexArray* array1 = new VertexArray();
+		array1->Bind();
 		buffer1.Bind();
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		array1->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 		colorBuffer.Bind();
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		array1->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		array1->EnableAttribArray(0);
+		array1->EnableAttribArray(1);
 
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
 
-		unsigned int vertexArray2;
-		glGenVertexArrays(1, &vertexArray2);
-		glBindVertexArray(vertexArray2);
-
+		VertexArray* array2 = new VertexArray();
+		array2->Bind();
 		buffer2.Bind();
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		array2->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 		colorBuffer.Bind();
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-
+		array2->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		array2->EnableAttribArray(0);
+		array2->EnableAttribArray(1);
 
 
 		// 
@@ -221,8 +217,8 @@ namespace Engine {
 				//m_indexBuffer = indexBuffer;
 
 
-		m_vertexArray1 = vertexArray1;
-		m_vertexArray2 = vertexArray2;
+		m_vertexArray1 = array1;
+		m_vertexArray2 = array2;
 
 
 		//shader Stuff
