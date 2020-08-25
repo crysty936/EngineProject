@@ -6,6 +6,7 @@
 #include "Engine/EventsManager/Events/MouseEvents.h"
 #include <glad/glad.h>
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
+#include "Engine/Renderer/VertexBuffer.h"
 
 namespace Engine {
 
@@ -97,10 +98,13 @@ namespace Engine {
 
 
 		m_Shader->Bind();
-		glBindVertexArray(m_vertexArray);
+		glBindVertexArray(m_vertexArray1);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(m_vertexArray2);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 	}
 
 
@@ -132,65 +136,93 @@ namespace Engine {
 // 		-0.5f, 0.5f, 0.0f,					// 2 triangles clockwise
 // 		};
 
-		constexpr float vertices[] = {
-		 0.0f, -0.5f, 0.0f,
-		-1.0f, -0.5f, 0.0f,
-		 -0.5f, 0.5f, 0.0f,					// 2 triangles
-		   1.0f,-0.5f,0.0f,
-		 0.0f, -0.5f, 0.0f,
+// 		constexpr float vertices[] = {
+// 		 0.0f, -0.5f, 0.0f,
+// 		-1.0f, -0.5f, 0.0f,
+// 		 -0.5f, 0.5f, 0.0f,					// 2 triangles
+// 		   1.0f,-0.5f,0.0f,
+// 		 0.0f, -0.5f, 0.0f,
+// 			0.5f,0.5f,0.0f,
+// 		};
+
+
+		constexpr float triangle1Vertices[] =
+		{
+			 0.0f, -0.5f, 0.0f,
+			-1.0f, -0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f
+		};
+		constexpr float triangle2Vertices[] =
+		{
+			1.0f,-0.5f,0.0f,
+			0.0f, -0.5f, 0.0f,
 			0.5f,0.5f,0.0f,
 		};
-
 		constexpr float colours[] = {
-		  1.0f, 0.0f, 0.0f,
-		  0.0f, 1.0f, 0.0f,
-		  0.0f, 0.0f, 1.0f,
-		  1.0f, 0.0f, 0.0f,
-		  0.0f, 1.0f, 0.0f,
-		  0.0f, 0.0f, 1.0f,
+			1.0f, 0.0f,0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
 		};
 
+		VertexBuffer buffer1;
+		buffer1.Bind();
+		buffer1.SetData(triangle1Vertices, sizeof(triangle1Vertices), GL_STATIC_DRAW);
+
+		VertexBuffer buffer2;
+		buffer2.Bind();
+		buffer2.SetData(triangle2Vertices, sizeof(triangle2Vertices), GL_STATIC_DRAW);
+
+		VertexBuffer colorBuffer;
+		colorBuffer.Bind();
+		colorBuffer.SetData(colours, sizeof(colours), GL_STATIC_DRAW);
 
 
-		unsigned int vertexBuffer;
-		glGenBuffers(1, &vertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);//set data to buffer
 
+		unsigned int vertexArray1;
+		glGenVertexArrays(1, &vertexArray1);
+		glBindVertexArray(vertexArray1);
 
-		unsigned int colorsBuffer;
-		glGenBuffers(1, &colorsBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
-
-		unsigned int vertexArray;
-		glGenVertexArrays(1, &vertexArray);
-		glBindVertexArray(vertexArray);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		buffer1.Bind();
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
+		colorBuffer.Bind();
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 
+		unsigned int vertexArray2;
+		glGenVertexArrays(1, &vertexArray2);
+		glBindVertexArray(vertexArray2);
 
-		unsigned int indexBuffer;
-		glGenBuffers(1, &indexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-		unsigned int indices[] = {
-			0, 1, 3,
-			1, 2, 3
-		};
-
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		buffer2.Bind();
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		colorBuffer.Bind();
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 
 
-		m_vertexArray = vertexArray;
-		m_vertexBuffer = vertexBuffer;
-		m_indexBuffer = indexBuffer;
+
+		// 
+		// 
+		// 
+		// 
+		// 
+		// 		unsigned int indexBuffer;
+		// 		glGenBuffers(1, &indexBuffer);
+		// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		// 
+		// 		unsigned int indices[] = {
+		// 			0, 1, 3,
+		// 			1, 2, 3
+		// 		};
+
+				//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+				//m_indexBuffer = indexBuffer;
+
+
+		m_vertexArray1 = vertexArray1;
+		m_vertexArray2 = vertexArray2;
 
 
 		//shader Stuff

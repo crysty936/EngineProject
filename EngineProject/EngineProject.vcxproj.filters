@@ -928,6 +928,7 @@
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Engine\Renderer\Shader.h" />
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.h" />
+    <ClInclude Include="src\Engine\Renderer\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -965,5 +966,6 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Engine\Renderer\VertexBuffer.cpp" />
   </ItemGroup>
 </Project>
