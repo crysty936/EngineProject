@@ -1,15 +1,17 @@
 #pragma once
 
 #include <string>
-#include "glm/glm.hpp"
+#include <Glad/glad.h>
 
 namespace Engine
 {
+
 	class Shader
 	{
 	public:
 
 		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		Shader(const char* vertexSrc, const char* fragmentSrc);
 		~Shader();
 
 		void Bind();
@@ -18,6 +20,10 @@ namespace Engine
 		void SetUniformValue(char* const UniformName, float v1, float v2, float v3) const;
 
 		uint32_t inline GetHandle() const { return m_RendererID; }
+
+	private:
+
+		unsigned int CreateShader(const std::string& Source, GLenum ShaderType);
 
 
 	private:

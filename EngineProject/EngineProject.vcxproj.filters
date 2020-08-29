@@ -969,5 +969,6 @@
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer\VertexBuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.cpp" />
   </ItemGroup>
 </Project>

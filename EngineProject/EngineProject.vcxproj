@@ -434,6 +434,7 @@
     <ClInclude Include="src\Engine\Renderer\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.cpp" />
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Core\Application.cpp" />

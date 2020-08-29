@@ -97,17 +97,6 @@ namespace Engine {
 		m_vertexArray1->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		m_Shader2->Bind();
-
-		float timeValue = glfwGetTime();
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		m_Shader2->SetUniformValue("OurColor", 0.0f, greenValue, 0.0f, 1.0f);
-
-		m_vertexArray2->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-
-
 
 		m_RenderingContext->SwapBuffers();
 		glfwPollEvents();
@@ -151,114 +140,30 @@ namespace Engine {
 // 			0.5f,0.5f,0.0f,
 // 		};
 
-
-		constexpr float triangle1Vertices[] =
-		{
-			 0.0f, -0.5f, 0.0f,
-			-1.0f, -0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f
-		};
-		constexpr float triangle2Vertices[] =
-		{
-			1.0f,-0.5f,0.0f,
-			0.0f, -0.5f, 0.0f,
-			0.5f,0.5f,0.0f,
-		};
-		constexpr float colours[] = {
-			1.0f, 0.0f,0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
+		constexpr float vertices[] = {
+		 -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,					//triangle and colors
+		 0.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		-1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		VertexBuffer buffer1(GL_ARRAY_BUFFER);
-		buffer1.Bind();
-		buffer1.SetData(triangle1Vertices, sizeof(triangle1Vertices), GL_STATIC_DRAW);
-
-		VertexBuffer buffer2(GL_ARRAY_BUFFER);
-		buffer2.Bind();
-		buffer2.SetData(triangle2Vertices, sizeof(triangle2Vertices), GL_STATIC_DRAW);
-
-		VertexBuffer colorBuffer(GL_ARRAY_BUFFER);
-		colorBuffer.Bind();
-		colorBuffer.SetData(colours, sizeof(colours), GL_STATIC_DRAW);
+		VertexBuffer buffer(GL_ARRAY_BUFFER);
+		buffer.Bind();
+		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 
-		VertexArray* array1 = new VertexArray();
-		array1->Bind();
-		buffer1.Bind();
-		array1->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		colorBuffer.Bind();
-		array1->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		array1->EnableAttribArray(0);
-		array1->EnableAttribArray(1);
+		VertexArray* VAO = new VertexArray();
+		VAO->Bind();
+		buffer.Bind();
+		VAO->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+		VAO->EnableAttribArray(0);
+		VAO->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+		VAO->EnableAttribArray(1);
+
+		m_vertexArray1 = VAO;
 
 
-		VertexArray* array2 = new VertexArray();
-		array2->Bind();
-		buffer2.Bind();
-		array2->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		colorBuffer.Bind();
-		array2->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		array2->EnableAttribArray(0);
-		array2->EnableAttribArray(1);
+		m_Shader = std::make_unique<Shader>("D:/C++/EngineProject/SandboxTest/Assets/Shaders/vertexShader.glsl", "D:/C++/EngineProject/SandboxTest/Assets/Shaders/fragmentShader.glsl");
 
-
-		m_vertexArray1 = array1;
-		m_vertexArray2 = array2;
-
-
-		//shader Stuff
-
-		std::string vertexShaderSrc = R"(
-			#version 330 core 
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec3 a_Color;
-
-			out vec3 v_Position;
-			out vec3 v_Color;
-
-			void main()
-			{
-				v_Position=a_Position;
-				v_Color=a_Color;
-				gl_Position= vec4(a_Position , 1.0);
-	
-			}
-		)";
-
-
-		std::string fragmentShaderSrc = R"(
-			#version 330 core 
-
-			layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec3 v_Color;
-
-			void main()
-			{
-				color = vec4(v_Color,1.0);
-			}
-		)";
-		std::string fragmentShaderSrc2 = R"(
-			#version 330 core 
-
-			layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec3 v_Color;
-
-			uniform vec4 OurColor;
-
-			void main()
-			{
-				color = OurColor;
-			}
-		)";
-
-		m_Shader = std::make_unique<Shader>(vertexShaderSrc, fragmentShaderSrc);
-		m_Shader2 = std::make_unique<Shader>(vertexShaderSrc, fragmentShaderSrc2);
 	}
 
 
