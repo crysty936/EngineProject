@@ -4,19 +4,20 @@
 
 namespace Engine
 {
-	
-	VertexBuffer::VertexBuffer()
+
+	VertexBuffer::VertexBuffer(unsigned int _BufferType)
+		:Type(_BufferType)
 	{
 		glGenBuffers(1, &Handle);
 	}
-	
+
 	void VertexBuffer::Bind() const
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, Handle);
+		glBindBuffer(Type, Handle);
 	}
-	
+
 	void VertexBuffer::SetData(const float* Vertices, const int size, const unsigned int DrawType)
 	{
-		glBufferData(GL_ARRAY_BUFFER, size, Vertices, DrawType);
+		glBufferData(Type, size, Vertices, DrawType);
 	}
 }

@@ -92,20 +92,25 @@ namespace Engine {
 	}
 	void WindowsWindow::OnUpdate()
 	{
-		m_RenderingContext->SwapBuffers();
-		glfwPollEvents();
-
-
-
-
 		m_Shader->Bind();
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		m_vertexArray1->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		m_Shader2->Bind();
+
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		m_Shader2->SetUniformValue("OurColor", 0.0f, greenValue, 0.0f, 1.0f);
+
 		m_vertexArray2->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
+
+
+
+		m_RenderingContext->SwapBuffers();
+		glfwPollEvents();
 	}
 
 
@@ -165,18 +170,17 @@ namespace Engine {
 			0.0f, 0.0f, 1.0f,
 		};
 
-		VertexBuffer buffer1;
+		VertexBuffer buffer1(GL_ARRAY_BUFFER);
 		buffer1.Bind();
 		buffer1.SetData(triangle1Vertices, sizeof(triangle1Vertices), GL_STATIC_DRAW);
 
-		VertexBuffer buffer2;
+		VertexBuffer buffer2(GL_ARRAY_BUFFER);
 		buffer2.Bind();
 		buffer2.SetData(triangle2Vertices, sizeof(triangle2Vertices), GL_STATIC_DRAW);
 
-		VertexBuffer colorBuffer;
+		VertexBuffer colorBuffer(GL_ARRAY_BUFFER);
 		colorBuffer.Bind();
 		colorBuffer.SetData(colours, sizeof(colours), GL_STATIC_DRAW);
-
 
 
 		VertexArray* array1 = new VertexArray();
@@ -197,24 +201,6 @@ namespace Engine {
 		array2->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 		array2->EnableAttribArray(0);
 		array2->EnableAttribArray(1);
-
-
-		// 
-		// 
-		// 
-		// 
-		// 
-		// 		unsigned int indexBuffer;
-		// 		glGenBuffers(1, &indexBuffer);
-		// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		// 
-		// 		unsigned int indices[] = {
-		// 			0, 1, 3,
-		// 			1, 2, 3
-		// 		};
-
-				//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-				//m_indexBuffer = indexBuffer;
 
 
 		m_vertexArray1 = array1;
@@ -255,10 +241,24 @@ namespace Engine {
 				color = vec4(v_Color,1.0);
 			}
 		)";
+		std::string fragmentShaderSrc2 = R"(
+			#version 330 core 
+
+			layout(location = 0) out vec4 color;
+			
+			in vec3 v_Position;
+			in vec3 v_Color;
+
+			uniform vec4 OurColor;
+
+			void main()
+			{
+				color = OurColor;
+			}
+		)";
 
 		m_Shader = std::make_unique<Shader>(vertexShaderSrc, fragmentShaderSrc);
-
-		m_Shader->Bind();
+		m_Shader2 = std::make_unique<Shader>(vertexShaderSrc, fragmentShaderSrc2);
 	}
 
 

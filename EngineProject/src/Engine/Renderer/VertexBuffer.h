@@ -5,7 +5,7 @@ namespace Engine
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer();
+		VertexBuffer(unsigned int _BufferType);
 	
 	public:
 		void Bind() const;
@@ -20,6 +20,7 @@ namespace Engine
 	
 	private:
 		unsigned int Handle;
+		unsigned int Type;
 	};
 	
 }

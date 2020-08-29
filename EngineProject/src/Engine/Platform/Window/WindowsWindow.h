@@ -46,6 +46,7 @@ namespace Engine {
 		unsigned int m_indexBuffer;
 
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<Shader> m_Shader2;
 
 		IRenderingContext* m_RenderingContext;
 		GLFWwindow* m_Window;

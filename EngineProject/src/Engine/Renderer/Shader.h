@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "glm/glm.hpp"
 
 namespace Engine
 {
@@ -13,6 +14,11 @@ namespace Engine
 
 		void Bind();
 		void UnBind();
+		void SetUniformValue(char* const UniformName, float v1, float v2, float v3, float v4) const;
+		void SetUniformValue(char* const UniformName, float v1, float v2, float v3) const;
+
+		uint32_t inline GetHandle() const { return m_RendererID; }
+
 
 	private:
 
