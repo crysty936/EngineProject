@@ -10,6 +10,8 @@ void main()
 {
 	v_Position=a_Position;
 	v_Color=a_Color;
-	gl_Position= vec4(a_Position , 1.0);
+	vec3 newPosition=vec3(a_Position.x,a_Position.y,a_Position.z);
+
+	gl_Position= vec4(newPosition , 1.0);
 	
 }

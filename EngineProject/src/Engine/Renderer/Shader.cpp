@@ -201,5 +201,12 @@ namespace Engine {
 		glUniform3f(vertexOurColorLocation, v1, v2, v3);
 	}
 
+	void Shader::SetUniformValue(char* const UniformName, float v1) const
+	{
+		int vertexOurColorLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(vertexOurColorLocation != -1, "Uniform location could not be found!");
+		glUniform1f(vertexOurColorLocation, v1);
+	}
+
 }
 

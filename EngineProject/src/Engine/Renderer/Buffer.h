@@ -2,14 +2,16 @@
 
 namespace Engine
 {
-	class VertexBuffer
+	class Buffer
 	{
 	public:
-		VertexBuffer(unsigned int _BufferType);
+		Buffer(unsigned int _BufferType);
 	
 	public:
 		void Bind() const;
 		void SetData(const float* Vertices, const int size, const unsigned int DrawType);
+		void SetData(const unsigned int* Indices, const int size, const unsigned int DrawType);
+
 	
 	public:
 		inline int GetHandle() const { return Handle; }

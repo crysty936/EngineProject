@@ -6,8 +6,9 @@
 #include "Engine/EventsManager/Events/MouseEvents.h"
 #include <glad/glad.h>
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
-#include "Engine/Renderer/VertexBuffer.h"
+#include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/VertexArray.h"
+#include "stb_image.h"
 
 namespace Engine {
 
@@ -94,8 +95,10 @@ namespace Engine {
 	{
 		m_Shader->Bind();
 
+		//m_Shader->SetUniformValue("a_Offset", 0.5f);
+
 		m_vertexArray1->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
 		m_RenderingContext->SwapBuffers();
@@ -140,29 +143,67 @@ namespace Engine {
 // 			0.5f,0.5f,0.0f,
 // 		};
 
-		constexpr float vertices[] = {
-		 -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,					//triangle and colors
-		 0.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		-1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
-		};
+// 		constexpr float vertices[] = {
+// 		 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,					//triangle and colors
+// 		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+// 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+// 		};
 
-		VertexBuffer buffer(GL_ARRAY_BUFFER);
+
+
+
+		unsigned int texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load("Assets/Textures/WoodenTexture.jpg", &width, &height, &nrChannels, 0);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(data);
+
+
+		float vertices[] = {
+			// positions          // colors           // texture coords
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		};
+		Buffer buffer(GL_ARRAY_BUFFER);
 		buffer.Bind();
 		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-
 
 		VertexArray* VAO = new VertexArray();
 		VAO->Bind();
 		buffer.Bind();
-		VAO->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+		VAO->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		VAO->EnableAttribArray(0);
-		VAO->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+		VAO->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		VAO->EnableAttribArray(1);
-
+		VAO->SetAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		VAO->EnableAttribArray(2);
 		m_vertexArray1 = VAO;
 
 
-		m_Shader = std::make_unique<Shader>("D:/C++/EngineProject/SandboxTest/Assets/Shaders/vertexShader.glsl", "D:/C++/EngineProject/SandboxTest/Assets/Shaders/fragmentShader.glsl");
+		unsigned int indices[] = {  // note that we start from 0!
+			0, 1, 3,   // first triangle
+			1, 2, 3    // second triangle
+		};
+		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
+		ebo.Bind();
+		ebo.SetData(indices, sizeof(indices), GL_STATIC_DRAW);
+
+
+
+
+		m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 
 	}
 

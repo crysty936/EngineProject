@@ -22,8 +22,20 @@
     <Filter Include="src\Engine\Layers\ImGui">
       <UniqueIdentifier>{7B2DE15B-E764-29F3-F06E-8D165C2550EC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Engine\Window">
-      <UniqueIdentifier>{B98500DA-259C-FE6F-6E13-8A91DA68CFF7}</UniqueIdentifier>
+    <Filter Include="src\Engine\Platform">
+      <UniqueIdentifier>{A63124B0-1293-01BE-9B00-48700761387D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Platform\RenderingApi">
+      <UniqueIdentifier>{EDB4C716-D905-B358-026A-A11AEE1946C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Platform\RenderingApi\OpenGL">
+      <UniqueIdentifier>{81F1E3B5-ED80-A5A0-F67C-86B8628BE0AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Platform\Window">
+      <UniqueIdentifier>{CD279F60-B937-4B31-22F1-AF4F0E203ACA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\Renderer">
+      <UniqueIdentifier>{F838018B-649A-DE98-ED07-254B59681558}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -98,6 +110,30 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
       <Filter>src\Engine\Layers\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h">
+      <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.h">
+      <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\Window\Window.h">
+      <Filter>src\Engine\Platform\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Platform\Window\WindowsWindow.h">
+      <Filter>src\Engine\Platform\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\IRenderingContext.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Renderer.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Shader.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\VertexArray.h">
+      <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
@@ -918,18 +954,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Platform\Window\Window.h">
-      <Filter>src\Engine\Window</Filter>
+    <ClInclude Include="src\Engine\Renderer\Buffer.h">
+      <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Platform\Window\WindowsWindow.h">
-      <Filter>src\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\IRenderingContext.h" />
-    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Engine\Renderer\Shader.h" />
-    <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.h" />
-    <ClInclude Include="src\Engine\Renderer\VertexBuffer.h" />
-    <ClInclude Include="src\Engine\Renderer\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -959,16 +986,29 @@
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
       <Filter>src\Engine\Layers\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.cpp">
+      <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Platform\Window\WindowsWindow.cpp">
+      <Filter>src\Engine\Platform\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Renderer.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Shader.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\VertexArray.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Platform\Window\WindowsWindow.cpp">
-      <Filter>src\Engine\Window</Filter>
+    <ClCompile Include="src\Engine\Renderer\Buffer.cpp">
+      <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Engine\Renderer\VertexBuffer.cpp" />
-    <ClCompile Include="src\Engine\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.cpp" />
   </ItemGroup>
 </Project>
