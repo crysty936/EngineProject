@@ -162,7 +162,7 @@ namespace Engine {
 		};
 		Buffer buffer(GL_ARRAY_BUFFER);
 		buffer.Bind();
-		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+		buffer.SetData(vertices, 32, GL_STATIC_DRAW);
 
 		VertexArray* VAO = new VertexArray();
 		VAO->Bind();
@@ -182,7 +182,7 @@ namespace Engine {
 		};
 		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
 		ebo.Bind();
-		ebo.SetData(indices, sizeof(indices), GL_STATIC_DRAW);
+		ebo.SetData(indices, 6, GL_STATIC_DRAW);
 
 		Texture boxTexture("Assets/Textures/WoodenTexture.jpg",GL_RGB);
 

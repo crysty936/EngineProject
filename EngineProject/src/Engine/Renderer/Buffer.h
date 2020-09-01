@@ -9,8 +9,8 @@ namespace Engine
 	
 	public:
 		void Bind() const;
-		void SetData(const float* Vertices, const int size, const unsigned int DrawType);
-		void SetData(const unsigned int* Indices, const int size, const unsigned int DrawType);
+		void SetData(const float* Vertices, const int count, const uint32_t DrawType);
+		void SetData(const uint32_t* Indices, const int count, const uint32_t DrawType);
 
 	
 	public:
