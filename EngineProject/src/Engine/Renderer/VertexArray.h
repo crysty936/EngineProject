@@ -1,7 +1,8 @@
 #pragma once
 #include "glad/glad.h"
 
-namespace Engine {
+namespace Engine 
+{
 
 	class VertexArray
 	{

@@ -44,9 +44,14 @@ namespace Engine {
 		class VertexArray* m_vertexArray1;
 		class VertexArray* m_vertexArray2;
 		unsigned int m_indexBuffer;
+		unsigned int m_Texture;
+		unsigned int m_Texture2;
+
 
 		std::unique_ptr<Shader> m_Shader;
 		std::unique_ptr<Shader> m_Shader2;
+
+
 
 		IRenderingContext* m_RenderingContext;
 		GLFWwindow* m_Window;

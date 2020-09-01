@@ -21,8 +21,9 @@ namespace Engine
 	
 	
 	private:
-		unsigned int Handle;
-		unsigned int Type;
+		uint32_t Handle;
+		uint32_t Type;
+		uint32_t Count;
 	};
 	
 }

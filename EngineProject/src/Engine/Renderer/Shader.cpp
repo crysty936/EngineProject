@@ -4,7 +4,8 @@
 #include <sstream>
 #include <iostream>
 
-namespace Engine {
+namespace Engine
+{
 
 	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
@@ -190,22 +191,29 @@ namespace Engine {
 
 	void Shader::SetUniformValue(char* const UniformName, float v1, float v2, float v3, float v4) const
 	{
-		int vertexOurColorLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(vertexOurColorLocation != -1, "Uniform location could not be found!");
-		glUniform4f(vertexOurColorLocation, v1, v2, v3, v4);
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+		glUniform4f(uniformLocation, v1, v2, v3, v4);
 	}
 	void Shader::SetUniformValue(char* const UniformName, float v1, float v2, float v3) const
 	{
-		int vertexOurColorLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(vertexOurColorLocation != -1, "Uniform location could not be found!");
-		glUniform3f(vertexOurColorLocation, v1, v2, v3);
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+		glUniform3f(uniformLocation, v1, v2, v3);
 	}
 
 	void Shader::SetUniformValue(char* const UniformName, float v1) const
 	{
-		int vertexOurColorLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(vertexOurColorLocation != -1, "Uniform location could not be found!");
-		glUniform1f(vertexOurColorLocation, v1);
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+		glUniform1f(uniformLocation, v1);
+	}
+
+	void Shader::SetUniformValue(char* const UniformName, int v1) const
+	{
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+		glUniform1i(uniformLocation, v1);
 	}
 
 }

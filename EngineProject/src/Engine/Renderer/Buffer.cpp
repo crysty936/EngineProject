@@ -5,7 +5,7 @@
 namespace Engine
 {
 
-	Buffer::Buffer(unsigned int _BufferType)
+	Buffer::Buffer(uint32_t _BufferType)
 		:Type(_BufferType)
 	{
 		glGenBuffers(1, &Handle);
@@ -16,12 +16,14 @@ namespace Engine
 		glBindBuffer(Type, Handle);
 	}
 
-	void Buffer::SetData(const float* Vertices, const int size, const unsigned int DrawType)
+	void Buffer::SetData(const float* Vertices, const int count, const uint32_t DrawType)
 	{
-		glBufferData(Type, size, Vertices, DrawType);
+		glBufferData(Type, sizeof(float) * count, Vertices, DrawType);
+		Count = count;
 	}
-	void Buffer::SetData(const unsigned int* Indices, const int size, const unsigned int DrawType)
+	void Buffer::SetData(const uint32_t* Indices, const int count, const uint32_t DrawType)
 	{
-		glBufferData(Type, size, Indices, DrawType);
+		glBufferData(Type, sizeof(uint32_t) * count, Indices, DrawType);
+		Count = count;
 	}
 }
