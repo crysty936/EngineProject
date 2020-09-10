@@ -38,7 +38,6 @@ namespace Engine {
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
 		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }
 	private:
-		void OnKeyPressed(KeyRepeatEvent e);
 		void SetGlfwCallbacks();
 
 	private:

@@ -47,7 +47,7 @@ namespace Engine
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 
-			CORE_ERROR("{0}", infoLog);
+			LOG_CORE_ERROR("{0}", infoLog);
 			ENGINE_CORE_ASSERT(false, "Shader link failure!");
 
 			return;
@@ -85,7 +85,7 @@ namespace Engine
 			// We don't need the shader anymore.
 			glDeleteShader(shaderHandle);
 
-			CORE_ERROR("{0}", infoLog);
+			LOG_CORE_ERROR("{0}", infoLog);
 			ENGINE_CORE_ASSERT(false, "Vertex shader compilation failure!");
 			return -1;
 		}
@@ -121,7 +121,7 @@ namespace Engine
 		}
 		catch (const std::ifstream::failure	e)
 		{
-			CORE_ERROR("Shader file cannot be read.");
+			LOG_CORE_ERROR("Shader file cannot be read.");
 			ENGINE_CORE_ASSERT(false, "Shader read failure.");
 		}
 
@@ -163,7 +163,7 @@ namespace Engine
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 
-			CORE_ERROR("{0}", infoLog);
+			LOG_CORE_ERROR("{0}", infoLog);
 			ENGINE_CORE_ASSERT(false, "Shader link failure!");
 
 			return;

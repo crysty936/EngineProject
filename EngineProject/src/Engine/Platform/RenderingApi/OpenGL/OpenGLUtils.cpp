@@ -26,7 +26,7 @@ namespace Engine
 			case GL_OUT_OF_MEMORY:					error = "Quack, out of memory"; break;
 			case GL_INVALID_FRAMEBUFFER_OPERATION:	error = "Invalid Framebuffer Operation"; break;
 			}
-			CORE_ERROR("{0} | {1}  ( {2} ) ", error, file, line);
+			LOG_CORE_ERROR("{0} | {1}  ( {2} ) ", error, file, line);
 		}
 		return errorCode;
 	}

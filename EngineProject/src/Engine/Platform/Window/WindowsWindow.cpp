@@ -11,6 +11,8 @@
 #include "Engine/Renderer/Texture.h"
 #include "Engine/Core/KeyCodes.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Engine {
 
@@ -18,7 +20,7 @@ namespace Engine {
 
 	static void GLFWErrorCallback(int errorType, const char* errorDesc)
 	{
-		CORE_CRITICAL("GLFW Error Code: {0} , {1}", errorType, errorDesc);
+		LOG_CORE_CRITICAL("GLFW Error Code: {0} , {1}", errorType, errorDesc);
 	}
 
 	Window* Window::Create(const WindowProps& props /* = WindowProps() */)
@@ -60,7 +62,7 @@ namespace Engine {
 
 	void WindowsWindow::Init()
 	{
-		CORE_INFO("Creating window {0} ({1},{2})", m_Data.Title, m_Data.Width, m_Data.Height);
+		LOG_CORE_INFO("Creating window {0} ({1},{2})", m_Data.Title, m_Data.Width, m_Data.Height);
 
 		if (!s_GLFWInitialized)
 		{
@@ -212,25 +214,24 @@ namespace Engine {
 
 
 
-		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_EVT(WindowsWindow::OnKeyPressed));
-	}
+		glm::mat4 trans = glm::mat4(1.0f);
 
-	void WindowsWindow::OnKeyPressed(KeyRepeatEvent e)
-	{
-		//CORE_INFO("{0}", e);
-		if (e.GetKeyCode() == (int)KeyCode::Up)
-		{
-			v_TheAlpha += 0.1f;
-			v_TheAlpha = glm::clamp(v_TheAlpha, 0.f, 1.f);
-			m_Shader->SetUniformValue("v_TheAlpha", v_TheAlpha);
-		}
-		else if (e.GetKeyCode() == (int)KeyCode::Down)
-		{
-			v_TheAlpha -= 0.1f;
-			//CORE_INFO("{0} is the value of v_TheAlpha", v_TheAlpha);
-			v_TheAlpha = glm::clamp(v_TheAlpha, 0.f, 1.f);
-			m_Shader->SetUniformValue("v_TheAlpha", v_TheAlpha);
-		}
+		trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+
+		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	}

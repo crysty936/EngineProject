@@ -220,7 +220,7 @@ namespace Engine
 		void Trace(const FormatString& fmt, const Args &... args)
 		{
 			if (m_TraceEnabled)
-				CORE_TRACE(fmt, args...);
+				LOG_CORE_TRACE(fmt, args...);
 		}
 		void inline SetTraceEnabled(bool value)
 		{
