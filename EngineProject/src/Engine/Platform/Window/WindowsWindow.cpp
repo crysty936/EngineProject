@@ -11,7 +11,6 @@
 #include "Engine/Renderer/Texture.h"
 #include "Engine/Core/KeyCodes.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Engine {
@@ -103,6 +102,7 @@ namespace Engine {
 		glBindTexture(GL_TEXTURE_2D, m_Texture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, m_Texture2);
+		m_Shader->SetUniformValue("transform", TheMatrixxx);
 
 		m_vertexArray1->Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -220,7 +220,7 @@ namespace Engine {
 
 		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
-
+		TheMatrixxx = trans;
 
 
 

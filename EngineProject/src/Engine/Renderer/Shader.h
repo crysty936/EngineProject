@@ -2,6 +2,8 @@
 
 #include <string>
 #include <Glad/glad.h>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 namespace Engine
 {
@@ -20,6 +22,7 @@ namespace Engine
 		void SetUniformValue(char* const UniformName, float v1, float v2, float v3) const;
 		void SetUniformValue(char* const UniformName, float v1) const;
 		void SetUniformValue(char* const UniformName, int v1) const;
+		void SetUniformValue(char* const UniformName, glm::mat4 matrix);
 
 		uint32_t inline GetHandle() const { return m_RendererID; }
 

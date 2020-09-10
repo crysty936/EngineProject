@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Engine
 {
@@ -214,6 +215,13 @@ namespace Engine
 		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
 		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
 		glUniform1i(uniformLocation, v1);
+	}
+
+	void Shader::SetUniformValue(char* const UniformName, glm::mat4 matrix)
+	{
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 }
