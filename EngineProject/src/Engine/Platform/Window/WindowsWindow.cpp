@@ -9,6 +9,8 @@
 #include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/VertexArray.h"
 #include "Engine/Renderer/Texture.h"
+#include "Engine/Core/KeyCodes.h"
+#include <glm/glm.hpp>
 
 namespace Engine {
 
@@ -96,7 +98,7 @@ namespace Engine {
 		m_Shader->Bind();
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,m_Texture);
+		glBindTexture(GL_TEXTURE_2D, m_Texture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, m_Texture2);
 
@@ -155,10 +157,10 @@ namespace Engine {
 
 		float vertices[] = {
 			// positions          // colors           // texture coords
-			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
-			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
 			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left 
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 		};
 		Buffer buffer(GL_ARRAY_BUFFER);
 		buffer.Bind();
@@ -184,14 +186,14 @@ namespace Engine {
 		ebo.Bind();
 		ebo.SetData(indices, 6, GL_STATIC_DRAW);
 
-		Texture boxTexture("Assets/Textures/WoodenTexture.jpg",GL_RGB);
+		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		Texture smileyTexture("Assets/Textures/AwesomefaceTexture.png",GL_RGBA);
+		Texture smileyTexture("Assets/Textures/AwesomefaceTexture.png", GL_RGBA);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -207,9 +209,31 @@ namespace Engine {
 
 		m_Shader->SetUniformValue("v_Texture1", 0);
 		m_Shader->SetUniformValue("v_Texture2", 1);
+
+
+
+		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_EVT(WindowsWindow::OnKeyPressed));
 	}
 
+	void WindowsWindow::OnKeyPressed(KeyRepeatEvent e)
+	{
+		//CORE_INFO("{0}", e);
+		if (e.GetKeyCode() == (int)KeyCode::Up)
+		{
+			v_TheAlpha += 0.1f;
+			v_TheAlpha = glm::clamp(v_TheAlpha, 0.f, 1.f);
+			m_Shader->SetUniformValue("v_TheAlpha", v_TheAlpha);
+		}
+		else if (e.GetKeyCode() == (int)KeyCode::Down)
+		{
+			v_TheAlpha -= 0.1f;
+			//CORE_INFO("{0} is the value of v_TheAlpha", v_TheAlpha);
+			v_TheAlpha = glm::clamp(v_TheAlpha, 0.f, 1.f);
+			m_Shader->SetUniformValue("v_TheAlpha", v_TheAlpha);
+		}
 
+
+	}
 	void WindowsWindow::SetGlfwCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)

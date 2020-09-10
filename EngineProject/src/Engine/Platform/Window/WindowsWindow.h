@@ -4,6 +4,7 @@
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLContext.h"
 #include <GLFW/glfw3.h>
 #include "Engine/Renderer/Shader.h"
+#include "Engine/EventsManager/Events/KeyEvents.h"
 
 namespace Engine {
 
@@ -37,6 +38,7 @@ namespace Engine {
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
 		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }
 	private:
+		void OnKeyPressed(KeyRepeatEvent e);
 		void SetGlfwCallbacks();
 
 	private:
@@ -46,6 +48,7 @@ namespace Engine {
 		unsigned int m_indexBuffer;
 		unsigned int m_Texture;
 		unsigned int m_Texture2;
+		float v_TheAlpha = 0.f;
 
 
 		std::unique_ptr<Shader> m_Shader;
