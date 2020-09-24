@@ -45,7 +45,7 @@ namespace Engine {
 
 		void DoOpenGlStuff();
 
-		void ThatSerpinskiRecursiveFunction(Point a, Point b, Point c, int depth);
+		void Draw();
 
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
 		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }

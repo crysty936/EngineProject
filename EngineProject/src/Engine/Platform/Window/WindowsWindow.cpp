@@ -112,12 +112,8 @@ namespace Engine {
 
 
 
-		Point A(0.0f, 1.0f, 0.0f);
-		Point B(-0.5f, -1.0f, 0.0f);
-		Point C(0.5f, -1.0f, 0.0f);
 
-
-		ThatSerpinskiRecursiveFunction(A, B, C, 5);
+		Draw();
 
 
 
@@ -127,59 +123,60 @@ namespace Engine {
 		m_RenderingContext->SwapBuffers();
 		glfwPollEvents();
 	}
-	void WindowsWindow::ThatSerpinskiRecursiveFunction(Point A, Point B, Point C, int depth)
+	void WindowsWindow::Draw()
 	{
-		if (depth < 0)
-			return;
-		depth--;
 
-  		float timeValue = glfwGetTime();
-  		m_Shader->SetUniformValue("time", timeValue * depth);
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-		float xx = (A.x + B.x) / 2;
-		float xy = (A.y + B.y) / 2;
-		Point X(xx, xy, 0.f);
-		float yx = (A.x + C.x) / 2;
-		float yy = (A.y + C.y) / 2;
-		Point Y(yx, yy, 0.f);
-		float zx = (B.x + C.x) / 2;
-		float zy = (B.y + C.y) / 2;
-		Point Z(zx, zy, 0.f);
+		m_Shader->SetUniformValue("model", model);
 
-		float vertices[16] = {
-			X.x,X.y,X.z, 
-			Y.x,Y.y,Y.z, 
-			Z.x,Z.y,Z.z,
+		glm::mat4 view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+		m_Shader->SetUniformValue("view", view);
+
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+		m_Shader->SetUniformValue("projection", projection);
+
+
+		Point A(-0.5f, -0.5f, 0.0f);
+		Point B(-0.5f, 0.5f, 0.0f);
+		Point C(0.5f, 0.5f, 0.0f);
+		Point D(0.5f, -0.5f, 0.0f);
+
+		float vertices[] = {
+			A.x,A.y,A.z,
+			B.x,B.y,B.z,
+			C.x,C.y,C.z,
+			D.x,D.y,D.z,
 			1.0f,1.0f,
 			1.0f,0.0f,
 			0.0f,0.0f,
+			0.0f,1.0f
 		};
 
 		Buffer buffer(GL_ARRAY_BUFFER);
 		buffer.Bind();
-		buffer.SetData(vertices, 16, GL_STATIC_DRAW);
+		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 		VertexArray vao;
 		vao.Bind();
 		vao.SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		vao.EnableAttribArray(0);
-		vao.SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(9 * sizeof(float)));
+		vao.SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(12 * sizeof(float)));
 		vao.EnableAttribArray(1);
 
-// 		unsigned int indices[] = {
-// 			0, 1, 2
-// 		};
-// 		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
-// 		ebo.Bind();
-// 		ebo.SetData(indices, 3, GL_STATIC_DRAW);
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-
-		ThatSerpinskiRecursiveFunction(X, B, Z, depth);
-		ThatSerpinskiRecursiveFunction(A, X, Y, depth);
-		ThatSerpinskiRecursiveFunction(Y, Z, C, depth);
+		unsigned int indices[] = {
+			1, 3, 0,
+			1 ,2 ,3
+		};
+		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
+		ebo.Bind();
+		ebo.SetData(indices, 6, GL_STATIC_DRAW);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
 
 
