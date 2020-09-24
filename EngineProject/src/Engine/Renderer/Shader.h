@@ -24,6 +24,8 @@ namespace Engine
 		void SetUniformValue(char* const UniformName, int v1) const;
 		void SetUniformValue(char* const UniformName, glm::mat4 matrix);
 
+		void SetUniformValue(char* const UniformName, glm::vec3 vec);
+
 		uint32_t inline GetHandle() const { return m_RendererID; }
 
 	private:

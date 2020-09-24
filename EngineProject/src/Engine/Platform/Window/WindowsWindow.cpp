@@ -15,6 +15,9 @@
 
 namespace Engine {
 
+
+
+
 	static bool s_GLFWInitialized = false;
 
 	static void GLFWErrorCallback(int errorType, const char* errorDesc)
@@ -96,145 +99,131 @@ namespace Engine {
 	}
 	void WindowsWindow::OnUpdate()
 	{
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		m_Shader->Bind();
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_Texture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, m_Texture2);
-		m_Shader->SetUniformValue("transform", TheMatrixxx);
+		//m_vertexArray1->Bind();
 
-		m_vertexArray1->Bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+// 		glActiveTexture(GL_TEXTURE0);
+// 		glBindTexture(GL_TEXTURE_2D, m_Texture);
+
+
+
+
+
+
+		Point A(0.0f, 1.0f, 0.0f);
+		Point B(-0.5f, -1.0f, 0.0f);
+		Point C(0.5f, -1.0f, 0.0f);
+
+
+		ThatSerpinskiRecursiveFunction(A, B, C, 5);
+
+
+
+
 
 
 		m_RenderingContext->SwapBuffers();
 		glfwPollEvents();
 	}
+	void WindowsWindow::ThatSerpinskiRecursiveFunction(Point A, Point B, Point C, int depth)
+	{
+		if (depth < 0)
+			return;
+		depth--;
+
+		float timeValue = glfwGetTime();
+		m_Shader->SetUniformValue("time", timeValue*depth);
+
+		float xx = (A.x + B.x) / 2;
+		float xy = (A.y + B.y) / 2;
+		Point X(xx, xy, 0.f); 
+		float yx = (A.x + C.x) / 2;
+		float yy = (A.y + C.y) / 2;
+		Point Y(yx, yy, 0.f); 
+		float zx = (B.x + C.x) / 2;
+		float zy = (B.y + C.y) / 2;
+		Point Z(zx, zy, 0.f);
+
+		float vertices[9] = {
+			X.x,X.y,X.z,
+			Y.x,Y.y,Y.z,
+			Z.x,Z.y,Z.z
+		};
+
+		Buffer buffer(GL_ARRAY_BUFFER);
+		buffer.Bind();
+		buffer.SetData(vertices, 9, GL_STATIC_DRAW);
+
+		VertexArray vao;
+		vao.Bind();
+		vao.SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		vao.EnableAttribArray(0);
+
+
+		unsigned int indices[] = {
+			0, 1, 2
+		};
+		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
+		ebo.Bind();
+		ebo.SetData(indices, 3, GL_STATIC_DRAW);
+
+
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+ 
+ 		ThatSerpinskiRecursiveFunction(X, B, Z, depth);
+ 		ThatSerpinskiRecursiveFunction(A, X, Y, depth);
+ 		ThatSerpinskiRecursiveFunction(Y, Z, C, depth);
+	}
 
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-
-		//vertex stuff
-
-		//constexpr float vertices[] = {
-		//  0.5f, 0.5f, 0.0f,					//rectangle
-		// 0.5f, -0.5f, 0.0f,
-		//-0.5f, -0.5f, 0.0f,
-		// -0.5f, 0.5f, 0.0f
-		//};
-
-// 		constexpr float vertices[] = {
-// 		 -0.5f, 0.5f, 0.0f,					//triangle
-// 		 0.0f, -0.5f, 0.0f,
-// 		-1.0f, -0.5f, 0.0f,
-// 		};
-
-// 		constexpr float vertices[] = {
-// 			0.5f,0.5f,0.0f,
-// 		   1.0f,-0.5f,0.0f,
-// 		 0.0f, -0.5f, 0.0f,
-// 
-// 		 0.0f, -0.5f, 0.0f,
-// 		-1.0f, -0.5f, 0.0f,
-// 		-0.5f, 0.5f, 0.0f,					// 2 triangles clockwise
-// 		};
-
-// 		constexpr float vertices[] = {
-// 		 0.0f, -0.5f, 0.0f,
-// 		-1.0f, -0.5f, 0.0f,
-// 		 -0.5f, 0.5f, 0.0f,					// 2 triangles
-// 		   1.0f,-0.5f,0.0f,
-// 		 0.0f, -0.5f, 0.0f,
-// 			0.5f,0.5f,0.0f,
-// 		};
-
-// 		constexpr float vertices[] = {
-// 		 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,					//triangle and colors
-// 		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-// 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
-// 		};
-
-
-		float vertices[] = {
-			// positions          // colors           // texture coords
-			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-		};
-		Buffer buffer(GL_ARRAY_BUFFER);
-		buffer.Bind();
-		buffer.SetData(vertices, 32, GL_STATIC_DRAW);
-
-		VertexArray* VAO = new VertexArray();
-		VAO->Bind();
-		buffer.Bind();
-		VAO->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		VAO->EnableAttribArray(0);
-		VAO->SetAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		VAO->EnableAttribArray(1);
-		VAO->SetAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-		VAO->EnableAttribArray(2);
-		m_vertexArray1 = VAO;
-
-
-		unsigned int indices[] = {  // note that we start from 0!
-			0, 1, 3,   // first triangle
-			1, 2, 3    // second triangle
-		};
-		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
-		ebo.Bind();
-		ebo.SetData(indices, 6, GL_STATIC_DRAW);
-
-		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		Texture smileyTexture("Assets/Textures/AwesomefaceTexture.png", GL_RGBA);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		m_Texture = boxTexture.GetHandle();
-		m_Texture2 = smileyTexture.GetHandle();
+		// 		float vertices[] = {
+		// 			// positions         
+		// 			 0.0f,  1.0f, 0.0f,
+		// 			 0.5f, -1.0f, 0.0f,
+		// 			-0.5f, -1.0f, 0.0f,
+		// 		};
+		// 		Buffer buffer(GL_ARRAY_BUFFER);
+		// 		buffer.Bind();
+		// 		buffer.SetData(vertices, 32, GL_STATIC_DRAW);
+		// 
+		// 		VertexArray* VAO = new VertexArray();
+		// 		VAO->Bind();
+		// 		buffer.Bind();
+		// 		VAO->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		// 		VAO->EnableAttribArray(0);
+		// 		m_vertexArray1 = VAO;
+		// 
+		// 
+		// 		unsigned int indices[] = {
+		// 			0, 1, 2
+		// 		};
+		// 		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
+		// 		ebo.Bind();
+		// 		ebo.SetData(indices, 3, GL_STATIC_DRAW);
+		// 
+		// 		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
+		// 
+		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// 
+		// 		m_Texture = boxTexture.GetHandle();
 
 		m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 
 		m_Shader->Bind();
-
-		m_Shader->SetUniformValue("v_Texture1", 0);
-		m_Shader->SetUniformValue("v_Texture2", 1);
-
-
-
-		glm::mat4 trans = glm::mat4(1.0f);
-
-		trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-
-		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-		TheMatrixxx = trans;
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
+
+
+
+
 	void WindowsWindow::SetGlfwCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)

@@ -12,6 +12,15 @@ namespace Engine {
 
 	class WindowsWindow : public Engine::Window
 	{
+		struct Point
+		{
+			Point(float _x, float _y, float _z):
+				x(_x),y(_y),z(_z){}
+
+			float x = 0.f;
+			float y = 0.f;
+			float z = 0.f;
+		};
 
 	public:
 		WindowsWindow(const WindowProps& props);
@@ -36,6 +45,8 @@ namespace Engine {
 
 		void DoOpenGlStuff();
 
+		void ThatSerpinskiRecursiveFunction(Point a, Point b, Point c, int depth);
+
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
 		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }
 	private:
@@ -49,7 +60,6 @@ namespace Engine {
 		unsigned int m_Texture;
 		unsigned int m_Texture2;
 		float v_TheAlpha = 0.f;
-		glm::mat4 TheMatrixxx;
 
 
 

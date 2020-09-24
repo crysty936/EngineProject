@@ -224,5 +224,12 @@ namespace Engine
 		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
+	void Shader::SetUniformValue(char* const UniformName, glm::vec3 vec)
+	{
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+		glUniform3fv(uniformLocation, 1, glm::value_ptr(vec));
+	}
+
 }
 
