@@ -104,10 +104,8 @@ namespace Engine {
 
 		m_Shader->Bind();
 
-		//m_vertexArray1->Bind();
-
-// 		glActiveTexture(GL_TEXTURE0);
-// 		glBindTexture(GL_TEXTURE_2D, m_Texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_Texture);
 
 
 
@@ -135,94 +133,74 @@ namespace Engine {
 			return;
 		depth--;
 
-		float timeValue = glfwGetTime();
-		m_Shader->SetUniformValue("time", timeValue*depth);
+  		float timeValue = glfwGetTime();
+  		m_Shader->SetUniformValue("time", timeValue * depth);
 
 		float xx = (A.x + B.x) / 2;
 		float xy = (A.y + B.y) / 2;
-		Point X(xx, xy, 0.f); 
+		Point X(xx, xy, 0.f);
 		float yx = (A.x + C.x) / 2;
 		float yy = (A.y + C.y) / 2;
-		Point Y(yx, yy, 0.f); 
+		Point Y(yx, yy, 0.f);
 		float zx = (B.x + C.x) / 2;
 		float zy = (B.y + C.y) / 2;
 		Point Z(zx, zy, 0.f);
 
-		float vertices[9] = {
-			X.x,X.y,X.z,
-			Y.x,Y.y,Y.z,
-			Z.x,Z.y,Z.z
+		float vertices[16] = {
+			X.x,X.y,X.z, 
+			Y.x,Y.y,Y.z, 
+			Z.x,Z.y,Z.z,
+			1.0f,1.0f,
+			1.0f,0.0f,
+			0.0f,0.0f,
 		};
 
 		Buffer buffer(GL_ARRAY_BUFFER);
 		buffer.Bind();
-		buffer.SetData(vertices, 9, GL_STATIC_DRAW);
+		buffer.SetData(vertices, 16, GL_STATIC_DRAW);
 
 		VertexArray vao;
 		vao.Bind();
 		vao.SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		vao.EnableAttribArray(0);
+		vao.SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(9 * sizeof(float)));
+		vao.EnableAttribArray(1);
+
+// 		unsigned int indices[] = {
+// 			0, 1, 2
+// 		};
+// 		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
+// 		ebo.Bind();
+// 		ebo.SetData(indices, 3, GL_STATIC_DRAW);
+		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 
-		unsigned int indices[] = {
-			0, 1, 2
-		};
-		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
-		ebo.Bind();
-		ebo.SetData(indices, 3, GL_STATIC_DRAW);
-
-
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
- 
- 		ThatSerpinskiRecursiveFunction(X, B, Z, depth);
- 		ThatSerpinskiRecursiveFunction(A, X, Y, depth);
- 		ThatSerpinskiRecursiveFunction(Y, Z, C, depth);
+		ThatSerpinskiRecursiveFunction(X, B, Z, depth);
+		ThatSerpinskiRecursiveFunction(A, X, Y, depth);
+		ThatSerpinskiRecursiveFunction(Y, Z, C, depth);
 	}
 
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-		// 		float vertices[] = {
-		// 			// positions         
-		// 			 0.0f,  1.0f, 0.0f,
-		// 			 0.5f, -1.0f, 0.0f,
-		// 			-0.5f, -1.0f, 0.0f,
-		// 		};
-		// 		Buffer buffer(GL_ARRAY_BUFFER);
-		// 		buffer.Bind();
-		// 		buffer.SetData(vertices, 32, GL_STATIC_DRAW);
-		// 
-		// 		VertexArray* VAO = new VertexArray();
-		// 		VAO->Bind();
-		// 		buffer.Bind();
-		// 		VAO->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		// 		VAO->EnableAttribArray(0);
-		// 		m_vertexArray1 = VAO;
-		// 
-		// 
-		// 		unsigned int indices[] = {
-		// 			0, 1, 2
-		// 		};
-		// 		Buffer ebo(GL_ELEMENT_ARRAY_BUFFER);
-		// 		ebo.Bind();
-		// 		ebo.SetData(indices, 3, GL_STATIC_DRAW);
-		// 
-		// 		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
-		// 
-		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// 
-		// 		m_Texture = boxTexture.GetHandle();
+
+		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		m_Texture = boxTexture.GetHandle();
 
 		m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 
+		m_Shader->SetUniformValue("v_Texture", 0);
+
 		m_Shader->Bind();
 	}
-
-
-
 
 	void WindowsWindow::SetGlfwCallbacks()
 	{

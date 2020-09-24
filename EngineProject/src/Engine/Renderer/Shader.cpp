@@ -87,7 +87,7 @@ namespace Engine
 			glDeleteShader(shaderHandle);
 
 			LOG_CORE_ERROR("{0}", infoLog);
-			ENGINE_CORE_ASSERT(false, "Vertex shader compilation failure!");
+			ENGINE_CORE_ASSERT(false, "Shader compilation failure!");
 			return -1;
 		}
 
