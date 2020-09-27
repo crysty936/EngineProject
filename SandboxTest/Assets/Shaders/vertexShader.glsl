@@ -15,6 +15,6 @@ void main()
 	v_Position=a_Position;
 	v_TexCoord=a_TexCoord;
 
-	gl_Position= projection * view * model * vec4(a_Position , 1.0);
+	gl_Position=projection * view * model * vec4(a_Position , 1.0);
 	
 }

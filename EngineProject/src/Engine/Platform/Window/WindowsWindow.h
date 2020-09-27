@@ -45,6 +45,8 @@ namespace Engine {
 
 		void DoOpenGlStuff();
 
+		void OnKeyRepeat(KeyRepeatEvent e);
+
 		void Draw();
 
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
@@ -54,19 +56,17 @@ namespace Engine {
 
 	private:
 
+		float sides = 0.0f;
+		float forward = -3.0f;;
+		float height = 0.0f;;
+
+
 		class VertexArray* m_vertexArray1;
-		class VertexArray* m_vertexArray2;
 		unsigned int m_indexBuffer;
 		unsigned int m_Texture;
-		unsigned int m_Texture2;
 		float v_TheAlpha = 0.f;
 
-
-
 		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<Shader> m_Shader2;
-
-
 
 		IRenderingContext* m_RenderingContext;
 		GLFWwindow* m_Window;

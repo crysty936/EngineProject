@@ -81,18 +81,18 @@ namespace Engine {
 
 	void Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 
 	void Application::OnWindowClose(WindowCloseEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		m_Running = false;
 	}
 	void Application::OnKeyPressed(KeyPressedEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		if (e.GetKeyCode() == static_cast<int>(Engine::Key::Escape))
 		{
 			m_Running = false;
@@ -102,37 +102,37 @@ namespace Engine {
 	}
 	void Application::OnKeyReleased(KeyReleasedEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 	void Application::OnKeyRepeat(KeyRepeatEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 	void Application::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 	void Application::OnMouseButtonReleased(MouseButtonReleasedEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 	void Application::OnMouseScrolled(MouseScrollEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 	void Application::OnMouseMoved(MouseMovedEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 	void Application::OnKeyTyped(KeyTypedEvent& e)
 	{
-		LOG_CORE_INFO("{0}", e);
+		//LOG_CORE_INFO("{0}", e);
 		PropagateEvent(e);
 	}
 }
