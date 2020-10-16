@@ -1,5 +1,6 @@
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
 
 #ifdef PLATFORM_WINDOWS
 #if DYNAMIC_LINK
@@ -12,7 +13,7 @@
 #define ENGINE_API
 #endif
 #else
-#error Enhine only supports Windows
+#error Engine only supports Windows
 #endif
 
 
