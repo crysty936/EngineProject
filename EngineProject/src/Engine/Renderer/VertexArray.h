@@ -1,5 +1,7 @@
 #pragma once
 #include "glad/glad.h"
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 namespace Engine 
 {
@@ -8,10 +10,10 @@ namespace Engine
 	{
 	public:
 		VertexArray();
+		~VertexArray();
 
 		void Bind()const;
-		void SetAttribPointer(GLuint Index, GLint Size, GLenum Type, GLboolean Normalized, GLsizei stride, const void* pointer) const;
-		void EnableAttribArray(int Index)const;
+		void AddBuffer(const VertexBuffer& VBuffer, const VertexBufferLayout& Layout);
 
 	public:
 		inline int GetHandle()const { return Handle; }

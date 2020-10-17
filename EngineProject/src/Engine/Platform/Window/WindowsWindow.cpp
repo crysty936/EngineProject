@@ -5,8 +5,9 @@
 #include "Engine/EventsManager/Events/EventManager.h"
 #include "Engine/EventsManager/Events/MouseEvents.h"
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
-#include "Engine/Renderer/Buffer.h"
 #include "Engine/Renderer/VertexArray.h"
+#include "Engine/Renderer/IndexBuffer.h"
+#include "Engine/Renderer/VertexBuffer.h"
 #include "Engine/Renderer/Texture.h"
 #include "Engine/Core/KeyCodes.h"
 #include "Engine/EventsManager/Events/KeyEvents.h"
@@ -33,6 +34,8 @@ namespace Engine {
 	{
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
+
+		delete m_vertexArray1;
 	}
 
 	void WindowsWindow::Close()
@@ -227,16 +230,22 @@ namespace Engine {
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 		};
 
-		Buffer buffer(GL_ARRAY_BUFFER);
+		VertexBuffer buffer;
 		buffer.Bind();
 		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
-		VertexArray vao;
-		vao.Bind();
-		vao.SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		vao.EnableAttribArray(0);
-		vao.SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		vao.EnableAttribArray(1);
+		m_vertexArray1 = new VertexArray();
+		VertexBufferLayout Layout;
+		Layout.Push<float>(3);
+		Layout.Push<float>(2);
+		m_vertexArray1->AddBuffer(buffer, Layout);
+
+
+// 
+// 		m_vertexArray1->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+// 		m_vertexArray1->EnableAttribArray(0);
+// 		m_vertexArray1->SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+// 		m_vertexArray1->EnableAttribArray(1);
 
 		// 		float vertices[] = {
 		// 			// positions          // texture coords
@@ -310,13 +319,6 @@ namespace Engine {
 		}
 		break;
 		}
-
-
-
-
-
-
-
 	}
 
 	void WindowsWindow::SetGlfwCallbacks()

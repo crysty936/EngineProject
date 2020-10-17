@@ -954,10 +954,13 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Buffer.h">
+    <ClInclude Include="src\Engine\Renderer\Texture.h" />
+    <ClInclude Include="src\Engine\Renderer\IndexBuffer.h" />
+    <ClInclude Include="src\Engine\Renderer\VertexBuffer.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Texture.h" />
+    <ClInclude Include="src\Engine\Renderer\BaseBuffer.h" />
+    <ClInclude Include="src\Engine\Renderer\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -1008,9 +1011,12 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\Buffer.cpp">
+    <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Engine\Renderer\IndexBuffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\VertexBuffer.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Engine\Renderer\BaseBuffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\VertexBufferLayout.cpp" />
   </ItemGroup>
 </Project>

@@ -155,11 +155,14 @@
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.h" />
     <ClInclude Include="src\Engine\Platform\Window\Window.h" />
     <ClInclude Include="src\Engine\Platform\Window\WindowsWindow.h" />
+    <ClInclude Include="src\Engine\Renderer\BaseBuffer.h" />
+    <ClInclude Include="src\Engine\Renderer\IndexBuffer.h" />
     <ClInclude Include="src\Engine\Renderer\IRenderingContext.h" />
     <ClInclude Include="src\Engine\Renderer\Renderer.h" />
     <ClInclude Include="src\Engine\Renderer\Shader.h" />
     <ClInclude Include="src\Engine\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Engine\Renderer\Buffer.h" />
+    <ClInclude Include="src\Engine\Renderer\VertexBuffer.h" />
+    <ClInclude Include="src\Engine\Renderer\VertexBufferLayout.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -448,10 +451,13 @@
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.cpp" />
     <ClCompile Include="src\Engine\Platform\Window\WindowsWindow.cpp" />
+    <ClCompile Include="src\Engine\Renderer\BaseBuffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\IndexBuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\VertexBuffer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\VertexBufferLayout.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
