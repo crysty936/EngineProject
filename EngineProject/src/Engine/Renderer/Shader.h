@@ -26,10 +26,12 @@ namespace Engine
 
 		void SetUniformValue(char* const UniformName, glm::vec3 vec);
 
+
 		uint32_t inline GetHandle() const { return m_RendererID; }
 
 	private:
 
+		int GetUniformLocation(char* const UniformName);
 		unsigned int CreateShader(const std::string& Source, GLenum ShaderType);
 
 

@@ -12,7 +12,7 @@ namespace Engine
 
 	VertexArray::~VertexArray()
 	{
-		//glDeleteVertexArrays(1, &Handle);
+		glDeleteVertexArrays(1, &Handle);
 	}
 
 	void VertexArray::Bind() const

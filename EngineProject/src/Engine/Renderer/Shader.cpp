@@ -192,43 +192,38 @@ namespace Engine
 
 	void Shader::SetUniformValue(char* const UniformName, float v1, float v2, float v3, float v4) const
 	{
-		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
-		glUniform4f(uniformLocation, v1, v2, v3, v4);
+		glUniform4f(GetUniformLocation(UniformName), v1, v2, v3, v4);
 	}
 	void Shader::SetUniformValue(char* const UniformName, float v1, float v2, float v3) const
 	{
-		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
-		glUniform3f(uniformLocation, v1, v2, v3);
+		glUniform3f(GetUniformLocation(UniformName), v1, v2, v3);
 	}
 
 	void Shader::SetUniformValue(char* const UniformName, float v1) const
 	{
-		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
-		glUniform1f(uniformLocation, v1);
+		glUniform1f(GetUniformLocation(UniformName), v1);
 	}
 
 	void Shader::SetUniformValue(char* const UniformName, int v1) const
 	{
-		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
-		glUniform1i(uniformLocation, v1);
+		glUniform1i(GetUniformLocation(UniformName), v1);
 	}
 
 	void Shader::SetUniformValue(char* const UniformName, glm::mat4 matrix)
 	{
-		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
-		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
-		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix4fv(GetUniformLocation(UniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void Shader::SetUniformValue(char* const UniformName, glm::vec3 vec)
 	{
+		glUniform3fv(GetUniformLocation(UniformName), 1, glm::value_ptr(vec));
+	}
+
+	int Shader::GetUniformLocation(char* const UniformName)
+	{
 		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
 		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
-		glUniform3fv(uniformLocation, 1, glm::value_ptr(vec));
+		return uniformLocation;
 	}
 
 }
