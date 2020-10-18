@@ -961,6 +961,7 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\BaseBuffer.h" />
     <ClInclude Include="src\Engine\Renderer\VertexBufferLayout.h" />
+    <ClInclude Include="src\Engine\Renderer\OpenGLUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -1018,5 +1019,6 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\BaseBuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\VertexBufferLayout.cpp" />
+    <ClCompile Include="src\Engine\Renderer\OpenGLUtils.cpp" />
   </ItemGroup>
 </Project>

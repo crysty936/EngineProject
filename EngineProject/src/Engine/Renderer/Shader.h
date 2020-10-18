@@ -19,12 +19,12 @@ namespace Engine
 
 		void Bind();
 		void UnBind();
-		void SetUniformValue(const std::string& UniformName, float v1, float v2, float v3, float v4);
-		void SetUniformValue(const std::string& UniformName, float v1, float v2, float v3);
-		void SetUniformValue(const std::string& UniformName, float v1);
-		void SetUniformValue(const std::string& UniformName, int v1);
-		void SetUniformValue(const std::string& UniformName, glm::mat4 matrix);
-		void SetUniformValue(const std::string& UniformName, glm::vec3 vec);
+		void SetUniformValue4f(const std::string& UniformName, float v1, float v2, float v3, float v4);
+		void SetUniformValue3f(const std::string& UniformName, float v1, float v2, float v3);
+		void SetUniformValue1f(const std::string& UniformName, float v1);
+		void SetUniformValue1i(const std::string& UniformName, int v1);
+		void SetUniformValue4fv(const std::string& UniformName, glm::mat4 matrix);
+		void SetUniformValue3fv(const std::string& UniformName, glm::vec3 vec);
 
 
 

@@ -66,7 +66,8 @@ namespace Engine {
 		unsigned int m_Texture;
 		float v_TheAlpha = 0.f;
 
-		std::unique_ptr<Shader> m_Shader;
+		//std::unique_ptr<Shader> m_Shader;
+		Shader* m_Shader;
 
 		IRenderingContext* m_RenderingContext;
 		GLFWwindow* m_Window;

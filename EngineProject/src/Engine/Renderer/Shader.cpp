@@ -190,31 +190,31 @@ namespace Engine
 		glUseProgram(0);
 	}
 
-	void Shader::SetUniformValue(const std::string& UniformName, float v1, float v2, float v3, float v4)
+	void Shader::SetUniformValue4f(const std::string& UniformName, float v1, float v2, float v3, float v4)
 	{
 		glUniform4f(GetUniformLocation(UniformName), v1, v2, v3, v4);
 	}
-	void Shader::SetUniformValue(const std::string& UniformName, float v1, float v2, float v3)
+	void Shader::SetUniformValue3f(const std::string& UniformName, float v1, float v2, float v3)
 	{
 		glUniform3f(GetUniformLocation(UniformName), v1, v2, v3);
 	}
 
-	void Shader::SetUniformValue(const std::string& UniformName, float v1)
+	void Shader::SetUniformValue1f(const std::string& UniformName, float v1)
 	{
 		glUniform1f(GetUniformLocation(UniformName), v1);
 	}
 
-	void Shader::SetUniformValue(const std::string& UniformName, int v1)
+	void Shader::SetUniformValue1i(const std::string& UniformName, int v1)
 	{
 		glUniform1i(GetUniformLocation(UniformName), v1);
 	}
 
-	void Shader::SetUniformValue(const std::string& UniformName, glm::mat4 matrix)
+	void Shader::SetUniformValue4fv(const std::string& UniformName, glm::mat4 matrix)
 	{
 		glUniformMatrix4fv(GetUniformLocation(UniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void Shader::SetUniformValue(const std::string& UniformName, glm::vec3 vec)
+	void Shader::SetUniformValue3fv(const std::string& UniformName, glm::vec3 vec)
 	{
 		glUniform3fv(GetUniformLocation(UniformName), 1, glm::value_ptr(vec));
 	}

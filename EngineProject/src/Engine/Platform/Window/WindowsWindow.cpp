@@ -14,6 +14,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/OpenGLUtils.h"
 
 namespace Engine {
 
@@ -125,11 +126,11 @@ namespace Engine {
 
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(sides, height, forward));
-		m_Shader->SetUniformValue("view", view);
+		m_Shader->SetUniformValue4fv("view", view);
 
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-		m_Shader->SetUniformValue("projection", projection);
+		m_Shader->SetUniformValue4fv("projection", projection);
 
 		for (int i = 0; i < 10; i++)
 		{
@@ -139,7 +140,7 @@ namespace Engine {
 			float angle = 20.0f * i;
 			// 		 			if (i % 3 == 0)
 			// 		 				model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.3f, 0.5f));
-			m_Shader->SetUniformValue("model", model);
+			m_Shader->SetUniformValue4fv("model", model);
 
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -159,9 +160,9 @@ namespace Engine {
 // 		//model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
  		view = glm::translate(view, glm::vec3(sides, height, forward));
 
-		m_Shader->SetUniformValue("view", view);
-		m_Shader->SetUniformValue("projection", projection);
-		m_Shader->SetUniformValue("model", model);
+		m_Shader->SetUniformValue4fv("view", view);
+		m_Shader->SetUniformValue4fv("projection", projection);
+		m_Shader->SetUniformValue4fv("model", model);
 
 		//GlCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 	}
@@ -179,11 +180,12 @@ namespace Engine {
 
 		m_Texture = boxTexture.GetHandle();
 
-		m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
+		//m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
+		m_Shader=new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 
 		m_Shader->Bind();
 
-		m_Shader->SetUniformValue("v_Texture", 0);
+		m_Shader->SetUniformValue1i("v_Texture", 0);
 
 
 		constexpr float vertices[] = {
