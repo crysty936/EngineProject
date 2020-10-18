@@ -190,39 +190,46 @@ namespace Engine
 		glUseProgram(0);
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, float v1, float v2, float v3, float v4) const
+	void Shader::SetUniformValue(const std::string& UniformName, float v1, float v2, float v3, float v4)
 	{
 		glUniform4f(GetUniformLocation(UniformName), v1, v2, v3, v4);
 	}
-	void Shader::SetUniformValue(char* const UniformName, float v1, float v2, float v3) const
+	void Shader::SetUniformValue(const std::string& UniformName, float v1, float v2, float v3)
 	{
 		glUniform3f(GetUniformLocation(UniformName), v1, v2, v3);
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, float v1) const
+	void Shader::SetUniformValue(const std::string& UniformName, float v1)
 	{
 		glUniform1f(GetUniformLocation(UniformName), v1);
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, int v1) const
+	void Shader::SetUniformValue(const std::string& UniformName, int v1)
 	{
 		glUniform1i(GetUniformLocation(UniformName), v1);
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, glm::mat4 matrix) const
+	void Shader::SetUniformValue(const std::string& UniformName, glm::mat4 matrix)
 	{
 		glUniformMatrix4fv(GetUniformLocation(UniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, glm::vec3 vec) const
+	void Shader::SetUniformValue(const std::string& UniformName, glm::vec3 vec)
 	{
 		glUniform3fv(GetUniformLocation(UniformName), 1, glm::value_ptr(vec));
 	}
 
-	int Shader::GetUniformLocation(char* const UniformName) const
+	int Shader::GetUniformLocation(const std::string& UniformName)
 	{
-		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
+		if (UniformLocations.find(UniformName) != UniformLocations.end())
+			return UniformLocations[UniformName];
+
+		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName.c_str());
+		if (uniformLocation != -1)
+			UniformLocations[UniformName] = uniformLocation;
+
 		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
+
 		return uniformLocation;
 	}
 
