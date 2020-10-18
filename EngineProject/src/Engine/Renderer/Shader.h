@@ -22,16 +22,16 @@ namespace Engine
 		void SetUniformValue(char* const UniformName, float v1, float v2, float v3) const;
 		void SetUniformValue(char* const UniformName, float v1) const;
 		void SetUniformValue(char* const UniformName, int v1) const;
-		void SetUniformValue(char* const UniformName, glm::mat4 matrix);
+		void SetUniformValue(char* const UniformName, glm::mat4 matrix) const;
+		void SetUniformValue(char* const UniformName, glm::vec3 vec) const;
 
-		void SetUniformValue(char* const UniformName, glm::vec3 vec);
 
 
 		uint32_t inline GetHandle() const { return m_RendererID; }
 
 	private:
 
-		int GetUniformLocation(char* const UniformName);
+		int GetUniformLocation(char* const UniformName) const;
 		unsigned int CreateShader(const std::string& Source, GLenum ShaderType);
 
 

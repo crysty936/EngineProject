@@ -209,17 +209,17 @@ namespace Engine
 		glUniform1i(GetUniformLocation(UniformName), v1);
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, glm::mat4 matrix)
+	void Shader::SetUniformValue(char* const UniformName, glm::mat4 matrix) const
 	{
 		glUniformMatrix4fv(GetUniformLocation(UniformName), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void Shader::SetUniformValue(char* const UniformName, glm::vec3 vec)
+	void Shader::SetUniformValue(char* const UniformName, glm::vec3 vec) const
 	{
 		glUniform3fv(GetUniformLocation(UniformName), 1, glm::value_ptr(vec));
 	}
 
-	int Shader::GetUniformLocation(char* const UniformName)
+	int Shader::GetUniformLocation(char* const UniformName) const
 	{
 		int uniformLocation = glGetUniformLocation(GetHandle(), UniformName);
 		ENGINE_CORE_ASSERT(uniformLocation != -1, "Uniform location could not be found!");
