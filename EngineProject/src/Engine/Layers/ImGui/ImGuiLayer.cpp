@@ -71,11 +71,35 @@ namespace Engine
 	void ImGuiLayer::OnImGuiDraw()
 	{
 		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		//ImGui::ShowDemoWindow(&show);
+
+	// We specify a default position/size in case there's no data in the .ini file. Typically this isn't required! We only do it to make the Demo applications a little more welcoming.
+		ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(ImVec2(main_viewport->GetWorkPos().x + 650, main_viewport->GetWorkPos().y + 20), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
+
+   		ImGuiWindowFlags window_flags = 0;
+   		ImGui::Begin("Editor", &show, window_flags);
+
+		ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
+
+//    		if (ImGui::CollapsingHeader("MyHelp"))
+//    		{
+//    			ImGui::Text("ABOUT THIS DEMO:");
+//    			ImGui::BulletText("Sections below are demonstrating many aspects of the library.");
+//    			ImGui::Separator();
+//    
+//    			ImGui::Text("PROGRAMMER GUIDE:");
+//    			ImGui::BulletText("See the ShowDemoWindow() code in imgui_demo.cpp. <- you are here!");
+//    		}
+   
+
 	}
 
 	void ImGuiLayer::End()
 	{
+		ImGui::End();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::GetInstance();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());

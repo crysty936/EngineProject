@@ -15,10 +15,26 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/OpenGLUtils.h"
+#include <imgui.h>
+
+static constexpr glm::vec3 cubePositions[] = {
+	glm::vec3(0.0f,  0.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f, -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3(2.4f, -0.4f, -3.5f),
+	glm::vec3(-1.7f,  3.0f, -7.5f),
+	glm::vec3(1.3f, -2.0f, -2.5f),
+	glm::vec3(1.5f,  2.0f, -2.5f),
+	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(-1.3f,  1.0f, -1.5f)
+};
 
 namespace Engine {
 
 	static bool s_GLFWInitialized = false;
+
+
 
 	Window* Window::Create(const WindowProps& props /* = WindowProps() */)
 	{
@@ -105,24 +121,12 @@ namespace Engine {
 	void WindowsWindow::Draw()
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Renderer::GetRenderer().Clear();
 
 		m_Shader->Bind();
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_Texture);
-		constexpr glm::vec3 cubePositions[] = {
-			glm::vec3(0.0f,  0.0f,  0.0f),
-			glm::vec3(2.0f,  5.0f, -15.0f),
-			glm::vec3(-1.5f, -2.2f, -2.5f),
-			glm::vec3(-3.8f, -2.0f, -12.3f),
-			glm::vec3(2.4f, -0.4f, -3.5f),
-			glm::vec3(-1.7f,  3.0f, -7.5f),
-			glm::vec3(1.3f, -2.0f, -2.5f),
-			glm::vec3(1.5f,  2.0f, -2.5f),
-			glm::vec3(1.5f,  0.2f, -1.5f),
-			glm::vec3(-1.3f,  1.0f, -1.5f)
-		};
 
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(sides, height, forward));
@@ -132,39 +136,34 @@ namespace Engine {
 		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 		m_Shader->SetUniformValue4fv("projection", projection);
 
-		for (int i = 0; i < 10; i++)
+		// 		for (glm::vec3 cubePosition : cubePositions)
+		// 		{
+		// 			glm::mat4 model = glm::mat4(1.0f);
+		// 			model = glm::translate(model, cubePosition);
+		// 			m_Shader->SetUniformValue4fv("model", model);
+		// 
+		// 			glDrawArrays(GL_TRIANGLES, 0, 36);
+		// 		}
+
+		glm::mat4 model = glm::mat4(1.0f);
+		static glm::vec3 translation(0, 0, 0);
+		ImGui::SliderFloat3("Model", &translation.x, 0.0f, 4.0f);
+		model = glm::translate(model, translation);
+		m_Shader->SetUniformValue4fv("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		if (ImGui::CollapsingHeader("MyHelp"))
 		{
 
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			// 		 			if (i % 3 == 0)
-			// 		 				model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.3f, 0.5f));
-			m_Shader->SetUniformValue4fv("model", model);
+			ImGui::Text("ABOUT THIS DEMO:");
+			ImGui::BulletText("Sections below are demonstrating many aspects of the library.");
+			ImGui::Separator();
 
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
+			ImGui::Text("PROGRAMMER GUIDE:");
+			ImGui::BulletText("See the ShowDemoWindow() code in imgui_demo.cpp. <- you are here!");
 		}
 
-		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-// 		glm::mat4 view = glm::mat4(1.0f);
-// 		glm::mat4 projection = glm::mat4(1.0f);
-// 		//projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
-// 		//projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, 0.1f, 100.0f);
-// 		projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -5.0f, 5.0f);
-// 
-// 		glm::vec4 result(300.0f, 300.0f, 0.f, 1.f);
-// 
-// 		result = result * projection;
-// 
-// 		//model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
- 		view = glm::translate(view, glm::vec3(sides, height, forward));
-
-		m_Shader->SetUniformValue4fv("view", view);
-		m_Shader->SetUniformValue4fv("projection", projection);
-		m_Shader->SetUniformValue4fv("model", model);
-
-		//GlCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 	}
 
 
@@ -181,7 +180,7 @@ namespace Engine {
 		m_Texture = boxTexture.GetHandle();
 
 		//m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
-		m_Shader=new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
+		m_Shader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 
 		m_Shader->Bind();
 
@@ -243,43 +242,43 @@ namespace Engine {
 		m_vertexArray1->AddBuffer(buffer, Layout);
 
 
-// 
-// 		m_vertexArray1->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-// 		m_vertexArray1->EnableAttribArray(0);
-// 		m_vertexArray1->SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-// 		m_vertexArray1->EnableAttribArray(1);
+		// 
+		// 		m_vertexArray1->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		// 		m_vertexArray1->EnableAttribArray(0);
+		// 		m_vertexArray1->SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		// 		m_vertexArray1->EnableAttribArray(1);
 
-		// 		float vertices[] = {
-		// 			// positions          // texture coords
-		// 			 300.0f,  300.0f, 0.0f,   1.0f, 1.0f, // top right
-		// 			 300.0f,  100.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		// 			 100.0f,  100.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		// 			 100.0f,  300.0f, 0.0f,   0.0f, 1.0f  // top left 
-		// 		};
-		// 
-		// 		unsigned int indices[] = {
-		// 			0, 1, 3, // first triangle
-		// 			1, 2, 3  // second triangle
-		// 		};
-		// 		unsigned int VBO, VAO, EBO;
-		// 		glGenVertexArrays(1, &VAO);
-		// 		glGenBuffers(1, &VBO);
-		// 		glGenBuffers(1, &EBO);
-		// 
-		// 		glBindVertexArray(VAO);
-		// 
-		// 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		// 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		// 
-		// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		// 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-		// 
-		// 		// position attribute
-		// 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
-		// 		glEnableVertexAttribArray(0);
-		// 		// texture coord attribute
-		// 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		// 		glEnableVertexAttribArray(1);
+				// 		float vertices[] = {
+				// 			// positions          // texture coords
+				// 			 300.0f,  300.0f, 0.0f,   1.0f, 1.0f, // top right
+				// 			 300.0f,  100.0f, 0.0f,   1.0f, 0.0f, // bottom right
+				// 			 100.0f,  100.0f, 0.0f,   0.0f, 0.0f, // bottom left
+				// 			 100.0f,  300.0f, 0.0f,   0.0f, 1.0f  // top left 
+				// 		};
+				// 
+				// 		unsigned int indices[] = {
+				// 			0, 1, 3, // first triangle
+				// 			1, 2, 3  // second triangle
+				// 		};
+				// 		unsigned int VBO, VAO, EBO;
+				// 		glGenVertexArrays(1, &VAO);
+				// 		glGenBuffers(1, &VBO);
+				// 		glGenBuffers(1, &EBO);
+				// 
+				// 		glBindVertexArray(VAO);
+				// 
+				// 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+				// 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+				// 
+				// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+				// 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+				// 
+				// 		// position attribute
+				// 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
+				// 		glEnableVertexAttribArray(0);
+				// 		// texture coord attribute
+				// 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+				// 		glEnableVertexAttribArray(1);
 
 		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_EVT(WindowsWindow::OnKeyRepeat));
 	}

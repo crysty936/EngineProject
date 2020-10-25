@@ -180,7 +180,7 @@ namespace Engine
 		glDeleteProgram(m_RendererID);
 	}
 
-	void Shader::Bind()
+	void Shader::Bind() const
 	{
 		glUseProgram(m_RendererID);
 	}

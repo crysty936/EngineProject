@@ -22,14 +22,14 @@ public:
 
 	void OnAttach() override
 	{
-		Engine::EventManager& instance = Engine::EventManager::GetInstance();
-		instance.AddListener<Engine::KeyPressedEvent>(BIND_FUNC_EVT(ExampleLayer::OnKeyPressed), this);
+// 		Engine::EventManager& instance = Engine::EventManager::GetInstance();
+// 		instance.AddListener<Engine::KeyPressedEvent>(BIND_FUNC_EVT(ExampleLayer::OnKeyPressed), this);
 	}
 
 	void OnDetach() override
 	{
-		Engine::EventManager& instance = Engine::EventManager::GetInstance();
-		instance.RemoveListener<Engine::KeyPressedEvent>(BIND_FUNC_EVT(ExampleLayer::OnKeyPressed), this);
+// 		Engine::EventManager& instance = Engine::EventManager::GetInstance();
+// 		instance.RemoveListener<Engine::KeyPressedEvent>(BIND_FUNC_EVT(ExampleLayer::OnKeyPressed), this);
 	}
 
 	void OnKeyPressed(Engine::KeyPressedEvent& e)
@@ -52,7 +52,7 @@ public:
 	void Init() override
 	{
 		Application::Init();
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
 	}
 
 private:

@@ -17,7 +17,7 @@ namespace Engine
 		Shader(const char* vertexSrc, const char* fragmentSrc);
 		~Shader();
 
-		void Bind();
+		void Bind() const;
 		void UnBind();
 		void SetUniformValue4f(const std::string& UniformName, float v1, float v2, float v3, float v4);
 		void SetUniformValue3f(const std::string& UniformName, float v1, float v2, float v3);

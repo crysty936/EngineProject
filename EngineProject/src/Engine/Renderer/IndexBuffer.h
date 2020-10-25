@@ -8,9 +8,14 @@ namespace Engine
 	class IndexBuffer : public BaseBuffer
 	{
 	public:
+
 		IndexBuffer();
 
 		void SetData(const uint32_t* Indices, const int count, const GLenum DrawType);
+
+	public:
+
+		FORCEINLINE uint32_t GetCount() const { return Count; };
 
 	private:
 		uint32_t Count;

@@ -37,21 +37,26 @@ namespace Engine {
 		void OnMouseMoved(MouseMovedEvent& e);
 		void OnKeyTyped(KeyTypedEvent& e);
 
-		bool m_Running = true;
 
-		template<typename T>
-		void PropagateEvent(T& e)
-		{
-			EventManager& instance = EventManager::GetInstance();
-			for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
-			{
-				--it;
-				if (e.IsHandled())
-					break;
-				Layer* layer = (*it);
-				instance.SendEvent(e, layer);
-			}
-		}
+
+	private:
+// 		template<typename T>
+// 		void PropagateEvent(T& e)
+// 		{
+// 			EventManager& instance = EventManager::GetInstance();
+// 			for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+// 			{
+// 				--it;
+// 				if (e.IsHandled())
+// 					break;
+// 				Layer* layer = (*it);
+// 				instance.SendEvent(e, layer);
+// 			}
+// 		}
+
+	private:
+
+		bool m_Running = true;
 		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
 		LayerStack m_LayerStack;

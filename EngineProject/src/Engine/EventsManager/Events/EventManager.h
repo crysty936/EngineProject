@@ -58,15 +58,16 @@ namespace Engine
 	public:
 		static EventManager& GetInstance()
 		{
-			//  			static EventManager s_Instance;
+			//  			static EventManager s_Instance; //lazy thread safe instantiation
 			//  			return s_Instance;
 			return *s_Instance;
 		}
 		EventManager(EventManager const& var) = delete;
 		void operator=(EventManager const& var) = delete;
-		static void Init()
+		static void Init(bool bTraceEnabled = true)
 		{
 			s_Instance = new EventManager();
+			s_Instance->SetTraceEnabled(bTraceEnabled);
 		}
 
 
