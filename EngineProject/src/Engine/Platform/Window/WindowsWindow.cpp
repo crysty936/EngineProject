@@ -16,8 +16,11 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/OpenGLUtils.h"
 #include <imgui.h>
+#include <sstream>
+#include "Engine/Renderer/RenderObject.h"
 
-static constexpr glm::vec3 cubePositions[] = {
+
+static glm::vec3 cubePositions[] = {
 	glm::vec3(0.0f,  0.0f,  0.0f),
 	glm::vec3(2.0f,  5.0f, -15.0f),
 	glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -136,22 +139,34 @@ namespace Engine {
 		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 		m_Shader->SetUniformValue4fv("projection", projection);
 
-		// 		for (glm::vec3 cubePosition : cubePositions)
+		for (int i = 0; i < RenderObjects.size(); i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec3* translation = RenderObjects[i]->GetTransform();
+
+			std::string sliderName("Model");
+			sliderName += std::to_string(i + 1);
+
+			ImGui::SliderFloat3(sliderName.c_str(), &translation->x, 0.0f, 4.0f);
+			model = glm::translate(model, *translation);
+			m_Shader->SetUniformValue4fv("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		}
+
+		// 		for (int i = 0; i < 10; i++)
 		// 		{
 		// 			glm::mat4 model = glm::mat4(1.0f);
-		// 			model = glm::translate(model, cubePosition);
-		// 			m_Shader->SetUniformValue4fv("model", model);
+		// 			glm::vec3 translation(cubePositions[i]);
 		// 
+		// 			std::string sliderName("Model");
+		// 			sliderName += std::to_string(i + 1);
+		// 
+		// 			ImGui::SliderFloat3(sliderName.c_str(), &translation.x, 0.0f, 4.0f);
+		// 			model = glm::translate(model, translation);
+		// 			m_Shader->SetUniformValue4fv("model", model);
 		// 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		// 		}
-
-		glm::mat4 model = glm::mat4(1.0f);
-		static glm::vec3 translation(0, 0, 0);
-		ImGui::SliderFloat3("Model", &translation.x, 0.0f, 4.0f);
-		model = glm::translate(model, translation);
-		m_Shader->SetUniformValue4fv("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
 
 		if (ImGui::CollapsingHeader("MyHelp"))
 		{
@@ -279,6 +294,13 @@ namespace Engine {
 				// 		// texture coord attribute
 				// 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 				// 		glEnableVertexAttribArray(1);
+
+
+		for (auto cubeModel : cubePositions)
+		{
+			RenderObject* newObject = new RenderObject(cubeModel);
+			RenderObjects.push_back(newObject);
+		}
 
 		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_EVT(WindowsWindow::OnKeyRepeat));
 	}
