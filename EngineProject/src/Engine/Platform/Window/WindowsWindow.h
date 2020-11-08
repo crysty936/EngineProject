@@ -54,6 +54,7 @@ namespace Engine {
 		std::vector<RenderObject> RenderObjects;
 
 		Shader* m_Shader;
+		class Camera* MainCamera;
 
 		IRenderingContext* m_RenderingContext;
 		GLFWwindow* m_Window;

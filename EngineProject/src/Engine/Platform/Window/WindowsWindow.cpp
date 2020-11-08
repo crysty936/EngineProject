@@ -17,6 +17,7 @@
 #include <imgui.h>
 #include <sstream>
 #include "Engine/Renderer/RenderObject.h"
+#include "Engine/Renderer/Camera.h"
 
 
 static glm::vec3 cubePositions[] = {
@@ -196,11 +197,13 @@ namespace Engine {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_Texture);
 
+		glm::vec3 theCameraPos = MainCamera->GetCameraPos();
+		glm::vec3 theCameraFront = MainCamera->GetCameraFront();
 
 		//camera stuff
 		glm::mat4 View = glm::lookAt(
-			CameraPos,
-			CameraPos + CameraFront,
+			theCameraPos,
+			theCameraPos + theCameraFront,
 			GLMStatics::Vec3Up);
 
 		m_Shader->SetUniformValue4fv("view", View);
@@ -284,8 +287,10 @@ namespace Engine {
 			RenderObjects[i].SetTransform(cubePositions[i]);
 		}
 
+		MainCamera = new Camera(GetWidth(), GetHeight(), { 0, 0.f, 3.0f }, { 0, 0.f, -1.0f });
 
-		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(WindowsWindow::OnMouseMoved));
+
+		//EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(WindowsWindow::OnMouseMoved));
 
 	}
 
