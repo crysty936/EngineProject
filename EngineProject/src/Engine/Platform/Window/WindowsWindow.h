@@ -5,23 +5,14 @@
 #include <GLFW/glfw3.h>
 #include "Engine/Renderer/Shader.h"
 #include "Engine/EventsManager/Events/KeyEvents.h"
+#include "Engine/EventsManager/Events/MouseEvents.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Engine/Renderer/RenderObject.h"
 
 namespace Engine {
 
-
 	class WindowsWindow : public Engine::Window
 	{
-		struct Point
-		{
-			Point(float _x, float _y, float _z):
-				x(_x),y(_y),z(_z){}
-
-			float x = 0.f;
-			float y = 0.f;
-			float z = 0.f;
-		};
-
 	public:
 		WindowsWindow(const WindowProps& props);
 
@@ -44,8 +35,8 @@ namespace Engine {
 		virtual void Init() override;
 
 		void DoOpenGlStuff();
-
-		void OnKeyRepeat(KeyRepeatEvent e);
+		void OnMouseMoved(MouseMovedEvent e);
+		void ProcessInput();
 
 		void Draw();
 
@@ -56,18 +47,12 @@ namespace Engine {
 
 	private:
 
-		float sides = 0.0f;
-		float forward = -3.0f;;
-		float height = 0.0f;;
-
-
 		class VertexArray* m_vertexArray1;
 		unsigned int m_indexBuffer;
 		unsigned int m_Texture;
 		float v_TheAlpha = 0.f;
-		std::vector<class RenderObject*> RenderObjects;
+		std::vector<RenderObject> RenderObjects;
 
-		//std::unique_ptr<Shader> m_Shader;
 		Shader* m_Shader;
 
 		IRenderingContext* m_RenderingContext;
@@ -82,9 +67,7 @@ namespace Engine {
 		};
 
 		WindowData m_Data;
+
 	};
-
-
-
 }
 

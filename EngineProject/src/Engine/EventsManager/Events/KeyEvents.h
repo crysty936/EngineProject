@@ -17,6 +17,23 @@ namespace Engine
 		int m_KeyCode;
 	};
 
+	class KeyEvent :public KeyEventBase
+	{
+	public:
+		KeyEvent(int keycode)
+			:KeyEventBase(keycode) {}
+
+		static std::string GetStaticName() { return "KeyEvent"; }
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << GetStaticName() << m_KeyCode;
+			return ss.str();
+		}
+
+	};
+
 	class KeyPressedEvent : public KeyEventBase
 	{
 	public:

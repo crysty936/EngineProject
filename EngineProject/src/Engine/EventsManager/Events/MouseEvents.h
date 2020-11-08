@@ -9,7 +9,7 @@ namespace Engine
 	class MouseMovedEvent : public EventBase
 	{
 	public:
-		MouseMovedEvent(float x, float y)
+		MouseMovedEvent(double x, double y)
 			:MouseX(x), MouseY(y) {}
 
 		static std::string GetStaticName() { return "MouseMovedEvent"; }
@@ -19,10 +19,10 @@ namespace Engine
 			ss << GetStaticName() << " x: " << MouseX << ", y: " << MouseY;
 			return ss.str();
 		}
-		virtual int GetCategoryFlags() const { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
+		virtual int GetCategoryFlags() const override { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
 
 
-		float MouseX, MouseY;
+		double MouseX, MouseY;
 	};
 
 	class MouseButtonPressedEvent :public EventBase
@@ -37,7 +37,7 @@ namespace Engine
 			ss << GetStaticName() << " " << Button;
 			return ss.str();
 		}
-		virtual int GetCategoryFlags() const { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
+		virtual int GetCategoryFlags() const override { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
 
 
 		int Button;
@@ -54,7 +54,7 @@ namespace Engine
 			ss << GetStaticName() << " " << Button;
 			return ss.str();
 		}
-		virtual int GetCategoryFlags() const { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
+		virtual int GetCategoryFlags() const override { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
 
 
 		int Button;
@@ -71,7 +71,7 @@ namespace Engine
 			ss << GetStaticName() << " X: " << XOffset << ", Y: " << YOffset;
 			return ss.str();
 		}
-		virtual int GetCategoryFlags() const { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
+		virtual int GetCategoryFlags() const override { return EventCategory::EventCategoryMouse | EventCategory::EventCategoryInput; }
 
 		float XOffset, YOffset;
 	};

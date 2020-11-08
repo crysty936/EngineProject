@@ -25,6 +25,8 @@ namespace Engine {
 		glEnable(GL_DEPTH_TEST);
 
 
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}

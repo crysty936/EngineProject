@@ -3,16 +3,18 @@
 
 namespace Engine
 {
-
-
-
-
-
-
 	RenderObject::RenderObject(glm::vec3 _Transform)
 		:Transform(_Transform)
 	{
 
+	}
+
+	RenderObject::RenderObject()
+	{
+	}
+
+	RenderObject::~RenderObject()
+	{
 	}
 
 }

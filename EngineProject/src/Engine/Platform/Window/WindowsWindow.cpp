@@ -14,7 +14,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/Renderer/OpenGLUtils.h"
 #include <imgui.h>
 #include <sstream>
 #include "Engine/Renderer/RenderObject.h"
@@ -33,10 +32,69 @@ static glm::vec3 cubePositions[] = {
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+static float vertices[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+};
+
+glm::vec3 CameraPos = glm::vec3(0, 0.f, 3.0f);
+glm::vec3 CameraFront = glm::vec3(0.f, 0.f, -1.f);
+const glm::vec3 Vec3Up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+float MouseLastX = 640;
+float MouseLastY = 360;
+
+
+float Yaw = -90.f;
+float Pitch = 0.f;
+
+bool FirstMouse = true;
+
 namespace Engine {
 
 	static bool s_GLFWInitialized = false;
-
 
 
 	Window* Window::Create(const WindowProps& props /* = WindowProps() */)
@@ -116,6 +174,7 @@ namespace Engine {
 	}
 	void WindowsWindow::OnUpdate()
 	{
+		ProcessInput();
 		Draw();
 
 		m_RenderingContext->SwapBuffers();
@@ -123,6 +182,13 @@ namespace Engine {
 	}
 	void WindowsWindow::Draw()
 	{
+
+		//delta time
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		Renderer::GetRenderer().Clear();
 
@@ -131,60 +197,61 @@ namespace Engine {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_Texture);
 
-		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(sides, height, forward));
-		m_Shader->SetUniformValue4fv("view", view);
+
+		//camera stuff
+		glm::mat4 View = glm::lookAt(
+			CameraPos,
+			CameraPos + CameraFront,
+			Vec3Up);
+
+		m_Shader->SetUniformValue4fv("view", View);
+
 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
 		m_Shader->SetUniformValue4fv("projection", projection);
 
+
+		//render objects
 		for (int i = 0; i < RenderObjects.size(); i++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
-			glm::vec3* translation = RenderObjects[i]->GetTransform();
-
-			std::string sliderName("Model");
-			sliderName += std::to_string(i + 1);
-
-			ImGui::SliderFloat3(sliderName.c_str(), &translation->x, 0.0f, 4.0f);
+			glm::vec3* translation = RenderObjects[i].GetTransform();
 			model = glm::translate(model, *translation);
 			m_Shader->SetUniformValue4fv("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
+			std::string sliderName("Model");
+
+			sliderName += std::to_string(i + 1);
+			ImGui::SliderFloat3(sliderName.c_str(), &translation->x, -4.0f, 4.0f);
 		}
-
-		// 		for (int i = 0; i < 10; i++)
-		// 		{
-		// 			glm::mat4 model = glm::mat4(1.0f);
-		// 			glm::vec3 translation(cubePositions[i]);
-		// 
-		// 			std::string sliderName("Model");
-		// 			sliderName += std::to_string(i + 1);
-		// 
-		// 			ImGui::SliderFloat3(sliderName.c_str(), &translation.x, 0.0f, 4.0f);
-		// 			model = glm::translate(model, translation);
-		// 			m_Shader->SetUniformValue4fv("model", model);
-		// 			glDrawArrays(GL_TRIANGLES, 0, 36);
-		// 		}
-
-		if (ImGui::CollapsingHeader("MyHelp"))
-		{
-
-			ImGui::Text("ABOUT THIS DEMO:");
-			ImGui::BulletText("Sections below are demonstrating many aspects of the library.");
-			ImGui::Separator();
-
-			ImGui::Text("PROGRAMMER GUIDE:");
-			ImGui::BulletText("See the ShowDemoWindow() code in imgui_demo.cpp. <- you are here!");
-		}
-
 	}
 
+	void WindowsWindow::ProcessInput()
+	{
+		const float CameraSpeed = 2.5f * deltaTime;
+		if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			CameraPos += CameraSpeed * CameraFront;
+		}
+		if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			CameraPos -= CameraSpeed * CameraFront;
+		}
+
+		if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			CameraPos -= glm::normalize(glm::cross(CameraFront, Vec3Up)) * CameraSpeed;
+		}
+		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			CameraPos += glm::normalize(glm::cross(CameraFront, Vec3Up)) * CameraSpeed;
+		}
+	}
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-
 		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -194,57 +261,11 @@ namespace Engine {
 
 		m_Texture = boxTexture.GetHandle();
 
-		//m_Shader = std::make_unique<Shader>("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 		m_Shader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 
 		m_Shader->Bind();
 
 		m_Shader->SetUniformValue1i("v_Texture", 0);
-
-
-		constexpr float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-		};
 
 		VertexBuffer buffer;
 		buffer.Bind();
@@ -256,97 +277,54 @@ namespace Engine {
 		Layout.Push<float>(2);
 		m_vertexArray1->AddBuffer(buffer, Layout);
 
+		int arraySize = sizeof(cubePositions) / sizeof(glm::vec3);
+		RenderObjects.resize(arraySize);
 
-		// 
-		// 		m_vertexArray1->SetAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		// 		m_vertexArray1->EnableAttribArray(0);
-		// 		m_vertexArray1->SetAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		// 		m_vertexArray1->EnableAttribArray(1);
-
-				// 		float vertices[] = {
-				// 			// positions          // texture coords
-				// 			 300.0f,  300.0f, 0.0f,   1.0f, 1.0f, // top right
-				// 			 300.0f,  100.0f, 0.0f,   1.0f, 0.0f, // bottom right
-				// 			 100.0f,  100.0f, 0.0f,   0.0f, 0.0f, // bottom left
-				// 			 100.0f,  300.0f, 0.0f,   0.0f, 1.0f  // top left 
-				// 		};
-				// 
-				// 		unsigned int indices[] = {
-				// 			0, 1, 3, // first triangle
-				// 			1, 2, 3  // second triangle
-				// 		};
-				// 		unsigned int VBO, VAO, EBO;
-				// 		glGenVertexArrays(1, &VAO);
-				// 		glGenBuffers(1, &VBO);
-				// 		glGenBuffers(1, &EBO);
-				// 
-				// 		glBindVertexArray(VAO);
-				// 
-				// 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-				// 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-				// 
-				// 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-				// 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-				// 
-				// 		// position attribute
-				// 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
-				// 		glEnableVertexAttribArray(0);
-				// 		// texture coord attribute
-				// 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-				// 		glEnableVertexAttribArray(1);
-
-
-		for (auto cubeModel : cubePositions)
+		for (int i = 0; i < arraySize; i++)
 		{
-			RenderObject* newObject = new RenderObject(cubeModel);
-			RenderObjects.push_back(newObject);
+			RenderObjects[i].SetTransform(cubePositions[i]);
 		}
 
-		EventManager::GetInstance().AddListener<KeyRepeatEvent>(BIND_FUNC_EVT(WindowsWindow::OnKeyRepeat));
+
+		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(WindowsWindow::OnMouseMoved));
+
 	}
 
-	void WindowsWindow::OnKeyRepeat(KeyRepeatEvent e)
+	void WindowsWindow::OnMouseMoved(MouseMovedEvent e)
 	{
+		if (FirstMouse)
+		{
+			MouseLastX = e.MouseX;
+			MouseLastY = e.MouseY;
+			FirstMouse = false;
+		}
 
-		switch (e.GetKeyCode())
-		{
-		case (int)KeyCode::W:
-		{
-			forward += 0.1f;
-			break;
-		}
-		case (int)KeyCode::S:
-		{
-			forward -= 0.1f;
-			break;
-		}
-		case (int)KeyCode::D:
-		{
-			sides -= 0.1f;
-			break;
-		}
-		case (int)KeyCode::A:
-		{
-			sides += 0.1f;
-			break;
-		}
-		case (int)KeyCode::Space:
-		{
-			height -= 0.1f;
-			break;
-		}
-		case (int)KeyCode::LeftControl:
-		{
-			height += 0.1f;
-			break;
-		}
-		break;
-		}
+		float XOffset = e.MouseX - MouseLastX;
+		float YOffset = (-1)*(e.MouseY - MouseLastY);
+
+		MouseLastX = e.MouseX;
+		MouseLastY = e.MouseY;
+
+		static const float sensitivity = 0.1f;
+		XOffset *= sensitivity;
+		YOffset *= sensitivity;
+
+		Yaw += XOffset;
+		Pitch += YOffset;
+
+
+		glm::vec3 direction;
+		direction.x = cos(glm::radians(Yaw)*cos(glm::radians(Pitch)));
+		direction.y = sin(glm::radians(Pitch));
+		direction.z = sin(glm::radians(Yaw)*cos(glm::radians(Pitch)));
+		CameraFront = glm::normalize(direction);
 	}
+
 
 	void WindowsWindow::SetGlfwCallbacks()
 	{
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		glfwSetWindowSizeCallback(m_Window, 
+			[](GLFWwindow* window, int width, int height)
 			{
 				WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
 				data->Width = width;
@@ -356,7 +334,8 @@ namespace Engine {
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		glfwSetFramebufferSizeCallback(m_Window, 
+			[](GLFWwindow* window, int width, int height)
 			{
 				glViewport(0, 0, width, height);
 
@@ -364,13 +343,15 @@ namespace Engine {
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+		glfwSetWindowCloseCallback(m_Window, 
+			[](GLFWwindow* window)
 			{
 				WindowCloseEvent e = WindowCloseEvent(window);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetKeyCallback(m_Window, [](GLFWwindow*, int keycode, int scandCode, int action, int mods)
+		glfwSetKeyCallback(m_Window, 
+			[](GLFWwindow*, int keycode, int scandCode, int action, int mods)
 			{
 				EventManager& instance = EventManager::GetInstance();
 
@@ -380,6 +361,8 @@ namespace Engine {
 				{
 					KeyPressedEvent e = KeyPressedEvent(keycode);
 					instance.SendEvent(e);
+					KeyEvent BasicKeyEvent = KeyEvent(keycode);
+					instance.SendEvent(BasicKeyEvent);
 					break;
 				}
 				case GLFW_RELEASE:
@@ -392,12 +375,15 @@ namespace Engine {
 				{
 					KeyRepeatEvent e = KeyRepeatEvent(keycode, 1);
 					instance.SendEvent(e);
+					KeyEvent BasicKeyEvent = KeyEvent(keycode);
+					instance.SendEvent(BasicKeyEvent);
 					break;
 				}
 				}
 			});
 
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow*, int button, int action, int mods)
+		glfwSetMouseButtonCallback(m_Window, 
+			[](GLFWwindow*, int button, int action, int mods)
 			{
 				EventManager& instance = EventManager::GetInstance();
 				switch (action)
@@ -416,22 +402,32 @@ namespace Engine {
 				}
 				}
 			});
-		glfwSetScrollCallback(m_Window, [](GLFWwindow*, double x, double y)
+		glfwSetScrollCallback(m_Window, 
+			[](GLFWwindow*, double x, double y)
 			{
 				MouseScrollEvent e = MouseScrollEvent((float)x, (float)y);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow*, double x, double y)
+		glfwSetCursorPosCallback(m_Window, 
+			[](GLFWwindow*, double x, double y)
 			{
 				MouseMovedEvent e = MouseMovedEvent((float)x, (float)y);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		glfwSetCharCallback(m_Window, 
+			[](GLFWwindow* window, unsigned int keycode)
 			{
 				KeyTypedEvent e = KeyTypedEvent(keycode);
 				EventManager::GetInstance().SendEvent(e);
+			});
+
+		glfwSetCursorPosCallback(m_Window,
+			[](GLFWwindow* window, double xPos, double yPos)
+			{
+				MouseMovedEvent Ev = MouseMovedEvent(xPos, yPos);
+				EventManager::GetInstance().SendEvent(Ev);
 			});
 	}
 }
