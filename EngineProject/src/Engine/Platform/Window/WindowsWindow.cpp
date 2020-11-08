@@ -78,7 +78,6 @@ static float vertices[] = {
 
 glm::vec3 CameraPos = glm::vec3(0, 0.f, 3.0f);
 glm::vec3 CameraFront = glm::vec3(0.f, 0.f, -1.f);
-const glm::vec3 Vec3Up = glm::vec3(0.0f, 1.0f, 0.0f);
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -202,7 +201,7 @@ namespace Engine {
 		glm::mat4 View = glm::lookAt(
 			CameraPos,
 			CameraPos + CameraFront,
-			Vec3Up);
+			GLMStatics::Vec3Up);
 
 		m_Shader->SetUniformValue4fv("view", View);
 
@@ -242,11 +241,11 @@ namespace Engine {
 
 		if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			CameraPos -= glm::normalize(glm::cross(CameraFront, Vec3Up)) * CameraSpeed;
+			CameraPos -= glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up)) * CameraSpeed;
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			CameraPos += glm::normalize(glm::cross(CameraFront, Vec3Up)) * CameraSpeed;
+			CameraPos += glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up)) * CameraSpeed;
 		}
 	}
 

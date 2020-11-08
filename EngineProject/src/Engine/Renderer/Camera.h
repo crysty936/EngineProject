@@ -6,12 +6,14 @@ namespace Engine
 	class Camera
 	{
 	public:
-		Camera();
+		//Camera(float WindowWidth, float WindowHeight, );
 
 
 
 	private:
 
+		float MouseLastX = 0.f;
+		float MouseLastY = 0.f;
 
 		float Yaw = -90.0f;
 		float Pitch = 0.0f;
@@ -21,6 +23,5 @@ namespace Engine
 		glm::vec3 CameraPos;
 		glm::vec3 CameraFront;
 
-		const glm::vec3 Vec3Up = glm::vec3(0.0f, 1.0f, 0.0f);
 	};
 }

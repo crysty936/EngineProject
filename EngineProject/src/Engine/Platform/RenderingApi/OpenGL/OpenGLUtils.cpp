@@ -65,5 +65,6 @@ namespace Engine
 		return error;
 	}
 
+	const glm::vec3 GLMStatics::Vec3Up(0.0f, 1.0f, 0.0f);
 }
 
