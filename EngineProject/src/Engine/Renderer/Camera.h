@@ -17,6 +17,7 @@ namespace Engine
 	{
 	public:
 		Camera(float WindowWidth, float WindowHeight, glm::vec3 CameraPos, glm::vec3 _CameraFront);
+		~Camera();
 
 	public:
 		void Move(CameraDirection Direction, float Amount);

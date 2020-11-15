@@ -12,18 +12,26 @@ namespace Engine
 		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(Camera::OnMouseMoved));
 	}
 
+	Camera::~Camera()
+	{
+		EventManager::GetInstance().RemoveListener<MouseMovedEvent>(BIND_FUNC_EVT(Camera::OnMouseMoved));
+	}
+
 	void Camera::Move(CameraDirection Direction, float Amount)
 	{
+
 		switch (Direction)
 		{
 		case CameraDirection::Forward:
 		{
-			CameraPos += CameraFront * Amount;
+			glm::vec3 fpsCameraFront = { CameraFront.x,0.f,CameraFront.z };
+			CameraPos += fpsCameraFront * Amount;
 			break;
 		}
 		case CameraDirection::Backward:
 		{
-			CameraPos -= CameraFront * Amount;
+			glm::vec3 fpsCameraFront = { CameraFront.x,0.f,CameraFront.z };
+			CameraPos -= fpsCameraFront * Amount;
 			break;
 		}
 		case CameraDirection::Left:
@@ -41,9 +49,6 @@ namespace Engine
 			break;
 		}
 		}
-
-
-
 	}
 
 	void Camera::OnMouseMoved(MouseMovedEvent e)
@@ -61,7 +66,7 @@ namespace Engine
 		MouseLastX = e.MouseX;
 		MouseLastY = e.MouseY;
 
-		static const float sensitivity = 0.1f;
+		const float sensitivity = 0.1f;
 		XOffset *= sensitivity;
 		YOffset *= sensitivity;
 
@@ -74,8 +79,6 @@ namespace Engine
 		direction.y = sin(glm::radians(Pitch));
 		direction.z = sin(glm::radians(Yaw) * cos(glm::radians(Pitch)));
 		CameraFront = glm::normalize(direction);
-
-
 	}
 
 	const glm::mat4& Camera::GetCameraLookAt() const
@@ -83,5 +86,4 @@ namespace Engine
 		const glm::mat4 LookAt = glm::lookAt(CameraPos, CameraPos + CameraFront, GLMStatics::Vec3Up);
 		return LookAt;
 	}
-
 }
