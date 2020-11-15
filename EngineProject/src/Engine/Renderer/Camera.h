@@ -5,32 +5,39 @@
 
 namespace Engine
 {
+	enum class CameraDirection : unsigned char
+	{
+		Forward,
+		Backward,
+		Left,
+		Right
+	};
+
 	class Camera
 	{
 	public:
 		Camera(float WindowWidth, float WindowHeight, glm::vec3 CameraPos, glm::vec3 _CameraFront);
 
-
-
-	private:
-
-		void OnMouseMoved(MouseMovedEvent e);
-
-		float MouseLastX = 0.f;
-		float MouseLastY = 0.f;
-
-		float Yaw = -90.0f;
-		float Pitch = 0.0f;
-
-		bool FirstMouse = true;
-
-		glm::vec3 CameraPos = glm::vec3(0, 0, 0);
-		glm::vec3 CameraFront = glm::vec3(0, 0, 0);;
+	public:
+		void Move(CameraDirection Direction, float Amount);
 
 	public:
+		const glm::mat4& GetCameraLookAt() const;
+		FORCEINLINE const glm::vec3& GetCameraFront() const { return CameraFront; }
+		FORCEINLINE const glm::vec3& GetCameraPos() const { return CameraPos; }
+		FORCEINLINE const float GetCameraSpeed() const { return CameraSpeed; }
 
-		FORCEINLINE glm::vec3 GetCameraFront() const { return CameraFront; }
-		FORCEINLINE glm::vec3 GetCameraPos() const { return CameraPos; }
+	private:
+		void OnMouseMoved(MouseMovedEvent e);
 
+	private:
+		float MouseLastX = 0.f;
+		float MouseLastY = 0.f;
+		float Yaw = -90.0f;
+		float Pitch = 0.0f;
+		bool FirstMouse = true;
+		glm::vec3 CameraPos = glm::vec3(0, 0, 0);
+		glm::vec3 CameraFront = glm::vec3(0, 0, 0);;
+		float CameraSpeed = 2.5f;
 	};
 }

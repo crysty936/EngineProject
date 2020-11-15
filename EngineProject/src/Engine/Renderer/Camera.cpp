@@ -1,18 +1,49 @@
 #include "pch.h"
 #include "Camera.h"
+#include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Engine
 {
 
-	Camera::Camera(float WindowWidth, float WindowHeight, glm::vec3 _CameraPos, glm::vec3 _CameraFront)
+	Camera::Camera(float InWindowWidth, float InWindowHeight, glm::vec3 InCameraPos, glm::vec3 InCameraFront)
+		:CameraPos(InCameraPos), CameraFront(InCameraFront), MouseLastX(InWindowWidth / 2), MouseLastY(InWindowHeight / 2)
 	{
-		CameraPos = _CameraPos;
-		CameraFront = _CameraFront;
-
-		MouseLastX = WindowWidth / 2;
-		MouseLastY = WindowHeight / 2;
-
 		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(Camera::OnMouseMoved));
+	}
+
+	void Camera::Move(CameraDirection Direction, float Amount)
+	{
+		switch (Direction)
+		{
+		case CameraDirection::Forward:
+		{
+			CameraPos += CameraFront * Amount;
+			break;
+		}
+		case CameraDirection::Backward:
+		{
+			CameraPos -= CameraFront * Amount;
+			break;
+		}
+		case CameraDirection::Left:
+		{
+			glm::vec3 Right = glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up));
+			CameraPos -= Right * Amount;
+			break;
+		}
+		case CameraDirection::Right:
+		{
+			glm::vec3 Right = glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up));
+			CameraPos += Right * Amount;
+
+			//glm::vec3 CameraUp = glm::normalize(Right, CameraFront);
+			break;
+		}
+		}
+
+
+
 	}
 
 	void Camera::OnMouseMoved(MouseMovedEvent e)
@@ -45,6 +76,12 @@ namespace Engine
 		CameraFront = glm::normalize(direction);
 
 
+	}
+
+	const glm::mat4& Camera::GetCameraLookAt() const
+	{
+		const glm::mat4 LookAt = glm::lookAt(CameraPos, CameraPos + CameraFront, GLMStatics::Vec3Up);
+		return LookAt;
 	}
 
 }

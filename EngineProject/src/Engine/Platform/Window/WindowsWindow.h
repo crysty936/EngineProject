@@ -6,7 +6,6 @@
 #include "Engine/Renderer/Shader.h"
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/Events/MouseEvents.h"
-#include <glm/gtc/matrix_transform.hpp>
 #include "Engine/Renderer/RenderObject.h"
 
 namespace Engine {
@@ -35,7 +34,6 @@ namespace Engine {
 		virtual void Init() override;
 
 		void DoOpenGlStuff();
-		void OnMouseMoved(MouseMovedEvent e);
 		void ProcessInput();
 
 		void Draw();

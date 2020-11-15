@@ -77,20 +77,8 @@ static float vertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-glm::vec3 CameraPos = glm::vec3(0, 0.f, 3.0f);
-glm::vec3 CameraFront = glm::vec3(0.f, 0.f, -1.f);
-
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-float MouseLastX = 640;
-float MouseLastY = 360;
-
-
-float Yaw = -90.f;
-float Pitch = 0.f;
-
-bool FirstMouse = true;
 
 namespace Engine {
 
@@ -201,10 +189,7 @@ namespace Engine {
 		glm::vec3 theCameraFront = MainCamera->GetCameraFront();
 
 		//camera stuff
-		glm::mat4 View = glm::lookAt(
-			theCameraPos,
-			theCameraPos + theCameraFront,
-			GLMStatics::Vec3Up);
+		glm::mat4 View = MainCamera->GetCameraLookAt();
 
 		m_Shader->SetUniformValue4fv("view", View);
 
@@ -232,23 +217,24 @@ namespace Engine {
 
 	void WindowsWindow::ProcessInput()
 	{
-		const float CameraSpeed = 2.5f * deltaTime;
+		const float Velocity = MainCamera->GetCameraSpeed() * deltaTime;
 		if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			CameraPos += CameraSpeed * CameraFront;
+			MainCamera->Move(CameraDirection::Forward, Velocity);
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			CameraPos -= CameraSpeed * CameraFront;
+			MainCamera->Move(CameraDirection::Backward, Velocity);
 		}
-
 		if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			CameraPos -= glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up)) * CameraSpeed;
+			MainCamera->Move(CameraDirection::Left, Velocity);
+
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			CameraPos += glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up)) * CameraSpeed;
+			MainCamera->Move(CameraDirection::Right, Velocity);
+
 		}
 	}
 
@@ -288,46 +274,12 @@ namespace Engine {
 		}
 
 		MainCamera = new Camera(GetWidth(), GetHeight(), { 0, 0.f, 3.0f }, { 0, 0.f, -1.0f });
-
-
-		//EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(WindowsWindow::OnMouseMoved));
-
-	}
-
-	void WindowsWindow::OnMouseMoved(MouseMovedEvent e)
-	{
-		if (FirstMouse)
-		{
-			MouseLastX = e.MouseX;
-			MouseLastY = e.MouseY;
-			FirstMouse = false;
-		}
-
-		float XOffset = e.MouseX - MouseLastX;
-		float YOffset = (-1)*(e.MouseY - MouseLastY);
-
-		MouseLastX = e.MouseX;
-		MouseLastY = e.MouseY;
-
-		static const float sensitivity = 0.1f;
-		XOffset *= sensitivity;
-		YOffset *= sensitivity;
-
-		Yaw += XOffset;
-		Pitch += YOffset;
-
-
-		glm::vec3 direction;
-		direction.x = cos(glm::radians(Yaw)*cos(glm::radians(Pitch)));
-		direction.y = sin(glm::radians(Pitch));
-		direction.z = sin(glm::radians(Yaw)*cos(glm::radians(Pitch)));
-		CameraFront = glm::normalize(direction);
 	}
 
 
 	void WindowsWindow::SetGlfwCallbacks()
 	{
-		glfwSetWindowSizeCallback(m_Window, 
+		glfwSetWindowSizeCallback(m_Window,
 			[](GLFWwindow* window, int width, int height)
 			{
 				WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
@@ -338,7 +290,7 @@ namespace Engine {
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetFramebufferSizeCallback(m_Window, 
+		glfwSetFramebufferSizeCallback(m_Window,
 			[](GLFWwindow* window, int width, int height)
 			{
 				glViewport(0, 0, width, height);
@@ -347,14 +299,14 @@ namespace Engine {
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetWindowCloseCallback(m_Window, 
+		glfwSetWindowCloseCallback(m_Window,
 			[](GLFWwindow* window)
 			{
 				WindowCloseEvent e = WindowCloseEvent(window);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetKeyCallback(m_Window, 
+		glfwSetKeyCallback(m_Window,
 			[](GLFWwindow*, int keycode, int scandCode, int action, int mods)
 			{
 				EventManager& instance = EventManager::GetInstance();
@@ -386,7 +338,7 @@ namespace Engine {
 				}
 			});
 
-		glfwSetMouseButtonCallback(m_Window, 
+		glfwSetMouseButtonCallback(m_Window,
 			[](GLFWwindow*, int button, int action, int mods)
 			{
 				EventManager& instance = EventManager::GetInstance();
@@ -406,21 +358,21 @@ namespace Engine {
 				}
 				}
 			});
-		glfwSetScrollCallback(m_Window, 
+		glfwSetScrollCallback(m_Window,
 			[](GLFWwindow*, double x, double y)
 			{
 				MouseScrollEvent e = MouseScrollEvent((float)x, (float)y);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetCursorPosCallback(m_Window, 
+		glfwSetCursorPosCallback(m_Window,
 			[](GLFWwindow*, double x, double y)
 			{
 				MouseMovedEvent e = MouseMovedEvent((float)x, (float)y);
 				EventManager::GetInstance().SendEvent(e);
 			});
 
-		glfwSetCharCallback(m_Window, 
+		glfwSetCharCallback(m_Window,
 			[](GLFWwindow* window, unsigned int keycode)
 			{
 				KeyTypedEvent e = KeyTypedEvent(keycode);
