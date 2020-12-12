@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLUtils.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Engine
 {
@@ -24,13 +25,13 @@ namespace Engine
 		{
 		case CameraDirection::Forward:
 		{
-			glm::vec3 fpsCameraFront = { CameraFront.x,0.f,CameraFront.z };
+			glm::vec3 fpsCameraFront = { CameraFront.x, 0.f, CameraFront.z };
 			CameraPos += fpsCameraFront * Amount;
 			break;
 		}
 		case CameraDirection::Backward:
 		{
-			glm::vec3 fpsCameraFront = { CameraFront.x,0.f,CameraFront.z };
+			glm::vec3 fpsCameraFront = { CameraFront.x, 0.f, CameraFront.z };
 			CameraPos -= fpsCameraFront * Amount;
 			break;
 		}
@@ -44,8 +45,6 @@ namespace Engine
 		{
 			glm::vec3 Right = glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up));
 			CameraPos += Right * Amount;
-
-			//glm::vec3 CameraUp = glm::normalize(Right, CameraFront);
 			break;
 		}
 		}
@@ -59,6 +58,7 @@ namespace Engine
 			MouseLastY = e.MouseY;
 			FirstMouse = false;
 		}
+
 
 		float XOffset = e.MouseX - MouseLastX;
 		float YOffset = (-1) * (e.MouseY - MouseLastY);
@@ -84,6 +84,67 @@ namespace Engine
 	const glm::mat4& Camera::GetCameraLookAt() const
 	{
 		const glm::mat4 LookAt = glm::lookAt(CameraPos, CameraPos + CameraFront, GLMStatics::Vec3Up);
-		return LookAt;
+
+		//return LookAt;
+
+		glm::vec3 Center = CameraPos + CameraFront;
+		glm::vec3 ThisFront = glm::normalize(CameraPos - Center);
+
+		glm::vec3 Right = glm::normalize(glm::cross(GLMStatics::Vec3Up, ThisFront));
+		glm::vec3 CameraUp = glm::cross(ThisFront, Right);
+
+		float firstMatrixA[16] =
+		{
+			Right.x,		Right.y,		Right.z,		0,
+			CameraUp.x,		CameraUp.y,		CameraUp.z,		0,
+			ThisFront.x,	ThisFront.y,	ThisFront.z,	0,
+			0,				0,				0,				1
+		};
+
+		//glm::mat4 FirstMatrix = glm::make_mat4(firstMatrixA);
+
+		glm::mat4 FirstMatrix = glm::mat4(1.f);
+		memcpy(glm::value_ptr(FirstMatrix), firstMatrixA, sizeof(glm::mat4));
+
+		FirstMatrix = glm::transpose(FirstMatrix);
+
+		float SecondMatrixA[16] =
+		{
+			1,		0,		0,		-CameraPos.x,
+			0,		1,		0,		-CameraPos.y,
+			0,		0,		1,		-CameraPos.z,
+			0,		0,		0,		1
+		};
+
+		//glm::mat4 SecondMatrix = glm::make_mat4(SecondMatrixA);
+
+		glm::mat4 SecondMatrix = glm::mat4(1.f);
+		memcpy(glm::value_ptr(SecondMatrix), SecondMatrixA, sizeof(glm::mat4));
+		SecondMatrix = glm::transpose(SecondMatrix);
+
+
+		//  		glm::mat4 FirstMatrix2 = glm::mat4(1.0f);
+		//  		FirstMatrix2[0][0] = Right.x;
+		//  		FirstMatrix2[1][0] = Right.y;
+		//  		FirstMatrix2[2][0] = Right.z;
+		//  		FirstMatrix2[0][1] = CameraUp.x;
+		//  		FirstMatrix2[1][1] = CameraUp.y;
+		//  		FirstMatrix2[2][1] = CameraUp.z;
+		//  		FirstMatrix2[0][2] = ThisFront.x;
+		//  		FirstMatrix2[1][2] = ThisFront.y;
+		//  		FirstMatrix2[2][2] = ThisFront.z;
+		//  
+		//  
+		//  		glm::mat4 SecondMatrix2 = glm::mat4(1.0f);
+		//  		SecondMatrix2[3][0] = -CameraPos.x;
+		//  		SecondMatrix2[3][1] = -CameraPos.y;
+		//  		SecondMatrix2[3][2] = -CameraPos.z;
+
+		//glm::mat4 myLookAt = FirstMatrix2 * SecondMatrix2;
+
+		glm::mat4 myLookAt = FirstMatrix * SecondMatrix;
+
+		return myLookAt;
+
 	}
 }

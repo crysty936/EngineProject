@@ -98,46 +98,46 @@ namespace glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> lookAtRH(vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up)
 	{
-		vec<3, T, Q> const f(normalize(center - eye));
-		vec<3, T, Q> const s(normalize(cross(f, up)));
-		vec<3, T, Q> const u(cross(s, f));
+		vec<3, T, Q> const Front(normalize(center - eye));
+		vec<3, T, Q> const Right(normalize(cross(Front, up)));
+		vec<3, T, Q> const CameraUp(cross(Right, Front));
 
 		mat<4, 4, T, Q> Result(1);
-		Result[0][0] = s.x;
-		Result[1][0] = s.y;
-		Result[2][0] = s.z;
-		Result[0][1] = u.x;
-		Result[1][1] = u.y;
-		Result[2][1] = u.z;
-		Result[0][2] =-f.x;
-		Result[1][2] =-f.y;
-		Result[2][2] =-f.z;
-		Result[3][0] =-dot(s, eye);
-		Result[3][1] =-dot(u, eye);
-		Result[3][2] = dot(f, eye);
+		Result[0][0] = Right.x;
+		Result[1][0] = Right.y;
+		Result[2][0] = Right.z;
+		Result[0][1] = CameraUp.x;
+		Result[1][1] = CameraUp.y;
+		Result[2][1] = CameraUp.z;
+		Result[0][2] =-Front.x;
+		Result[1][2] =-Front.y;
+		Result[2][2] =-Front.z;
+		Result[3][0] =-dot(Right, eye);
+		Result[3][1] =-dot(CameraUp, eye);
+		Result[3][2] = dot(Front, eye);
 		return Result;
 	}
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> lookAtLH(vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up)
 	{
-		vec<3, T, Q> const f(normalize(center - eye));
-		vec<3, T, Q> const s(normalize(cross(up, f)));
-		vec<3, T, Q> const u(cross(f, s));
+		vec<3, T, Q> const front(normalize(center - eye));
+		vec<3, T, Q> const Right(normalize(cross(up, front)));
+		vec<3, T, Q> const CameraUp(cross(front, Right));
 
 		mat<4, 4, T, Q> Result(1);
-		Result[0][0] = s.x;
-		Result[1][0] = s.y;
-		Result[2][0] = s.z;
-		Result[0][1] = u.x;
-		Result[1][1] = u.y;
-		Result[2][1] = u.z;
-		Result[0][2] = f.x;
-		Result[1][2] = f.y;
-		Result[2][2] = f.z;
-		Result[3][0] = -dot(s, eye);
-		Result[3][1] = -dot(u, eye);
-		Result[3][2] = -dot(f, eye);
+		Result[0][0] = Right.x;
+		Result[1][0] = Right.y;
+		Result[2][0] = Right.z;
+		Result[0][1] = CameraUp.x;
+		Result[1][1] = CameraUp.y;
+		Result[2][1] = CameraUp.z;
+		Result[0][2] = front.x;
+		Result[1][2] = front.y;
+		Result[2][2] = front.z;
+		Result[3][0] = -dot(Right, eye);
+		Result[3][1] = -dot(CameraUp, eye);
+		Result[3][2] = -dot(front, eye);
 		return Result;
 	}
 
