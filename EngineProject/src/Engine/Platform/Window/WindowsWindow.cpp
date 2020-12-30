@@ -19,6 +19,18 @@
 #include "Engine/Renderer/RenderObject.h"
 #include "Engine/Renderer/Camera.h"
 
+struct asd
+{
+	int a;
+	struct bsd
+	{
+		int b;
+
+
+	};
+
+};
+
 
 static glm::vec3 cubePositions[] = {
 	glm::vec3(0.0f,  0.0f,  0.0f),
@@ -182,8 +194,8 @@ namespace Engine {
 
 		m_Shader->Bind();
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_Texture);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_Texture);
 
 		glm::vec3 theCameraPos = MainCamera->GetCameraPos();
 		glm::vec3 theCameraFront = MainCamera->GetCameraFront();
@@ -200,7 +212,7 @@ namespace Engine {
 
 
 		//render objects
-		for (int i = 0; i < RenderObjects.size(); i++)
+		for (int i = 0; i < 1; i++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
 			glm::vec3* translation = RenderObjects[i].GetTransform();
@@ -253,7 +265,7 @@ namespace Engine {
 
 		m_Shader->Bind();
 
-		m_Shader->SetUniformValue1i("v_Texture", 0);
+		//m_Shader->SetUniformValue1i("v_Texture", 0);
 
 		VertexBuffer buffer;
 		buffer.Bind();
@@ -268,12 +280,12 @@ namespace Engine {
 		int arraySize = sizeof(cubePositions) / sizeof(glm::vec3);
 		RenderObjects.resize(arraySize);
 
-		for (int i = 0; i < arraySize; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			RenderObjects[i].SetTransform(cubePositions[i]);
 		}
 
-		MainCamera = new Camera(GetWidth(), GetHeight(), { 0, 0.f, 3.0f }, { 0, 0.f, -1.0f });
+		MainCamera = new Camera(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}
 
 

@@ -25,14 +25,12 @@ namespace Engine
 		{
 		case CameraDirection::Forward:
 		{
-			glm::vec3 fpsCameraFront = { CameraFront.x, 0.f, CameraFront.z };
-			CameraPos += fpsCameraFront * Amount;
+			CameraPos += CameraFront * Amount;
 			break;
 		}
 		case CameraDirection::Backward:
 		{
-			glm::vec3 fpsCameraFront = { CameraFront.x, 0.f, CameraFront.z };
-			CameraPos -= fpsCameraFront * Amount;
+			CameraPos -= CameraFront * Amount;
 			break;
 		}
 		case CameraDirection::Left:
@@ -83,13 +81,10 @@ namespace Engine
 
 	const glm::mat4& Camera::GetCameraLookAt() const
 	{
-		const glm::mat4 LookAt = glm::lookAt(CameraPos, CameraPos + CameraFront, GLMStatics::Vec3Up);
-
+		//const glm::mat4 LookAt = glm::lookAt(CameraPos, CameraPos + CameraFront, GLMStatics::Vec3Up);
 		//return LookAt;
 
-		glm::vec3 Center = CameraPos + CameraFront;
-		glm::vec3 ThisFront = glm::normalize(CameraPos - Center);
-
+		glm::vec3 ThisFront = glm::normalize(-CameraFront);
 		glm::vec3 Right = glm::normalize(glm::cross(GLMStatics::Vec3Up, ThisFront));
 		glm::vec3 CameraUp = glm::cross(ThisFront, Right);
 
