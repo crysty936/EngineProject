@@ -32,61 +32,51 @@ struct asd
 };
 
 
-static glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
-	glm::vec3(-1.3f,  1.0f, -1.5f)
-};
+static const glm::vec3 ContainerPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+static const glm::vec3 LightPosition = glm::vec3(1.2f, 1.0f, 2.0f);
 
-static float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+float vertices[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
 float deltaTime = 0.0f;
@@ -112,8 +102,6 @@ namespace Engine {
 	{
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
-
-		delete m_vertexArray1;
 	}
 
 	void WindowsWindow::Close()
@@ -180,51 +168,73 @@ namespace Engine {
 		m_RenderingContext->SwapBuffers();
 		glfwPollEvents();
 	}
+
 	void WindowsWindow::Draw()
 	{
-
 		//delta time
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		Renderer::GetRenderer().Clear();
 
-		m_Shader->Bind();
+		LightRO->GetShader()->Bind();
+		LightRO->GetVAO()->Bind();
 
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, m_Texture);
-
-		glm::vec3 theCameraPos = MainCamera->GetCameraPos();
-		glm::vec3 theCameraFront = MainCamera->GetCameraFront();
-
-		//camera stuff
+		//camera stuff  
 		glm::mat4 View = MainCamera->GetCameraLookAt();
-
-		m_Shader->SetUniformValue4fv("view", View);
-
+		LightRO->GetShader()->SetUniformValue4fv("view", View);
 
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-		m_Shader->SetUniformValue4fv("projection", projection);
+		LightRO->GetShader()->SetUniformValue4fv("projection", projection);
 
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::vec3* translation = LightRO->GetTransform();
+		model = glm::translate(model, *translation);
+		model = glm::scale(model, glm::vec3(0.2f));
+		LightRO->GetShader()->SetUniformValue4fv("model", model);
+		//
 
-		//render objects
-		for (int i = 0; i < 1; i++)
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		AddImGuiSlider("Light Object", &translation->x);
+
+		int i = 0;
+		for (const auto& RO : RenderObjects)
 		{
+			RO.GetShader()->Bind();
+			RO.GetVAO()->Bind();
+
+			RO.GetShader()->SetUniformValue3f("ObjectColor", 1.0f, 0.5f, 0.31f);
+			RO.GetShader()->SetUniformValue3f("LightColor", 1.0f, 1.0f, 1.0f);
+			RO.GetShader()->SetUniformValue3fv("LightPosition", *LightRO->GetTransform());
+
+			//camera stuff  
+			glm::mat4 View = MainCamera->GetCameraLookAt();
+			RO.GetShader()->SetUniformValue4fv("view", View);
+
+			glm::mat4 projection;
+			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+			RO.GetShader()->SetUniformValue4fv("projection", projection);
+
 			glm::mat4 model = glm::mat4(1.0f);
 			glm::vec3* translation = RenderObjects[i].GetTransform();
 			model = glm::translate(model, *translation);
-			m_Shader->SetUniformValue4fv("model", model);
+			RO.GetShader()->SetUniformValue4fv("model", model);
+			//
+
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
-			std::string sliderName("Model");
-
-			sliderName += std::to_string(i + 1);
-			ImGui::SliderFloat3(sliderName.c_str(), &translation->x, -4.0f, 4.0f);
+			AddImGuiSlider("Model" + std::to_string(i+1), &translation->x);
+			i++;
 		}
+	}
+
+	void WindowsWindow::AddImGuiSlider(const std::string& Name, float* Pointer)
+	{
+		ImGui::SliderFloat3(Name.c_str(), Pointer, -4.0f, 4.0f);
 	}
 
 	void WindowsWindow::ProcessInput()
@@ -261,29 +271,26 @@ namespace Engine {
 
 		m_Texture = boxTexture.GetHandle();
 
-		m_Shader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
-
-		m_Shader->Bind();
-
-		//m_Shader->SetUniformValue1i("v_Texture", 0);
+		Shader* ObjectShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
+		Shader* LightObjShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/LightFragmentShader.glsl");
 
 		VertexBuffer buffer;
 		buffer.Bind();
 		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
-		m_vertexArray1 = new VertexArray();
-		VertexBufferLayout Layout;
-		Layout.Push<float>(3);
-		Layout.Push<float>(2);
-		m_vertexArray1->AddBuffer(buffer, Layout);
+		VertexArray* ContainerVAO = new VertexArray();
+		VertexBufferLayout ContainerLayout;
+		ContainerLayout.Push<float>(3);
+		ContainerLayout.Push<float>(3);
+		ContainerVAO->AddBuffer(buffer, ContainerLayout);
 
-		int arraySize = sizeof(cubePositions) / sizeof(glm::vec3);
-		RenderObjects.resize(arraySize);
+		VertexArray* LightVAO = new VertexArray();
+		LightVAO->AddBuffer(buffer, ContainerLayout);
 
-		for (int i = 0; i < 1; i++)
-		{
-			RenderObjects[i].SetTransform(cubePositions[i]);
-		}
+		RenderObject ContainerRO = RenderObject(ContainerPosition, ContainerVAO, ObjectShader);
+		LightRO = new RenderObject(LightPosition, LightVAO, LightObjShader);
+
+		RenderObjects.push_back(ContainerRO);
 
 		MainCamera = new Camera(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}

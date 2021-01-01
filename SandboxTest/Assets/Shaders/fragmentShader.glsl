@@ -2,14 +2,23 @@
 
 layout(location = 0) out vec4 FragColor;
 
-in vec3 v_Position;
-//in vec2 v_TexCoord;
-			
-//uniform sampler2D v_Texture;
+in vec3 Normal;
+in vec3 FragPos;
+
+uniform vec3 ObjectColor;
+uniform vec3 LightColor;
+uniform vec3 LightPosition;
 
 void main()
 {
-	//FragColor = texture(v_Texture,v_TexCoord);
-	FragColor= vec4(1.0,1.0,1.0,1.0);
+	vec3 norm= normalize(Normal);
+	vec3 lightDir = normalize(LightPosition - FragPos);
+	float diff = max(dot(norm, lightDir), 0.0);
+	vec3 Diffuse = diff*LightColor;
 
+	float AmbientStrength= 0.1;
+	vec3 Ambient= AmbientStrength * LightColor;
+	vec3 Result=(Ambient + Diffuse) * ObjectColor;
+
+	FragColor= vec4(Result, 1.0);
 }

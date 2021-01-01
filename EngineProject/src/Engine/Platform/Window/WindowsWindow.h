@@ -39,6 +39,8 @@ namespace Engine {
 
 		void Draw();
 
+		void AddImGuiSlider(const std::string& Name, float* Pointer);
+
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
 		virtual void SetRunning(bool value) override { glfwSetWindowShouldClose(m_Window, !value); }
 	private:
@@ -46,13 +48,12 @@ namespace Engine {
 
 	private:
 
-		class VertexArray* m_vertexArray1;
 		unsigned int m_indexBuffer;
 		unsigned int m_Texture;
 		float v_TheAlpha = 0.f;
 		std::vector<RenderObject> RenderObjects;
+		RenderObject* LightRO;
 
-		Shader* m_Shader;
 		class Camera* MainCamera;
 
 		IRenderingContext* m_RenderingContext;
