@@ -31,9 +31,7 @@ struct asd
 
 };
 
-
-static const glm::vec3 ContainerPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-static const glm::vec3 LightPosition = glm::vec3(1.2f, 1.0f, 2.0f);
+static const glm::vec3 LightPosition = glm::vec3(1.2f, 0.0f, 0.0f);
 
 float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -78,6 +76,20 @@ float vertices[] = {
 	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
+
+static glm::vec3 cubePositions[] = {
+	glm::vec3(0.0f,  0.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f, -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3(2.4f, -0.4f, -3.5f),
+	glm::vec3(-1.7f,  3.0f, -7.5f),
+	glm::vec3(1.3f, -2.0f, -2.5f),
+	glm::vec3(1.5f,  2.0f, -2.5f),
+	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(-1.3f,  1.0f, -1.5f)
+};
+
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -191,25 +203,33 @@ namespace Engine {
 		LightRO->GetShader()->SetUniformValue4fv("projection", projection);
 
 		glm::mat4 model = glm::mat4(1.0f);
-		glm::vec3* translation = LightRO->GetTransform();
-		model = glm::translate(model, *translation);
+		glm::vec3& translation = LightRO->GetTransform();
+		
+		float x = 2.f * glm::sin(currentFrame);
+		float z = 2.f * glm::cos(currentFrame);
+		translation.x = x;
+		translation.z = z;
+
+
+		model = glm::translate(model, translation);
 		model = glm::scale(model, glm::vec3(0.2f));
 		LightRO->GetShader()->SetUniformValue4fv("model", model);
 		//
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		AddImGuiSlider("Light Object", &translation->x);
+		AddImGuiSlider("Light Object", &translation.x);
 
-		int i = 0;
-		for (const auto& RO : RenderObjects)
+		for (int i = 0; i < 1; i++)
 		{
+			const RenderObject& RO = RenderObjects[i];
 			RO.GetShader()->Bind();
 			RO.GetVAO()->Bind();
 
 			RO.GetShader()->SetUniformValue3f("ObjectColor", 1.0f, 0.5f, 0.31f);
 			RO.GetShader()->SetUniformValue3f("LightColor", 1.0f, 1.0f, 1.0f);
-			RO.GetShader()->SetUniformValue3fv("LightPosition", *LightRO->GetTransform());
+			RO.GetShader()->SetUniformValue3fv("LightPosition", LightRO->GetTransform());
+			RO.GetShader()->SetUniformValue3fv("CameraPosition", MainCamera->GetCameraPos());
 
 			//camera stuff  
 			glm::mat4 View = MainCamera->GetCameraLookAt();
@@ -220,21 +240,23 @@ namespace Engine {
 			RO.GetShader()->SetUniformValue4fv("projection", projection);
 
 			glm::mat4 model = glm::mat4(1.0f);
-			glm::vec3* translation = RenderObjects[i].GetTransform();
-			model = glm::translate(model, *translation);
+			glm::vec3& translation = RenderObjects[i].GetTransform();
+			model = glm::translate(model, translation);
 			RO.GetShader()->SetUniformValue4fv("model", model);
 			//
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
-			AddImGuiSlider("Model" + std::to_string(i+1), &translation->x);
+			AddImGuiSlider("Model" + std::to_string(i + 1), &translation.x);
 			i++;
+
+
 		}
 	}
 
 	void WindowsWindow::AddImGuiSlider(const std::string& Name, float* Pointer)
 	{
-		ImGui::SliderFloat3(Name.c_str(), Pointer, -4.0f, 4.0f);
+		ImGui::SliderFloat3(Name.c_str(), Pointer, -20.0f, 20.0f);
 	}
 
 	void WindowsWindow::ProcessInput()
@@ -287,10 +309,20 @@ namespace Engine {
 		VertexArray* LightVAO = new VertexArray();
 		LightVAO->AddBuffer(buffer, ContainerLayout);
 
-		RenderObject ContainerRO = RenderObject(ContainerPosition, ContainerVAO, ObjectShader);
+		int arraySize = sizeof(cubePositions) / sizeof(glm::vec3);
+		RenderObjects.resize(arraySize);
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			//RenderObjects[i] = SetTransform(cubePositions[i]);
+			RenderObject ContainerRO = RenderObject(cubePositions[i], ContainerVAO, ObjectShader);
+			RenderObjects[i] = ContainerRO;
+		}
+
+
 		LightRO = new RenderObject(LightPosition, LightVAO, LightObjShader);
 
-		RenderObjects.push_back(ContainerRO);
+		//RenderObjects.push_back(ContainerRO);
 
 		MainCamera = new Camera(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}
