@@ -205,11 +205,10 @@ namespace Engine {
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::vec3& translation = LightRO->GetTransform();
 		
-		float x = 2.f * glm::sin(currentFrame);
-		float z = 2.f * glm::cos(currentFrame);
-		translation.x = x;
-		translation.z = z;
-
+// 		float x = 2.f * glm::sin(currentFrame);
+// 		float z = 4.f * glm::cos(currentFrame);
+// 		translation.x = x;
+// 		translation.z = z;
 
 		model = glm::translate(model, translation);
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -226,14 +225,17 @@ namespace Engine {
 			RO.GetShader()->Bind();
 			RO.GetVAO()->Bind();
 
-			RO.GetShader()->SetUniformValue3f("ObjectColor", 1.0f, 0.5f, 0.31f);
-			RO.GetShader()->SetUniformValue3f("LightColor", 1.0f, 1.0f, 1.0f);
-			RO.GetShader()->SetUniformValue3fv("LightPosition", LightRO->GetTransform());
-			RO.GetShader()->SetUniformValue3fv("CameraPosition", MainCamera->GetCameraPos());
-
-			//camera stuff  
 			glm::mat4 View = MainCamera->GetCameraLookAt();
 			RO.GetShader()->SetUniformValue4fv("view", View);
+
+			RO.GetShader()->SetUniformValue3f("ObjectColor", 1.0f, 0.5f, 0.31f);
+			RO.GetShader()->SetUniformValue3f("LightColor", 1.0f, 1.0f, 1.0f);
+			glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
+			glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
+			RO.GetShader()->SetUniformValue3fv("LightPosition", LightRO->GetTransform());
+
+			RO.GetShader()->SetUniformValue3fv("CameraPos", MainCamera->GetCameraPos());
+
 
 			glm::mat4 projection;
 			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
