@@ -38,7 +38,7 @@ namespace Engine {
 		void ProcessInput();
 
 		void Draw();
-
+		bool did = false;
 		void AddImGuiSlider(const std::string& Name, float* Pointer);
 
 		virtual bool IsRunning() const override { return !glfwWindowShouldClose(m_Window); }
@@ -50,6 +50,7 @@ namespace Engine {
 
 		unsigned int m_indexBuffer;
 		unsigned int m_Texture;
+		unsigned int m_TextureSpecular;
 		float v_TheAlpha = 0.f;
 		std::vector<RenderObject> RenderObjects;
 		RenderObject* LightRO;

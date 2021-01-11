@@ -45,6 +45,20 @@ namespace Engine
 			CameraPos += Right * Amount;
 			break;
 		}
+		case CameraDirection::Up:
+		{
+			glm::vec3 Right = glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up));
+			glm::vec3 Up = -glm::cross(CameraFront, Right);
+			CameraPos += Up * Amount;
+			break;
+		}
+		case CameraDirection::Down:
+		{
+			glm::vec3 Right = glm::normalize(glm::cross(CameraFront, GLMStatics::Vec3Up));
+			glm::vec3 Down = glm::cross(CameraFront, Right);
+			CameraPos += Down * Amount;
+			break;
+		}
 		}
 	}
 

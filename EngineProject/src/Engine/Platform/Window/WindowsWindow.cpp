@@ -34,47 +34,48 @@ struct asd
 static const glm::vec3 LightPosition = glm::vec3(1.2f, 0.0f, 0.0f);
 
 float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	// positions          // normals           // texture coords
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
 
 static glm::vec3 cubePositions[] = {
@@ -184,35 +185,41 @@ namespace Engine {
 	void WindowsWindow::Draw()
 	{
 		//delta time
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		float ElapsedTime = glfwGetTime();
+		deltaTime = ElapsedTime - lastFrame;
+		lastFrame = ElapsedTime;
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		Renderer::GetRenderer().Clear();
 
-		LightRO->GetShader()->Bind();
-		LightRO->GetVAO()->Bind();
+		LightRO->GetShader().Bind();
+		LightRO->GetVAO().Bind();
 
 		//camera stuff  
 		glm::mat4 View = MainCamera->GetCameraLookAt();
-		LightRO->GetShader()->SetUniformValue4fv("view", View);
+		LightRO->GetShader().SetUniformValue4fv("view", View);
 
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-		LightRO->GetShader()->SetUniformValue4fv("projection", projection);
+		LightRO->GetShader().SetUniformValue4fv("projection", projection);
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::vec3& translation = LightRO->GetTransform();
 		
-// 		float x = 2.f * glm::sin(currentFrame);
-// 		float z = 4.f * glm::cos(currentFrame);
-// 		translation.x = x;
-// 		translation.z = z;
+// 		translation.x = 2.f * glm::sin(currentFrame);
+// 		translation.z = 4.f * glm::cos(currentFrame);
 
 		model = glm::translate(model, translation);
 		model = glm::scale(model, glm::vec3(0.2f));
-		LightRO->GetShader()->SetUniformValue4fv("model", model);
+		LightRO->GetShader().SetUniformValue4fv("model", model);
+		glm::vec3 LightColor;
+// 		LightColor.x = sin(ElapsedTime * 2.0f);
+// 		LightColor.y = sin(ElapsedTime * 0.7f);
+// 		LightColor.z = sin(ElapsedTime * 1.3f);
+		LightColor = glm::vec3(1, 1, 1);
+
+
+		LightRO->GetShader().SetUniformValue3fv("ULightColor", LightColor);
 		//
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -222,29 +229,45 @@ namespace Engine {
 		for (int i = 0; i < 1; i++)
 		{
 			const RenderObject& RO = RenderObjects[i];
-			RO.GetShader()->Bind();
-			RO.GetVAO()->Bind();
+			Shader& const CurShader = RO.GetShader();
+			CurShader.Bind();
+			RO.GetVAO().Bind();
+
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_Texture);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, m_TextureSpecular);
 
 			glm::mat4 View = MainCamera->GetCameraLookAt();
-			RO.GetShader()->SetUniformValue4fv("view", View);
+			CurShader.SetUniformValue4fv("view", View);
 
-			RO.GetShader()->SetUniformValue3f("ObjectColor", 1.0f, 0.5f, 0.31f);
-			RO.GetShader()->SetUniformValue3f("LightColor", 1.0f, 1.0f, 1.0f);
+			CurShader.SetUniformValue3f("UObjectColor", 1.0f, 1.0f, 1.0f);
+
 			glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
 			glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
-			RO.GetShader()->SetUniformValue3fv("LightPosition", LightRO->GetTransform());
 
-			RO.GetShader()->SetUniformValue3fv("CameraPos", MainCamera->GetCameraPos());
+			glm::vec3 DiffuseColor = LightColor * glm::vec3(0.5f);
+			glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+
+			CurShader.SetUniformValue3fv("ULight.Position", Vec3ViewSpacePosition);
+			CurShader.SetUniformValue3fv("ULight.Ambient", AmbientColor);
+			CurShader.SetUniformValue3fv("ULight.Diffuse", DiffuseColor);
+			CurShader.SetUniformValue3f("ULight.Specular", LightColor.x, LightColor.y, LightColor.z);
+
+			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
+			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
+			CurShader.SetUniformValue1f("UMaterial.Shininess", 32.f);
 
 
 			glm::mat4 projection;
 			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-			RO.GetShader()->SetUniformValue4fv("projection", projection);
+			CurShader.SetUniformValue4fv("projection", projection);
 
 			glm::mat4 model = glm::mat4(1.0f);
 			glm::vec3& translation = RenderObjects[i].GetTransform();
 			model = glm::translate(model, translation);
-			RO.GetShader()->SetUniformValue4fv("model", model);
+			CurShader.SetUniformValue4fv("model", model);
 			//
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -282,18 +305,25 @@ namespace Engine {
 			MainCamera->Move(CameraDirection::Right, Velocity);
 
 		}
+		if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			MainCamera->Move(CameraDirection::Up, Velocity);
+		}
+		if (glfwGetKey(m_Window, GLFW_KEY_C) == GLFW_PRESS)
+		{
+			MainCamera->Move(CameraDirection::Down, Velocity);
+		}
 	}
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-		Texture boxTexture("Assets/Textures/WoodenTexture.jpg", GL_RGB);
+		m_Texture = Texture("Assets/Textures/WoodContainer.png", GL_RGBA).GetHandle();
+		m_TextureSpecular =  Texture("Assets/Textures/WoodContainer_Specular.png", GL_RGBA).GetHandle();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		m_Texture = boxTexture.GetHandle();
 
 		Shader* ObjectShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
 		Shader* LightObjShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/LightFragmentShader.glsl");
@@ -306,6 +336,7 @@ namespace Engine {
 		VertexBufferLayout ContainerLayout;
 		ContainerLayout.Push<float>(3);
 		ContainerLayout.Push<float>(3);
+		ContainerLayout.Push<float>(2);
 		ContainerVAO->AddBuffer(buffer, ContainerLayout);
 
 		VertexArray* LightVAO = new VertexArray();

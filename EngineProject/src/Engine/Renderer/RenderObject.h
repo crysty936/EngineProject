@@ -12,8 +12,8 @@ namespace Engine
 		~RenderObject();
 
 		FORCEINLINE glm::vec3&			GetTransform() { return Transform; }
-		FORCEINLINE class VertexArray*	GetVAO() const { return VAO; }
-		FORCEINLINE class Shader*		GetShader() const { return ObjectShader; }
+		FORCEINLINE class VertexArray&	GetVAO() const { return *VAO; }
+		FORCEINLINE class Shader&		GetShader() const { return *ObjectShader; }
 		
 		FORCEINLINE void				SetTransform(glm::vec3 _Transform) { Transform = _Transform; }
 		FORCEINLINE void				SetVAO(class VertexArray* _VAO) { VAO = _VAO; }
