@@ -205,17 +205,12 @@ namespace Engine {
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::vec3& translation = LightRO->GetTransform();
-		
-// 		translation.x = 2.f * glm::sin(currentFrame);
-// 		translation.z = 4.f * glm::cos(currentFrame);
 
 		model = glm::translate(model, translation);
 		model = glm::scale(model, glm::vec3(0.2f));
 		LightRO->GetShader().SetUniformValue4fv("model", model);
 		glm::vec3 LightColor;
-// 		LightColor.x = sin(ElapsedTime * 2.0f);
-// 		LightColor.y = sin(ElapsedTime * 0.7f);
-// 		LightColor.z = sin(ElapsedTime * 1.3f);
+
 		LightColor = glm::vec3(1, 1, 1);
 
 
@@ -226,7 +221,10 @@ namespace Engine {
 
 		AddImGuiSlider("Light Object", &translation.x);
 
-		for (int i = 0; i < 1; i++)
+		const glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
+		const glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
+
+		for (int i = 0; i < RenderObjects.size(); i++)
 		{
 			const RenderObject& RO = RenderObjects[i];
 			Shader& const CurShader = RO.GetShader();
@@ -238,25 +236,31 @@ namespace Engine {
 			glBindTexture(GL_TEXTURE_2D, m_Texture);
 			glActiveTexture(GL_TEXTURE1);
 			glBindTexture(GL_TEXTURE_2D, m_TextureSpecular);
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, m_TextureEmission);
 
-			glm::mat4 View = MainCamera->GetCameraLookAt();
+			const glm::mat4 View = MainCamera->GetCameraLookAt();
 			CurShader.SetUniformValue4fv("view", View);
 
 			CurShader.SetUniformValue3f("UObjectColor", 1.0f, 1.0f, 1.0f);
 
-			glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
-			glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
+			const glm::vec3 DiffuseColor = LightColor * glm::vec3(0.5f);
+			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
 
-			glm::vec3 DiffuseColor = LightColor * glm::vec3(0.5f);
-			glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
 
 			CurShader.SetUniformValue3fv("ULight.Position", Vec3ViewSpacePosition);
+
+			CurShader.SetUniformValue1f("ULight.Constant", 1.0f);
+			CurShader.SetUniformValue1f("ULight.Linear", 0.09f);
+			CurShader.SetUniformValue1f("ULight.Quadratic", 0.032f);
+
 			CurShader.SetUniformValue3fv("ULight.Ambient", AmbientColor);
 			CurShader.SetUniformValue3fv("ULight.Diffuse", DiffuseColor);
 			CurShader.SetUniformValue3f("ULight.Specular", LightColor.x, LightColor.y, LightColor.z);
 
 			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
 			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
+			//CurShader.SetUniformValue1i("UMaterial.EmissionMap", 2);
 			CurShader.SetUniformValue1f("UMaterial.Shininess", 32.f);
 
 
@@ -273,9 +277,6 @@ namespace Engine {
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
 			AddImGuiSlider("Model" + std::to_string(i + 1), &translation.x);
-			i++;
-
-
 		}
 	}
 
@@ -318,7 +319,8 @@ namespace Engine {
 	void WindowsWindow::DoOpenGlStuff()
 	{
 		m_Texture = Texture("Assets/Textures/WoodContainer.png", GL_RGBA).GetHandle();
-		m_TextureSpecular =  Texture("Assets/Textures/WoodContainer_Specular.png", GL_RGBA).GetHandle();
+		m_TextureSpecular = Texture("Assets/Textures/WoodContainer_Specular.png", GL_RGBA).GetHandle();
+		m_TextureEmission = Texture("Assets/Textures/WoodContainer_Emission.jpg", GL_RGB).GetHandle();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -347,7 +349,6 @@ namespace Engine {
 
 		for (int i = 0; i < arraySize; i++)
 		{
-			//RenderObjects[i] = SetTransform(cubePositions[i]);
 			RenderObject ContainerRO = RenderObject(cubePositions[i], ContainerVAO, ObjectShader);
 			RenderObjects[i] = ContainerRO;
 		}

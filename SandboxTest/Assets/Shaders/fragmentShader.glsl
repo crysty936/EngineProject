@@ -2,14 +2,13 @@
 
 layout(location = 0) out vec4 FragColor;
 
-
-
 struct Material
 {
 	float Shininess;
 	
 	sampler2D DiffuseMap;
 	sampler2D SpecularMap;
+	sampler2D EmissionMap;
 };
 
 struct Light
@@ -19,6 +18,11 @@ struct Light
  vec3 Ambient;
  vec3 Diffuse;
  vec3 Specular;
+
+ float Constant;
+ float Linear;
+ float Quadratic;
+
 };
 
 in vec3 Normal;
@@ -31,7 +35,11 @@ uniform Light ULight;
 
 void main()
 {
-	vec3 Ambient = ULight.Ambient * vec3(texture(UMaterial.DiffuseMap, TexCoords));
+
+	float Distance = length(ULight.Position - FragPos);
+	float Attenuation = 1.0/(ULight.Constant + ULight.Linear * Distance + ULight.Quadratic*(Distance*Distance));
+
+	vec3 Ambient = ULight.Ambient * vec3(texture(UMaterial.DiffuseMap, TexCoords)) ;
 
 	vec3 norm= normalize(Normal);
 	vec3 LightDir = normalize(ULight.Position - FragPos);
@@ -43,8 +51,13 @@ void main()
 	float SpecAmount = pow(max(dot(ViewDirection, ReflectDir), 0.0), UMaterial.Shininess);
 	vec3 Specular = ULight.Specular *SpecAmount * vec3(texture(UMaterial.SpecularMap, TexCoords));
 
+	//vec3 Emission = vec3(texture(UMaterial.EmissionMap, TexCoords));
 
-	vec3 Result=(Ambient + Diffuse + Specular) * UObjectColor;
+	Ambient*=Attenuation;
+	Diffuse*=Attenuation;
+	Specular*=Attenuation;
+
+	vec3 Result=(Ambient + Diffuse + Specular) * UObjectColor ;
 
 	FragColor= vec4(Result, 1.0);
 }

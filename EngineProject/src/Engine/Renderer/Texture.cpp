@@ -11,6 +11,8 @@ namespace Engine
 
 		unsigned char* data = stbi_load(TexturePath, &Width, &Height, &NrChannels, 0);
 
+		ENGINE_ASSERT(data, "Image Loading Failed");
+
 		stbi_set_flip_vertically_on_load(true);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, ImageType, GL_UNSIGNED_BYTE, data);

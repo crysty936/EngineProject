@@ -51,6 +51,7 @@ namespace Engine {
 		unsigned int m_indexBuffer;
 		unsigned int m_Texture;
 		unsigned int m_TextureSpecular;
+		unsigned int m_TextureEmission;
 		float v_TheAlpha = 0.f;
 		std::vector<RenderObject> RenderObjects;
 		RenderObject* LightRO;
