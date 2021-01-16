@@ -31,7 +31,7 @@ struct asd
 
 };
 
-static const glm::vec3 LightPosition = glm::vec3(1.2f, 0.0f, 0.0f);
+static const glm::vec3 LightPosition = glm::vec3(10.2f, 0.0f, 0.0f);
 
 float vertices[] = {
 	// positions          // normals           // texture coords
@@ -221,8 +221,8 @@ namespace Engine {
 
 		AddImGuiSlider("Light Object", &translation.x);
 
-		const glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
-		const glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
+// 		const glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
+// 		const glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
 
 		for (int i = 0; i < RenderObjects.size(); i++)
 		{
@@ -248,11 +248,15 @@ namespace Engine {
 			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
 
 
-			CurShader.SetUniformValue3fv("ULight.Position", Vec3ViewSpacePosition);
+			CurShader.SetUniformValue3fv("ULight.Position", MainCamera->GetCameraPos());
+			CurShader.SetUniformValue3fv("ULight.Direction", MainCamera->GetCameraFront());
 
 			CurShader.SetUniformValue1f("ULight.Constant", 1.0f);
 			CurShader.SetUniformValue1f("ULight.Linear", 0.09f);
 			CurShader.SetUniformValue1f("ULight.Quadratic", 0.032f);
+			CurShader.SetUniformValue1f("ULight.InnerCutOff", glm::cos(glm::radians(12.5f)));
+			CurShader.SetUniformValue1f("ULight.OuterCutOff", glm::cos(glm::radians(17.5f)));
+
 
 			CurShader.SetUniformValue3fv("ULight.Ambient", AmbientColor);
 			CurShader.SetUniformValue3fv("ULight.Diffuse", DiffuseColor);

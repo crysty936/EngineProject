@@ -14,6 +14,7 @@ struct Material
 struct Light
 {
  vec3 Position;
+ vec3 Direction;
 
  vec3 Ambient;
  vec3 Diffuse;
@@ -22,7 +23,8 @@ struct Light
  float Constant;
  float Linear;
  float Quadratic;
-
+ float InnerCutOff;
+ float OuterCutOff;
 };
 
 in vec3 Normal;
@@ -51,13 +53,26 @@ void main()
 	float SpecAmount = pow(max(dot(ViewDirection, ReflectDir), 0.0), UMaterial.Shininess);
 	vec3 Specular = ULight.Specular *SpecAmount * vec3(texture(UMaterial.SpecularMap, TexCoords));
 
-	//vec3 Emission = vec3(texture(UMaterial.EmissionMap, TexCoords));
+	float Theta=dot(LightDir, normalize(-ULight.Direction));
+	float Epsilon = ULight.InnerCutOff - ULight.OuterCutOff;
+	float Intensity = clamp((Theta-ULight.OuterCutOff)/Epsilon, 0.0, 1.0);
 
-	Ambient*=Attenuation;
-	Diffuse*=Attenuation;
-	Specular*=Attenuation;
 
-	vec3 Result=(Ambient + Diffuse + Specular) * UObjectColor ;
+	Diffuse*=Attenuation * Intensity;
+	Specular*=Attenuation * Intensity;
+
+	vec3 Result;
+	if(Theta>ULight.OuterCutOff)
+	{
+		Result=(Ambient + Diffuse + Specular) * UObjectColor ;
+	}
+	else
+	{
+		Result=ULight.Ambient * vec3(texture(UMaterial.DiffuseMap, TexCoords));
+	}
+
+
+
 
 	FragColor= vec4(Result, 1.0);
 }
