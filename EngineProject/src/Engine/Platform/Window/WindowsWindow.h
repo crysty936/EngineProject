@@ -7,6 +7,7 @@
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/Events/MouseEvents.h"
 #include "Engine/Renderer/RenderObject.h"
+#include <glm/glm.hpp>
 
 
 namespace Engine {
@@ -55,6 +56,8 @@ namespace Engine {
 		float v_TheAlpha = 0.f;
 		std::vector<RenderObject> RenderObjects;
 		RenderObject* LightRO;
+
+		glm::vec3 CameraDirection = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		class Camera* MainCamera;
 

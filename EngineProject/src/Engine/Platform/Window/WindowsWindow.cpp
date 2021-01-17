@@ -31,7 +31,7 @@ struct asd
 
 };
 
-static const glm::vec3 LightPosition = glm::vec3(10.2f, 0.0f, 0.0f);
+static const glm::vec3 LightPosition = glm::vec3(1.2f, 0.0f, 0.0f);
 
 float vertices[] = {
 	// positions          // normals           // texture coords
@@ -91,6 +91,12 @@ static glm::vec3 cubePositions[] = {
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+static const glm::vec3 PointLightPositions[] = {
+	glm::vec3(0.7f,  0.2f,  2.0f),
+	glm::vec3(2.3f, -3.3f, -4.0f),
+	glm::vec3(-4.0f,  2.0f, -12.0f),
+	glm::vec3(0.0f,  0.0f, -3.0f)
+};
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -192,37 +198,42 @@ namespace Engine {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		Renderer::GetRenderer().Clear();
 
-		LightRO->GetShader().Bind();
-		LightRO->GetVAO().Bind();
+		glm::vec3 LightColor = glm::vec3(1, 1, 1);
 
-		//camera stuff  
-		glm::mat4 View = MainCamera->GetCameraLookAt();
-		LightRO->GetShader().SetUniformValue4fv("view", View);
+		for (int i = 0; i < sizeof(PointLightPositions) / sizeof(glm::vec3); i++)
+		{
+			LightRO->GetShader().Bind();
+			LightRO->GetVAO().Bind();
 
-		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-		LightRO->GetShader().SetUniformValue4fv("projection", projection);
+			//camera stuff  
+			glm::mat4 View = MainCamera->GetCameraLookAt();
+			LightRO->GetShader().SetUniformValue4fv("view", View);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::vec3& translation = LightRO->GetTransform();
+			glm::mat4 projection;
+			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+			LightRO->GetShader().SetUniformValue4fv("projection", projection);
 
-		model = glm::translate(model, translation);
-		model = glm::scale(model, glm::vec3(0.2f));
-		LightRO->GetShader().SetUniformValue4fv("model", model);
-		glm::vec3 LightColor;
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec3 translation = PointLightPositions[i];
 
-		LightColor = glm::vec3(1, 1, 1);
+			model = glm::translate(model, translation);
+			model = glm::scale(model, glm::vec3(0.2f));
+			LightRO->GetShader().SetUniformValue4fv("model", model);
 
 
-		LightRO->GetShader().SetUniformValue3fv("ULightColor", LightColor);
-		//
+			LightRO->GetShader().SetUniformValue3fv("ULightColor", LightColor);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		AddImGuiSlider("Light Object", &translation.x);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
 
-// 		const glm::vec4 Vec4ViewSpacePosition = View * glm::vec4(LightRO->GetTransform(), 1.0f);
-// 		const glm::vec3 Vec3ViewSpacePosition = glm::vec3(Vec4ViewSpacePosition);
+			AddImGuiSlider("Light Object", &translation.x);
+
+			AddImGuiSlider("CameraDirection", glm::value_ptr(CameraDirection));
+		}
+
+
+
+
 
 		for (int i = 0; i < RenderObjects.size(); i++)
 		{
@@ -242,25 +253,45 @@ namespace Engine {
 			const glm::mat4 View = MainCamera->GetCameraLookAt();
 			CurShader.SetUniformValue4fv("view", View);
 
-			CurShader.SetUniformValue3f("UObjectColor", 1.0f, 1.0f, 1.0f);
 
-			const glm::vec3 DiffuseColor = LightColor * glm::vec3(0.5f);
+			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
 			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
 
 
-			CurShader.SetUniformValue3fv("ULight.Position", MainCamera->GetCameraPos());
-			CurShader.SetUniformValue3fv("ULight.Direction", MainCamera->GetCameraFront());
-
-			CurShader.SetUniformValue1f("ULight.Constant", 1.0f);
-			CurShader.SetUniformValue1f("ULight.Linear", 0.09f);
-			CurShader.SetUniformValue1f("ULight.Quadratic", 0.032f);
-			CurShader.SetUniformValue1f("ULight.InnerCutOff", glm::cos(glm::radians(12.5f)));
-			CurShader.SetUniformValue1f("ULight.OuterCutOff", glm::cos(glm::radians(17.5f)));
+			CurShader.SetUniformValue3fv("UDirectionalLight.Direction", glm::vec3(0, -1.0f, 0));
+			CurShader.SetUniformValue3fv("UDirectionalLight.Ambient", AmbientColor);
+			CurShader.SetUniformValue3fv("UDirectionalLight.Diffuse", DiffuseColor);
+			CurShader.SetUniformValue3f("UDirectionalLight.Specular", LightColor.x, LightColor.y, LightColor.z);
 
 
-			CurShader.SetUniformValue3fv("ULight.Ambient", AmbientColor);
-			CurShader.SetUniformValue3fv("ULight.Diffuse", DiffuseColor);
-			CurShader.SetUniformValue3f("ULight.Specular", LightColor.x, LightColor.y, LightColor.z);
+			for (int j = 0; j < sizeof(PointLightPositions) / sizeof(glm::vec3); j++)
+			{
+				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Position", PointLightPositions[j]);
+
+
+
+				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Constant", 1.0f);
+				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Linear", 0.09f);
+				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Quadratic", 0.032f);
+				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Ambient", AmbientColor);
+				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Diffuse", DiffuseColor);
+				CurShader.SetUniformValue3f("UPointLights[" + std::to_string(j) + "].Specular", LightColor.x, LightColor.y, LightColor.z);
+
+			}
+
+
+			CurShader.SetUniformValue3fv("USpotLight.Position", MainCamera->GetCameraPos());
+			CurShader.SetUniformValue3fv("USpotLight.Direction", MainCamera->GetCameraFront());
+
+			CurShader.SetUniformValue1f("USpotLight.Constant", 1.0f);
+			CurShader.SetUniformValue1f("USpotLight.Linear", 0.09f);
+			CurShader.SetUniformValue1f("USpotLight.Quadratic", 0.032f);
+			CurShader.SetUniformValue1f("USpotLight.InnerCutOff", glm::cos(glm::radians(12.5f)));
+			CurShader.SetUniformValue1f("USpotLight.OuterCutOff", glm::cos(glm::radians(17.5f)));
+
+			CurShader.SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
+			CurShader.SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
+			CurShader.SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
 
 			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
 			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
@@ -359,8 +390,6 @@ namespace Engine {
 
 
 		LightRO = new RenderObject(LightPosition, LightVAO, LightObjShader);
-
-		//RenderObjects.push_back(ContainerRO);
 
 		MainCamera = new Camera(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}
