@@ -15,10 +15,12 @@ workspace "EngineProject"
 	IncludeDir["Glad"]="EngineProject/vendor/Glad/include"
 	IncludeDir["Imgui"]="EngineProject/vendor/imgui"
 	IncludeDir["glm"]="EngineProject/vendor/glm"
+	IncludeDir["assimp"]="EngineProject/vendor/assimp/include"
 
 	include "EngineProject/vendor/GLFW"
 	include "EngineProject/vendor/Glad"
 	include "EngineProject/vendor/Imgui"
+	include "EngineProject/vendor/assimp"
 
 	project "EngineProject"
 		location "EngineProject"
@@ -49,7 +51,8 @@ workspace "EngineProject"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.Imgui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.assimp}"
 		}
 
 		links
@@ -57,7 +60,8 @@ workspace "EngineProject"
 			"GLFW",
 			"Glad",
 			"Imgui",
-			"opengl32.lib"
+			"opengl32.lib",
+			"assimp"
 		}
 		
 		defines

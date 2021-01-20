@@ -194,7 +194,6 @@ namespace Engine {
 		float ElapsedTime = glfwGetTime();
 		deltaTime = ElapsedTime - lastFrame;
 		lastFrame = ElapsedTime;
-
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		Renderer::GetRenderer().Clear();
 
