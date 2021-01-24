@@ -8,7 +8,7 @@
 #include "Engine/Renderer/VertexArray.h"
 #include "Engine/Renderer/IndexBuffer.h"
 #include "Engine/Renderer/VertexBuffer.h"
-#include "Engine/Renderer/Texture.h"
+#include "Engine/Renderer/OGTexture.h"
 #include "Engine/Core/KeyCodes.h"
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include <glm/glm.hpp>
@@ -18,18 +18,8 @@
 #include <sstream>
 #include "Engine/Renderer/RenderObject.h"
 #include "Engine/Renderer/Camera.h"
+#include "Engine/Renderer/Model.h"
 
-struct asd
-{
-	int a;
-	struct bsd
-	{
-		int b;
-
-
-	};
-
-};
 
 static const glm::vec3 LightPosition = glm::vec3(1.2f, 0.0f, 0.0f);
 
@@ -79,7 +69,7 @@ float vertices[] = {
 };
 
 static glm::vec3 cubePositions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
+	//glm::vec3(0.0f,  0.0f,  0.0f),
 	glm::vec3(2.0f,  5.0f, -15.0f),
 	glm::vec3(-1.5f, -2.2f, -2.5f),
 	glm::vec3(-3.8f, -2.0f, -12.3f),
@@ -193,125 +183,141 @@ namespace Engine {
 		//delta time
 		float ElapsedTime = glfwGetTime();
 		deltaTime = ElapsedTime - lastFrame;
+		LOG_CORE_INFO("Current Frame Time : {0}", deltaTime);
 		lastFrame = ElapsedTime;
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		Renderer::GetRenderer().Clear();
 
-		glm::vec3 LightColor = glm::vec3(1, 1, 1);
+		// 		glm::vec3 LightColor = glm::vec3(1, 1, 1);
+		// 		for (int i = 0; i < sizeof(PointLightPositions) / sizeof(glm::vec3); i++)
+		// 		{
+		// 			LightRO->GetShader().Bind();
+		// 			LightRO->GetVAO().Bind();
+		// 
+		// 			//camera stuff  
+		// 			glm::mat4 View = MainCamera->GetCameraLookAt();
+		// 			LightRO->GetShader().SetUniformValue4fv("view", View);
+		// 
+		// 			glm::mat4 projection;
+		// 			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+		// 			LightRO->GetShader().SetUniformValue4fv("projection", projection);
+		// 
+		// 			glm::mat4 model = glm::mat4(1.0f);
+		// 			glm::vec3 translation = PointLightPositions[i];
+		// 
+		// 			model = glm::translate(model, translation);
+		// 			model = glm::scale(model, glm::vec3(0.2f));
+		// 			LightRO->GetShader().SetUniformValue4fv("model", model);
+		// 
+		// 
+		// 			LightRO->GetShader().SetUniformValue3fv("ULightColor", LightColor);
+		// 
+		// 
+		// 			glDrawArrays(GL_TRIANGLES, 0, 36);
+		// 
+		// 			AddImGuiSlider("Light Object", &translation.x);
+		// 
+		// 			AddImGuiSlider("CameraDirection", glm::value_ptr(CameraDirection));
+		// 		}
+		// 
+		// 
+		// 
+		// 
+		// 
+		// 		for (int i = 0; i < RenderObjects.size(); i++)
+		// 		{
+		// 			const RenderObject& RO = RenderObjects[i];
+		// 			Shader& const CurShader = RO.GetShader();
+		// 			CurShader.Bind();
+		// 			RO.GetVAO().Bind();
+		// 
+		// 
+		// 			glActiveTexture(GL_TEXTURE0);
+		// 			glBindTexture(GL_TEXTURE_2D, m_Texture);
+		// 			glActiveTexture(GL_TEXTURE1);
+		// 			glBindTexture(GL_TEXTURE_2D, m_TextureSpecular);
+		// 			glActiveTexture(GL_TEXTURE2);
+		// 			glBindTexture(GL_TEXTURE_2D, m_TextureEmission);
+		// 
+		// 			const glm::mat4 View = MainCamera->GetCameraLookAt();
+		// 			CurShader.SetUniformValue4fv("view", View);
+		// 
+		// 
+		// 			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
+		// 			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+		// 
+		// 
+		// 			CurShader.SetUniformValue3fv("UDirectionalLight.Direction", glm::vec3(0, -1.0f, 0));
+		// 			CurShader.SetUniformValue3fv("UDirectionalLight.Ambient", AmbientColor);
+		// 			CurShader.SetUniformValue3fv("UDirectionalLight.Diffuse", DiffuseColor);
+		// 			CurShader.SetUniformValue3f("UDirectionalLight.Specular", LightColor.x, LightColor.y, LightColor.z);
+		// 
+		// 
+		// 			for (int j = 0; j < sizeof(PointLightPositions) / sizeof(glm::vec3); j++)
+		// 			{
+		// 				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Position", PointLightPositions[j]);
+		// 
+		// 
+		// 
+		// 				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Constant", 1.0f);
+		// 				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Linear", 0.09f);
+		// 				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Quadratic", 0.032f);
+		// 				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Ambient", AmbientColor);
+		// 				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Diffuse", DiffuseColor);
+		// 				CurShader.SetUniformValue3f("UPointLights[" + std::to_string(j) + "].Specular", LightColor.x, LightColor.y, LightColor.z);
+		// 
+		// 			}
+		// 
+		// 
+		// 			CurShader.SetUniformValue3fv("USpotLight.Position", MainCamera->GetCameraPos());
+		// 			CurShader.SetUniformValue3fv("USpotLight.Direction", MainCamera->GetCameraFront());
+		// 
+		// 			CurShader.SetUniformValue1f("USpotLight.Constant", 1.0f);
+		// 			CurShader.SetUniformValue1f("USpotLight.Linear", 0.09f);
+		// 			CurShader.SetUniformValue1f("USpotLight.Quadratic", 0.032f);
+		// 			CurShader.SetUniformValue1f("USpotLight.InnerCutOff", glm::cos(glm::radians(12.5f)));
+		// 			CurShader.SetUniformValue1f("USpotLight.OuterCutOff", glm::cos(glm::radians(17.5f)));
+		// 
+		// 			CurShader.SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
+		// 			CurShader.SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
+		// 			CurShader.SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
+		// 
+		// 			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
+		// 			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
+		// 			//CurShader.SetUniformValue1i("UMaterial.EmissionMap", 2);
+		// 			CurShader.SetUniformValue1f("UMaterial.Shininess", 32.f);
+		// 
+		// 
+		// 			glm::mat4 projection;
+		// 			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+		// 			CurShader.SetUniformValue4fv("projection", projection);
+		// 
+		// 			glm::mat4 model = glm::mat4(1.0f);
+		// 			glm::vec3& translation = RenderObjects[i].GetTransform();
+		// 			model = glm::translate(model, translation);
+		// 			CurShader.SetUniformValue4fv("model", model);
+		// 			//
+		// 
+		// 			glDrawArrays(GL_TRIANGLES, 0, 36);
+		// 
+		// 			AddImGuiSlider("Model" + std::to_string(i + 1), &translation.x);
+		// 		}
 
-		for (int i = 0; i < sizeof(PointLightPositions) / sizeof(glm::vec3); i++)
-		{
-			LightRO->GetShader().Bind();
-			LightRO->GetVAO().Bind();
+		ModelShader->Bind();
+		const glm::mat4 View = MainCamera->GetCameraLookAt();
+		ModelShader->SetUniformValue4fv("view", View);
 
-			//camera stuff  
-			glm::mat4 View = MainCamera->GetCameraLookAt();
-			LightRO->GetShader().SetUniformValue4fv("view", View);
+		glm::mat4 ModelProjection;
+		ModelProjection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+		ModelShader->SetUniformValue4fv("projection", ModelProjection);
 
-			glm::mat4 projection;
-			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-			LightRO->GetShader().SetUniformValue4fv("projection", projection);
+		glm::mat4 ModelModel = glm::mat4(1.0f);
+		glm::vec3& ModelTranslation = ModelPosition;
+		ModelModel = glm::translate(ModelModel, ModelTranslation);
+		ModelShader->SetUniformValue4fv("model", ModelModel);
+		AddImGuiSlider("Model" , &ModelTranslation.x);
 
-			glm::mat4 model = glm::mat4(1.0f);
-			glm::vec3 translation = PointLightPositions[i];
-
-			model = glm::translate(model, translation);
-			model = glm::scale(model, glm::vec3(0.2f));
-			LightRO->GetShader().SetUniformValue4fv("model", model);
-
-
-			LightRO->GetShader().SetUniformValue3fv("ULightColor", LightColor);
-
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-
-			AddImGuiSlider("Light Object", &translation.x);
-
-			AddImGuiSlider("CameraDirection", glm::value_ptr(CameraDirection));
-		}
-
-
-
-
-
-		for (int i = 0; i < RenderObjects.size(); i++)
-		{
-			const RenderObject& RO = RenderObjects[i];
-			Shader& const CurShader = RO.GetShader();
-			CurShader.Bind();
-			RO.GetVAO().Bind();
-
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_Texture);
-			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, m_TextureSpecular);
-			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, m_TextureEmission);
-
-			const glm::mat4 View = MainCamera->GetCameraLookAt();
-			CurShader.SetUniformValue4fv("view", View);
-
-
-			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
-			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
-
-
-			CurShader.SetUniformValue3fv("UDirectionalLight.Direction", glm::vec3(0, -1.0f, 0));
-			CurShader.SetUniformValue3fv("UDirectionalLight.Ambient", AmbientColor);
-			CurShader.SetUniformValue3fv("UDirectionalLight.Diffuse", DiffuseColor);
-			CurShader.SetUniformValue3f("UDirectionalLight.Specular", LightColor.x, LightColor.y, LightColor.z);
-
-
-			for (int j = 0; j < sizeof(PointLightPositions) / sizeof(glm::vec3); j++)
-			{
-				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Position", PointLightPositions[j]);
-
-
-
-				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Constant", 1.0f);
-				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Linear", 0.09f);
-				CurShader.SetUniformValue1f("UPointLights[" + std::to_string(j) + "].Quadratic", 0.032f);
-				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Ambient", AmbientColor);
-				CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(j) + "].Diffuse", DiffuseColor);
-				CurShader.SetUniformValue3f("UPointLights[" + std::to_string(j) + "].Specular", LightColor.x, LightColor.y, LightColor.z);
-
-			}
-
-
-			CurShader.SetUniformValue3fv("USpotLight.Position", MainCamera->GetCameraPos());
-			CurShader.SetUniformValue3fv("USpotLight.Direction", MainCamera->GetCameraFront());
-
-			CurShader.SetUniformValue1f("USpotLight.Constant", 1.0f);
-			CurShader.SetUniformValue1f("USpotLight.Linear", 0.09f);
-			CurShader.SetUniformValue1f("USpotLight.Quadratic", 0.032f);
-			CurShader.SetUniformValue1f("USpotLight.InnerCutOff", glm::cos(glm::radians(12.5f)));
-			CurShader.SetUniformValue1f("USpotLight.OuterCutOff", glm::cos(glm::radians(17.5f)));
-
-			CurShader.SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
-			CurShader.SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
-			CurShader.SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
-
-			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
-			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
-			//CurShader.SetUniformValue1i("UMaterial.EmissionMap", 2);
-			CurShader.SetUniformValue1f("UMaterial.Shininess", 32.f);
-
-
-			glm::mat4 projection;
-			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-			CurShader.SetUniformValue4fv("projection", projection);
-
-			glm::mat4 model = glm::mat4(1.0f);
-			glm::vec3& translation = RenderObjects[i].GetTransform();
-			model = glm::translate(model, translation);
-			CurShader.SetUniformValue4fv("model", model);
-			//
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-
-			AddImGuiSlider("Model" + std::to_string(i + 1), &translation.x);
-		}
+		TheModel->Draw(*ModelShader);
 	}
 
 	void WindowsWindow::AddImGuiSlider(const std::string& Name, float* Pointer)
@@ -352,43 +358,49 @@ namespace Engine {
 
 	void WindowsWindow::DoOpenGlStuff()
 	{
-		m_Texture = Texture("Assets/Textures/WoodContainer.png", GL_RGBA).GetHandle();
-		m_TextureSpecular = Texture("Assets/Textures/WoodContainer_Specular.png", GL_RGBA).GetHandle();
-		m_TextureEmission = Texture("Assets/Textures/WoodContainer_Emission.jpg", GL_RGB).GetHandle();
+		/// <summary>
+// 		m_Texture = OGTexture("Assets/Textures/WoodContainer.png").GetHandle();
+// 		m_TextureSpecular = OGTexture("Assets/Textures/WoodContainer_Specular.png").GetHandle();
+// 		m_TextureEmission = OGTexture("Assets/Textures/WoodContainer_Emission.jpg").GetHandle();
+// 
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+// 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 		Shader* ObjectShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
+// 		Shader* LightObjShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/LightFragmentShader.glsl");
+// 
+// 		VertexBuffer buffer;
+// 		buffer.Bind();
+// 		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+// 
+// 		VertexArray* ContainerVAO = new VertexArray();
+// 		VertexBufferLayout ContainerLayout;
+// 		ContainerLayout.Push<float>(3);
+// 		ContainerLayout.Push<float>(3);
+// 		ContainerLayout.Push<float>(2);
+// 		ContainerVAO->AddBuffer(buffer, ContainerLayout);
+// 
+// 		VertexArray* LightVAO = new VertexArray();
+// 		LightVAO->AddBuffer(buffer, ContainerLayout);
+// 
+// 		int arraySize = sizeof(cubePositions) / sizeof(glm::vec3);
+// 		RenderObjects.resize(arraySize);
+// 
+// 		for (int i = 0; i < arraySize; i++)
+// 		{
+// 			RenderObject ContainerRO = RenderObject(cubePositions[i], ContainerVAO, ObjectShader);
+// 			RenderObjects[i] = ContainerRO;
+// 		}
+// 
+// 
+// 		LightRO = new RenderObject(LightPosition, LightVAO, LightObjShader);
 
-		Shader* ObjectShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/fragmentShader.glsl");
-		Shader* LightObjShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/LightFragmentShader.glsl");
-
-		VertexBuffer buffer;
-		buffer.Bind();
-		buffer.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-
-		VertexArray* ContainerVAO = new VertexArray();
-		VertexBufferLayout ContainerLayout;
-		ContainerLayout.Push<float>(3);
-		ContainerLayout.Push<float>(3);
-		ContainerLayout.Push<float>(2);
-		ContainerVAO->AddBuffer(buffer, ContainerLayout);
-
-		VertexArray* LightVAO = new VertexArray();
-		LightVAO->AddBuffer(buffer, ContainerLayout);
-
-		int arraySize = sizeof(cubePositions) / sizeof(glm::vec3);
-		RenderObjects.resize(arraySize);
-
-		for (int i = 0; i < arraySize; i++)
-		{
-			RenderObject ContainerRO = RenderObject(cubePositions[i], ContainerVAO, ObjectShader);
-			RenderObjects[i] = ContainerRO;
-		}
-
-
-		LightRO = new RenderObject(LightPosition, LightVAO, LightObjShader);
+		/// /// </summary>
+		//stbi_set_flip_vertically_on_load(true);
+		ModelShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/BackpackFragmentShader.glsl");
+		TheModel = new Model("Assets/Models/Backpack/backpack.obj");
 
 		MainCamera = new Camera(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}

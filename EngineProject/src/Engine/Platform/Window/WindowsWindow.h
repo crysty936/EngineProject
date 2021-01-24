@@ -73,6 +73,9 @@ namespace Engine {
 		};
 
 		WindowData m_Data;
+ 		class Model* TheModel;
+ 		class Shader* ModelShader;
+		glm::vec3 ModelPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	};
 }

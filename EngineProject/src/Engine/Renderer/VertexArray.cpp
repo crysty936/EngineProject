@@ -39,4 +39,8 @@ namespace Engine
 		}
 
 	}
+	void VertexArray::Unbind()
+	{
+		glBindVertexArray(0);
+	}
 }

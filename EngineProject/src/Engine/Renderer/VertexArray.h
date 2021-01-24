@@ -16,6 +16,9 @@ namespace Engine
 		void AddBuffer(const VertexBuffer& VBuffer, const VertexBufferLayout& Layout);
 
 	public:
+		static void Unbind();
+
+	public:
 		inline int GetHandle()const { return Handle; }
 
 
