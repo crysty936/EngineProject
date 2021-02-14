@@ -98,7 +98,7 @@ void main()
 
 	for(int i=0; i< NR_POINT_LIGHTS; i++)
 	{
-		Result+=CalcPointLight(UPointLights[i],norm,ViewDirection);
+		Result += max(CalcPointLight(UPointLights[i],norm,ViewDirection), 0.0f);
 	}
 
 	Result+=CalcSpotLight(USpotLight, norm, ViewDirection);

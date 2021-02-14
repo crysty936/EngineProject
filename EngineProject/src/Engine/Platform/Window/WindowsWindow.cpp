@@ -19,7 +19,7 @@
 #include "Engine/Renderer/RenderObject.h"
 #include "Engine/Renderer/Camera.h"
 #include "Engine/Renderer/Model.h"
-
+#include "Engine/Parser/ParserObj.h"
 
 static const glm::vec3 LightPosition = glm::vec3(1.2f, 0.0f, 0.0f);
 
@@ -189,36 +189,190 @@ namespace Engine {
 		//
 		glm::vec3 LightColor = glm::vec3(1, 1, 1);
 
-		ModelShader->Bind();
-		const glm::mat4 View = MainCamera->GetCameraLookAt();
-		ModelShader->SetUniformValue4fv("view", View);
+		LightRO->GetShader().Bind();
+		LightRO->GetVAO().Bind();
 
-		glm::mat4 ModelProjection;
-		ModelProjection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
-		ModelShader->SetUniformValue4fv("projection", ModelProjection);
+		glm::mat4 View = MainCamera->GetCameraLookAt();
+		LightRO->GetShader().SetUniformValue4fv("view", View);
 
-		glm::mat4 ModelModel = glm::mat4(1.0f);
-		glm::vec3& ModelTranslation = ModelPosition;
-		ModelModel = glm::translate(ModelModel, ModelTranslation);
-		ModelShader->SetUniformValue4fv("model", ModelModel);
-		AddImGuiSlider("Model", &ModelTranslation.x);
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+		LightRO->GetShader().SetUniformValue4fv("projection", projection);
 
-		TheModel->Draw(*ModelShader);
-		ModelShader->SetUniformValue1f("UMaterial.Shininess", 32.f);
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::vec3 translation = MainPosition;
 
-		const glm::vec3 DiffuseColor = glm::vec3(0.5f);
-		const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+		model = glm::translate(model, translation);
+		model = glm::scale(model, glm::vec3(0.2f));
+		LightRO->GetShader().SetUniformValue4fv("model", model);
 
-		ModelShader->SetUniformValue3fv("USpotLight.Position", MainCamera->GetCameraPos());
-		ModelShader->SetUniformValue3fv("USpotLight.Direction", MainCamera->GetCameraFront());
-		ModelShader->SetUniformValue1f("USpotLight.Constant", 1.0f);
-		ModelShader->SetUniformValue1f("USpotLight.Linear", 0.09f);
-		ModelShader->SetUniformValue1f("USpotLight.Quadratic", 0.032f);
-		ModelShader->SetUniformValue1f("USpotLight.InnerCutOff", glm::cos(glm::radians(12.5f)));
-		ModelShader->SetUniformValue1f("USpotLight.OuterCutOff", glm::cos(glm::radians(17.5f)));
-		ModelShader->SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
-		ModelShader->SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
-		ModelShader->SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		AddImGuiSlider("Light Object", &MainPosition.x);
+
+
+		{
+			const RenderObject& RO = RenderObjects[0];
+			Shader& const CurShader = RO.GetShader();
+			CurShader.Bind();
+			RO.GetVAO().Bind();
+
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_Texture);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, m_TextureSpecular);
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, m_TextureEmission);
+
+			const glm::mat4 View = MainCamera->GetCameraLookAt();
+			CurShader.SetUniformValue4fv("view", View);
+
+
+			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
+			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+
+
+			CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(0) + "].Position", MainPosition);
+
+			CurShader.SetUniformValue1f("UPointLights[" + std::to_string(0) + "].Constant", 1.0f);
+			CurShader.SetUniformValue1f("UPointLights[" + std::to_string(0) + "].Linear", 0.09f);
+			CurShader.SetUniformValue1f("UPointLights[" + std::to_string(0) + "].Quadratic", 0.032f);
+			CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(0) + "].Ambient", AmbientColor);
+			CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(0) + "].Diffuse", DiffuseColor);
+			CurShader.SetUniformValue3f("UPointLights[" + std::to_string(0) + "].Specular", LightColor.x, LightColor.y, LightColor.z);
+
+			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
+			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
+			CurShader.SetUniformValue1f("UMaterial.Shininess", 32.f);
+
+
+			glm::mat4 projection;
+			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+			CurShader.SetUniformValue4fv("projection", projection);
+
+			EarthPosition.x = glm::sin(ElapsedTime);
+			EarthPosition.z = glm::cos(ElapsedTime);
+
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec3& translation = EarthPosition;
+
+			model = glm::translate(model, translation);
+
+			model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+
+			EarthPosition += MainPosition;
+			model[3][0] += EarthPosition.x;
+			model[3][1] += EarthPosition.y;
+			model[3][2] += EarthPosition.z;
+
+			CurShader.SetUniformValue4fv("model", model);
+			//
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+			AddImGuiSlider("Model1" + std::to_string(0), &translation.x);
+
+		}
+
+
+
+		{
+			const RenderObject& RO = RenderObjects[0];
+			Shader& const CurShader = RO.GetShader();
+			CurShader.Bind();
+			RO.GetVAO().Bind();
+
+
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_Texture);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, m_TextureSpecular);
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, m_TextureEmission);
+
+			const glm::mat4 View = MainCamera->GetCameraLookAt();
+			CurShader.SetUniformValue4fv("view", View);
+
+
+			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
+			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+
+
+			CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(0) + "].Position", MainPosition);
+
+			CurShader.SetUniformValue1f("UPointLights[" + std::to_string(0) + "].Constant", 1.0f);
+			CurShader.SetUniformValue1f("UPointLights[" + std::to_string(0) + "].Linear", 0.09f);
+			CurShader.SetUniformValue1f("UPointLights[" + std::to_string(0) + "].Quadratic", 0.032f);
+			CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(0) + "].Ambient", AmbientColor);
+			CurShader.SetUniformValue3fv("UPointLights[" + std::to_string(0) + "].Diffuse", DiffuseColor);
+			CurShader.SetUniformValue3f("UPointLights[" + std::to_string(0) + "].Specular", LightColor.x, LightColor.y, LightColor.z);
+
+			CurShader.SetUniformValue1i("UMaterial.DiffuseMap", 0);
+			CurShader.SetUniformValue1i("UMaterial.SpecularMap", 1);
+			CurShader.SetUniformValue1f("UMaterial.Shininess", 32.f);
+
+
+			glm::mat4 projection;
+			projection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+			CurShader.SetUniformValue4fv("projection", projection);
+
+			MoonPosition.x = glm::sin(ElapsedTime);
+			MoonPosition.z = glm::cos(ElapsedTime);
+
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec3& translation = MoonPosition;
+
+			model = glm::translate(model, translation);
+			model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+			model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+
+			MoonPosition += EarthPosition;
+			model[3][0] += MoonPosition.x;
+			model[3][1] += MoonPosition.y;
+			model[3][2] += MoonPosition.z;
+
+			CurShader.SetUniformValue4fv("model", model);
+			//
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+			AddImGuiSlider("Model2" + std::to_string(0), &translation.x);
+
+		}
+
+
+
+		// 		ModelShader->Bind();
+		// 		const glm::mat4 View = MainCamera->GetCameraLookAt();
+		// 		ModelShader->SetUniformValue4fv("view", View);
+		// 
+		// 		glm::mat4 ModelProjection;
+		// 		ModelProjection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+		// 		ModelShader->SetUniformValue4fv("projection", ModelProjection);
+		// 
+		// 		glm::mat4 ModelModel = glm::mat4(1.0f);
+		// 		glm::vec3& ModelTranslation = ModelPosition;
+		// 		ModelModel = glm::translate(ModelModel, ModelTranslation);
+		// 		ModelShader->SetUniformValue4fv("model", ModelModel);
+		// 		AddImGuiSlider("Model", &ModelTranslation.x);
+		// 
+		// 		TheModel->Draw(*ModelShader);
+		// 		ModelShader->SetUniformValue1f("UMaterial.Shininess", 32.f);
+		// 
+		// 		const glm::vec3 DiffuseColor = glm::vec3(0.5f);
+		// 		const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+		// 
+		// 		ModelShader->SetUniformValue3fv("USpotLight.Position", MainCamera->GetCameraPos());
+		// 		ModelShader->SetUniformValue3fv("USpotLight.Direction", MainCamera->GetCameraFront());
+		// 		ModelShader->SetUniformValue1f("USpotLight.Constant", 1.0f);
+		// 		ModelShader->SetUniformValue1f("USpotLight.Linear", 0.09f);
+		// 		ModelShader->SetUniformValue1f("USpotLight.Quadratic", 0.032f);
+		// 		ModelShader->SetUniformValue1f("USpotLight.InnerCutOff", glm::cos(glm::radians(12.5f)));
+		// 		ModelShader->SetUniformValue1f("USpotLight.OuterCutOff", glm::cos(glm::radians(17.5f)));
+		// 		ModelShader->SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
+		// 		ModelShader->SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
+		// 		ModelShader->SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
 
 	}
 
@@ -302,7 +456,9 @@ namespace Engine {
 		/// /// </summary>
 
 		ModelShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/BackpackFragmentShader.glsl");
-		TheModel = new Model("Assets/Models/Backpack/backpack.obj");
+		//TheModel = new Model("Assets/Models/Backpack/backpack.obj");
+
+		//Model* M = ParserObj::ParseGetModel("Assets/Models/Backpack/backpack.obj");
 
 		MainCamera = new Camera(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}

@@ -58,6 +58,10 @@ namespace Engine {
 		RenderObject* LightRO;
 
 		glm::vec3 CameraDirection = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 EarthPosition = glm::vec3(2.f, 0.0f, 0.0f);
+		glm::vec3 MoonPosition = glm::vec3(1.0f, 0.0f, 0.0f);
+
+		glm::vec3 MainPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		class Camera* MainCamera;
 
@@ -75,7 +79,7 @@ namespace Engine {
 		WindowData m_Data;
  		class Model* TheModel;
  		class Shader* ModelShader;
-		glm::vec3 ModelPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 ModelPosition = glm::vec3(2.0f, 3.0f, 4.0f);
 
 	};
 }

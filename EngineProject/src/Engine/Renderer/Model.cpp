@@ -14,12 +14,23 @@ namespace Engine
 	{
 		LoadModel(Path);
 	}
+
 	void Model::Draw(Shader& InShader)
 	{
 		for (auto& const Mesh : Meshes)
 		{
 			Mesh.Draw(InShader);
 		}
+	}
+
+	void Model::AddMesh(Mesh& InMesh)
+	{
+		Meshes.push_back(InMesh);
+	}
+
+	void Model::AddMeshes(std::vector<Mesh>& InMeshes)
+	{
+		Meshes.insert(Meshes.end(), InMeshes.begin(), InMeshes.end());
 	}
 
 	void Model::LoadModel(std::string Path)
@@ -96,8 +107,8 @@ namespace Engine
 			std::vector<Texture> DiffuseMaps = LoadMaterialTextures(Material, aiTextureType_DIFFUSE, TextureType::TextureDiffuse);
 			Textures.insert(Textures.end(), DiffuseMaps.begin(), DiffuseMaps.end());
 
- 			std::vector<Texture> SpecularMaps = LoadMaterialTextures(Material, aiTextureType_SPECULAR, TextureType::TextureSpecular);
- 			Textures.insert(Textures.end(), SpecularMaps.begin(), SpecularMaps.end());
+			std::vector<Texture> SpecularMaps = LoadMaterialTextures(Material, aiTextureType_SPECULAR, TextureType::TextureSpecular);
+			Textures.insert(Textures.end(), SpecularMaps.begin(), SpecularMaps.end());
 		}
 
 		return Mesh(Vertices, Indices, Textures);

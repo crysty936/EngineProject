@@ -15,7 +15,13 @@ namespace Engine
 
 	public:
 		Model(char* Path);
+		Model() = default;
 		void Draw(class Shader& InShader);
+
+	public:
+		void AddMesh(Mesh& InMesh);
+		void AddMeshes(std::vector<Mesh>& InMeshes);
+
 
 	private:
 		std::vector<Mesh> Meshes;
