@@ -21,6 +21,8 @@ namespace Engine
 		MetallicRoughness PbrMetallicRoughness;
 	};
 
+
+
 	std::unique_ptr<Model> ParserObj::ParseGetModel(std::string Path)
 	{
 		using namespace rapidjson;
@@ -61,7 +63,7 @@ namespace Engine
 		// 
 
 
-		Value& JMaterialsArray = GltfDocument["materials"];
+		Value::ConstObject::ValueType& JMaterialsArray = GltfDocument.FindMember("materials")->value;
 		assert(!JMaterialsArray.IsNull());
 		std::vector<Material> Materials;
 		Materials.reserve(JMaterialsArray.Size());
@@ -92,6 +94,55 @@ namespace Engine
 			Materials.push_back(M);
 		}
 
+		Value::MemberIterator& BufferMember = GltfDocument.FindMember("buffers");
+		if (BufferMember != GltfDocument.MemberEnd())
+		{
+			Value::ConstObject::ValueType& BufferMemberValue = GltfDocument.FindMember("buffers")->value;
+
+			Value::ConstArray& ArrayMember = BufferMemberValue.GetArray();
+			Value::ConstArray::ValueType& TheBuffer = ArrayMember[0];
+			Value::ConstObject& BufferObj = TheBuffer.GetObject();
+
+			uint32_t ByteLength;
+			GetMember(BufferObj, "byteLength", MemberType::UInt, &ByteLength);
+
+			std::string BufferUri;
+			GetMember(BufferObj, "uri", MemberType::String, &BufferUri);
+
+			if (BufferUri.find("octet-stream") != std::string::npos)
+			{
+				size_t LastCommaIndex = BufferUri.find_last_of(',');
+				BufferUri.erase(0, LastCommaIndex + 1);
+				const char* Data = BufferUri.c_str();
+
+				std::vector<float> FloatVector;
+				FloatVector.resize(288 / sizeof(float)); // Count 24 -> 288 bytes = 72 floats = 24 Vec3s
+				memcpy(FloatVector.data(), Data, 288);
+
+
+			}
+
+
+
+
+		}
+
+
+
+		//Mesh (indices to Accessors) ->
+		//Accessors(Type, count and indices to BufferViews) ->
+		//BufferViews ( Buffer(Nearly always only one so 0), ByteLength(Length in that buffer in bytes starting from byteOffset), byteOfsset(offset of start position)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -109,11 +160,11 @@ namespace Engine
 
 
 
-	void ParserObj::GetMember(rapidjson::Value::ConstObject& Container, const char* MemberName, MemberType Type, void* MemberAdress)
+	void ParserObj::GetMember(rapidjson::Value::ConstObject& Container, const char* MemberName, MemberType Type, OUT void* MemberAdress)
 	{
 		using namespace rapidjson;
-		Value::ConstMemberIterator& Member_Name = Container.FindMember(MemberName);
-		const bool ItemFound = Member_Name != Container.MemberEnd();
+		Value::ConstMemberIterator& Member = Container.FindMember(MemberName);
+		const bool ItemFound = Member != Container.MemberEnd();
 		bool IsCorrectType = false;
 
 		if (ItemFound)
@@ -122,22 +173,27 @@ namespace Engine
 			{
 			case MemberType::Bool:
 			{
-				(*(bool*)MemberAdress) = Member_Name->value.GetBool();
+				(*(bool*)MemberAdress) = Member->value.GetBool();
 				break;
 			}
 			case MemberType::Double:
 			{
-				(*(double*)MemberAdress) = Member_Name->value.GetDouble();
+				(*(double*)MemberAdress) = Member->value.GetDouble();
 				break;
 			}
 			case MemberType::Float:
 			{
-				(*(float*)MemberAdress) = Member_Name->value.GetFloat();
+				(*(float*)MemberAdress) = Member->value.GetFloat();
 				break;
 			}
 			case MemberType::String:
 			{
-				(*(std::string*)MemberAdress) = std::string(Member_Name->value.GetString());
+				(*(std::string*)MemberAdress) = Member->value.GetString();
+				break;
+			}
+			case MemberType::UInt:
+			{
+				(*(uint32_t*)MemberAdress) = Member->value.GetUint();
 				break;
 			}
 			}
@@ -147,5 +203,10 @@ namespace Engine
 			__debugbreak();
 		}
 	}
+
+
+
+
+
 
 }

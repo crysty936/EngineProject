@@ -14,10 +14,11 @@ namespace Engine
 			String,
 			Bool,
 			Float,
-			Double
+			Double,
+			UInt
 		};
 	public:
 		static std::unique_ptr<Model> ParseGetModel(std::string Path);
-		static void GetMember(rapidjson::Value::ConstObject& Container, const char* MemberName, MemberType Type, void* MemberAdress);
+		static void GetMember(rapidjson::Value::ConstObject& Container, const char* MemberName, MemberType Type, OUT void* MemberAdress);
 	};
 }
