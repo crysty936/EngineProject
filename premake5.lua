@@ -16,6 +16,7 @@ workspace "EngineProject"
 	IncludeDir["Imgui"]="EngineProject/vendor/imgui"
 	IncludeDir["glm"]="EngineProject/vendor/glm"
 	IncludeDir["assimp"]="EngineProject/vendor/assimp/include"
+	IncludeDir["rapidjson"]="EngineProject/vendor/rapidjson"
 
 	include "EngineProject/vendor/GLFW"
 	include "EngineProject/vendor/Glad"
@@ -52,7 +53,8 @@ workspace "EngineProject"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.Imgui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.assimp}"
+		"%{IncludeDir.assimp}",
+		"%{IncludeDir.rapidjson}"
 		}
 
 		links

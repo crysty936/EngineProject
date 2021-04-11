@@ -18,7 +18,7 @@ namespace Engine
 	class Camera
 	{
 	public:
-		Camera(float WindowWidth, float WindowHeight, glm::vec3 CameraPos, glm::vec3 _CameraFront);
+		Camera(uint32_t WindowWidth, uint32_t WindowHeight, glm::vec3 CameraPos, glm::vec3 _CameraFront);
 		~Camera();
 
 	public:

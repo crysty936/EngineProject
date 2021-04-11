@@ -21,10 +21,12 @@ namespace Engine
 	public:
 		void AddMesh(Mesh& InMesh);
 		void AddMeshes(std::vector<Mesh>& InMeshes);
-
+		FORCEINLINE void SetDirectory(std::string& InDirectory) { Directory = InDirectory; }
+		FORCEINLINE void SetName(std::string& InName) { Name = InName; }
 
 	private:
 		std::vector<Mesh> Meshes;
+		std::string Name;
 		std::string Directory;
 
 	private:

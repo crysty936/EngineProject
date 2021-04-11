@@ -7,8 +7,7 @@
 namespace Engine
 {
 
-	Camera::Camera(float InWindowWidth, float InWindowHeight, glm::vec3 InCameraPos, glm::vec3 InCameraFront)
-		:CameraPos(InCameraPos), CameraFront(InCameraFront), MouseLastX(InWindowWidth / 2), MouseLastY(InWindowHeight / 2)
+	Camera::Camera(uint32_t WindowWidth, uint32_t WindowHeight, glm::vec3 CameraPos, glm::vec3 _CameraFront) :CameraPos(CameraPos), CameraFront(_CameraFront), MouseLastX(WindowWidth / 2), MouseLastY(WindowHeight / 2)
 	{
 		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(Camera::OnMouseMoved));
 	}

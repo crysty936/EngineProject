@@ -4,7 +4,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
-#include "Engine/Renderer/OGTexture.h"
+#include "Engine/Renderer/TextureUtils.h"
 
 namespace Engine
 {
@@ -126,7 +126,7 @@ namespace Engine
 			if (!IsTextureLoaded(Str.C_Str(), Tex))
 			{
 				std::string Path = Directory + std::string("/") + std::string(Str.C_Str());
-				Tex.Id = OGTexture(Path.c_str()).GetHandle();
+				TextureUtils::LoadTexture(Path.c_str(), Tex.Id);
 				Tex.Type = TexType;
 				Tex.Path = std::string(Str.C_Str());
 				LoadedTextures.push_back(Tex);
@@ -139,7 +139,7 @@ namespace Engine
 	}
 	bool Model::IsTextureLoaded(const std::string& TexPath, Texture& OutTex)
 	{
-		for (auto& LoadedTexture : LoadedTextures)
+		for (const auto& LoadedTexture : LoadedTextures)
 		{
 			if (LoadedTexture.Path._Equal(TexPath))
 			{

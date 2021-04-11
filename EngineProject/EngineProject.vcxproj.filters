@@ -22,6 +22,9 @@
     <Filter Include="src\Engine\Layers\ImGui">
       <UniqueIdentifier>{7B2DE15B-E764-29F3-F06E-8D165C2550EC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Parser">
+      <UniqueIdentifier>{4E151EC9-BA2B-1C5F-03A3-A7806FF8ECE6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Engine\Platform">
       <UniqueIdentifier>{A63124B0-1293-01BE-9B00-48700761387D}</UniqueIdentifier>
     </Filter>
@@ -111,6 +114,9 @@
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
       <Filter>src\Engine\Layers\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Parser\ParserObj.h">
+      <Filter>src\Engine\Parser</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h">
       <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
     </ClInclude>
@@ -141,9 +147,6 @@
     <ClInclude Include="src\Engine\Renderer\Model.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\OGTexture.h">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderObject.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
@@ -151,6 +154,9 @@
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Shader.h">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\TextureUtils.h">
       <Filter>src\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\VertexArray.h">
@@ -981,7 +987,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Parser\ParserObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -1011,6 +1016,9 @@
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
       <Filter>src\Engine\Layers\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Parser\ParserObj.cpp">
+      <Filter>src\Engine\Parser</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp">
       <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
     </ClCompile>
@@ -1035,9 +1043,6 @@
     <ClCompile Include="src\Engine\Renderer\Model.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\OGTexture.cpp">
-      <Filter>src\Engine\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderObject.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
@@ -1045,6 +1050,9 @@
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Shader.cpp">
+      <Filter>src\Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\TextureUtils.cpp">
       <Filter>src\Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\VertexArray.cpp">
@@ -1059,6 +1067,5 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Parser\ParserObj.cpp" />
   </ItemGroup>
 </Project>

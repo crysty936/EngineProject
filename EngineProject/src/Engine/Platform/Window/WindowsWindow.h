@@ -1,16 +1,20 @@
 #pragma once
 #include "Engine/Platform/Window/Window.h"
-#include "Engine/Renderer/IRenderingContext.h"
-#include "Engine/Platform/RenderingApi/OpenGL/OpenGLContext.h"
 #include <GLFW/glfw3.h>
-#include "Engine/Renderer/Shader.h"
 #include "Engine/EventsManager/Events/KeyEvents.h"
 #include "Engine/EventsManager/Events/MouseEvents.h"
 #include "Engine/Renderer/RenderObject.h"
 #include <glm/glm.hpp>
 
 
+struct GLFWwindow;
+
 namespace Engine {
+
+	class Camera;
+	class Model;
+	class Shader;
+	class IRenderingContext;
 
 	class WindowsWindow : public Engine::Window
 	{
@@ -63,9 +67,8 @@ namespace Engine {
 
 		glm::vec3 MainPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
-		class Camera* MainCamera;
-
-		IRenderingContext* m_RenderingContext;
+		std::unique_ptr<Camera> MainCamera;
+		std::unique_ptr<IRenderingContext> m_RenderingContext;
 		GLFWwindow* m_Window;
 
 		struct WindowData
@@ -77,8 +80,8 @@ namespace Engine {
 		};
 
 		WindowData m_Data;
- 		class Model* TheModel;
- 		class Shader* ModelShader;
+		Model* TheModel;
+		Shader* ModelShader;
 		glm::vec3 ModelPosition = glm::vec3(2.0f, 3.0f, 4.0f);
 
 	};
