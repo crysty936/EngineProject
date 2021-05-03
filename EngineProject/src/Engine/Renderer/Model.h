@@ -16,6 +16,7 @@ namespace Engine
 	public:
 		Model(char* Path);
 		Model() = default;
+		Model(std::vector<Mesh>& inMeshes);
 		void Draw(class Shader& InShader);
 
 	public:

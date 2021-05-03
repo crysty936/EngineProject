@@ -19,7 +19,7 @@
 #include "Engine/Renderer/RenderObject.h"
 #include "Engine/Renderer/Camera.h"
 #include "Engine/Renderer/Model.h"
-#include "Engine/Parser/ParserObj.h"
+#include "Engine/Parser/GLTFParser.h"
 #include "Engine/Platform/RenderingApi/OpenGL/OpenGLContext.h"
 #include "Engine/Renderer/Shader.h"
 
@@ -90,8 +90,8 @@ static const glm::vec3 PointLightPositions[] = {
 	glm::vec3(0.0f,  0.0f, -3.0f)
 };
 
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
+double deltaTime = 0.0f;
+double lastFrame = 0.0f;
 
 namespace Engine {
 
@@ -333,7 +333,8 @@ namespace Engine {
 		ModelShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/BackpackFragmentShader.glsl");
 		//TheModel = new Model("Assets/Models/Backpack/backpack.obj");
 
-		std::unique_ptr<Model> M = ParserObj::ParseGetModel("Assets/Models/TestModelglTF/TestModel.gltf");
+		//TheModel = GLTFParser::GetInstance().ParseGetModel("Assets/Models/Backpack_glTF/scene.gltf"); //TODO
+		TheModel = GLTFParser::GetInstance().ParseGetModel("Assets/Models/TestModelglTF/TestModel.gltf");
 
 		MainCamera = std::make_unique<Camera>(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}

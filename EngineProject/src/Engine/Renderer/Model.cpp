@@ -15,6 +15,12 @@ namespace Engine
 		LoadModel(Path);
 	}
 
+	Model::Model(std::vector<Mesh>& inMeshes)
+		:Meshes(inMeshes)
+	{
+
+	}
+
 	void Model::Draw(Shader& InShader)
 	{
 		for (auto& const Mesh : Meshes)

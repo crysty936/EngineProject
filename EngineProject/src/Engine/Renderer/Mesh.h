@@ -28,22 +28,18 @@ namespace Engine
 
 	class Mesh
 	{
-
 	public:
-
-		std::vector<Vertex> Vertices;
-		std::vector<unsigned int> Indices;
-		std::vector<Texture> Textures;
-
 		Mesh(std::vector<Vertex> InVertices, std::vector<unsigned int> InIndices, std::vector<Texture> InTextures);
-
 		void Draw(class Shader& InShader);
 
 	private:
-
+		std::vector<Vertex> Vertices;
+		std::vector<unsigned int> Indices;
+		std::vector<Texture> Textures;
 		class IndexBuffer* EBO;
 		class VertexArray* VAO;
 
+	private:
 		void SetupMesh();
 
 #define TEXTURE_DIFFUSE  "texture_diffuse"

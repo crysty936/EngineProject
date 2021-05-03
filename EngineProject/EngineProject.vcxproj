@@ -151,7 +151,7 @@
     <ClInclude Include="src\Engine\EventsManager\Events\KeyEvents.h" />
     <ClInclude Include="src\Engine\EventsManager\Events\MouseEvents.h" />
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Engine\Parser\ParserObj.h" />
+    <ClInclude Include="src\Engine\Parser\GLTFParser.h" />
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.h" />
     <ClInclude Include="src\Engine\Platform\Window\Window.h" />
@@ -453,7 +453,7 @@
     <ClCompile Include="src\Engine\EventsManager\Events\EventManager.cpp" />
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Engine\Parser\ParserObj.cpp" />
+    <ClCompile Include="src\Engine\Parser\GLTFParser.cpp" />
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLUtils.cpp" />
     <ClCompile Include="src\Engine\Platform\Window\WindowsWindow.cpp" />

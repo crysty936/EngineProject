@@ -80,7 +80,7 @@ namespace Engine {
 		};
 
 		WindowData m_Data;
-		Model* TheModel;
+		std::unique_ptr<class Model> TheModel;
 		Shader* ModelShader;
 		glm::vec3 ModelPosition = glm::vec3(2.0f, 3.0f, 4.0f);
 
