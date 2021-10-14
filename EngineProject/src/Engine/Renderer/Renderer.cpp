@@ -26,7 +26,8 @@ namespace Engine
 		VA.Bind();
 		IB.Bind();
 
-		glDrawElements(GL_TRIANGLES, IB.GetCount(), GL_UNSIGNED_INT, nullptr);
+		const GLsizei count = static_cast<GLsizei>(IB.GetCount());
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void Renderer::DrawArrays(const class VertexArray& VA, const int Start, const int Count, const class Shader& S) const

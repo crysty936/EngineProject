@@ -7,7 +7,8 @@
 namespace Engine
 {
 
-	Camera::Camera(uint32_t WindowWidth, uint32_t WindowHeight, glm::vec3 CameraPos, glm::vec3 _CameraFront) :CameraPos(CameraPos), CameraFront(_CameraFront), MouseLastX(WindowWidth / 2), MouseLastY(WindowHeight / 2)
+	Camera::Camera(uint32_t inWindowWidth, uint32_t inWindowHeight, glm::vec3 inCameraPos, glm::vec3 inCameraFront) 
+		:CameraPos(inCameraPos), CameraFront(inCameraFront), MouseLastX(inWindowWidth / 2), MouseLastY(inWindowHeight / 2)
 	{
 		EventManager::GetInstance().AddListener<MouseMovedEvent>(BIND_FUNC_EVT(Camera::OnMouseMoved));
 	}
@@ -71,8 +72,8 @@ namespace Engine
 		}
 
 
-		float XOffset = e.MouseX - MouseLastX;
-		float YOffset = (-1) * (e.MouseY - MouseLastY);
+		double XOffset = e.MouseX - MouseLastX;
+		double YOffset = (-1) * (e.MouseY - MouseLastY);
 
 		MouseLastX = e.MouseX;
 		MouseLastY = e.MouseY;
@@ -85,14 +86,17 @@ namespace Engine
 		Pitch += YOffset;
 
 
+		const float floatPitch = static_cast<float>(Pitch);
+		const float floatYaw = static_cast<float>(Yaw);
+
 		glm::vec3 direction;
-		direction.x = cos(glm::radians(Yaw) * cos(glm::radians(Pitch)));
-		direction.y = sin(glm::radians(Pitch));
-		direction.z = sin(glm::radians(Yaw) * cos(glm::radians(Pitch)));
+		direction.x = cos(glm::radians(floatYaw) * cos(glm::radians(floatPitch)));
+		direction.y = sin(glm::radians(floatPitch));
+		direction.z = sin(glm::radians(floatYaw) * cos(glm::radians(floatPitch)));
 		CameraFront = glm::normalize(direction);
 	}
 
-	const glm::mat4& Camera::GetCameraLookAt() const
+	const glm::mat4 Camera::GetCameraLookAt() const
 	{
 		//const glm::mat4 LookAt = glm::lookAt(CameraPos, CameraPos + CameraFront, GLMStatics::Vec3Up);
 		//return LookAt;

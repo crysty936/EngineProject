@@ -32,7 +32,7 @@ namespace Engine
 		{
 			const auto& Property = Properties[i];
 
-			glVertexAttribPointer(i, Property.Count, Property.Type, Property.Normalized, Layout.GetStride(), (void*)offset);
+			glVertexAttribPointer(i, Property.Count, Property.Type, Property.Normalized, Layout.GetStride(), reinterpret_cast<void*>(offset));
 			glEnableVertexAttribArray(i);
 
 			offset += Property.Count * LayoutProperties::GetSizeOfType(Property.Type);

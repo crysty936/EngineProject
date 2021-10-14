@@ -25,7 +25,7 @@ namespace Engine
 		void Move(CameraDirection Direction, float Amount);
 
 	public:
-		const glm::mat4& GetCameraLookAt() const;
+		const glm::mat4 GetCameraLookAt() const;
 		FORCEINLINE const glm::vec3& GetCameraFront() const { return CameraFront; }
 		FORCEINLINE const glm::vec3& GetCameraPos() const { return CameraPos; }
 		FORCEINLINE const float GetCameraSpeed() const { return CameraSpeed; }
@@ -34,10 +34,10 @@ namespace Engine
 		void OnMouseMoved(MouseMovedEvent e);
 
 	private:
-		float MouseLastX = 0.f;
-		float MouseLastY = 0.f;
-		float Yaw = -90.0f;
-		float Pitch = 0.0f;
+		double MouseLastX = 0;
+		double MouseLastY = 0;
+		double Yaw = -90;
+		double Pitch = 0;
 		bool FirstMouse = true;
 		glm::vec3 CameraPos = glm::vec3(0, 0, 0);
 		glm::vec3 CameraFront = glm::vec3(0, 0, 0);;

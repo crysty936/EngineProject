@@ -81,9 +81,14 @@ namespace Engine {
 
 		WindowData m_Data;
 		std::unique_ptr<class Model> TheModel;
+		std::unique_ptr<class Model> ParserModel;
 		Shader* ModelShader;
-		glm::vec3 ModelPosition = glm::vec3(2.0f, 3.0f, 4.0f);
+		Shader* ParserModelShader;
+		glm::vec3 ModelPosition = glm::vec3(5.0f, 3.0f, 4.0f);
+		glm::vec3 ParserModelPosition = glm::vec3(0.0f, 3.0f, 4.0f);
 
 	};
+
+
 }
 

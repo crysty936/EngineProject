@@ -14,7 +14,7 @@ namespace Engine
 	{
 
 	public:
-		Model(char* Path);
+		Model(const char* Path);
 		Model() = default;
 		Model(std::vector<Mesh>& inMeshes);
 		void Draw(class Shader& InShader);
@@ -31,7 +31,7 @@ namespace Engine
 		std::string Directory;
 
 	private:
-		void LoadModel(std::string Path);
+		void LoadModel(const std::string Path);
 		void ProcessNode(aiNode* Node, const aiScene* Scene);
 		Mesh ProcessMesh(aiMesh* Mesh, const aiScene* Scene);
 		std::vector<Texture> LoadMaterialTextures(aiMaterial* Mat, aiTextureType Type, TextureType TexType);

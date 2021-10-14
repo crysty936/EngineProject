@@ -6,10 +6,11 @@ namespace Engine
 	IndexBuffer::IndexBuffer()
 		:BaseBuffer(), Count(0)  {}
 
-	void IndexBuffer::SetData(const uint32_t* Indices, const int _Count, const GLenum DrawType)
+	void IndexBuffer::SetData(const uint32_t* inIndices, const size_t inCount, const GLenum inDrawType)
 	{
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * _Count, Indices, DrawType);
-		Count = _Count;
+		const GLsizei count = static_cast<GLsizei>(inCount);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * count, inIndices, inDrawType);
+		Count = inCount;
 	}
 	void IndexBuffer::Bind() const
 	{

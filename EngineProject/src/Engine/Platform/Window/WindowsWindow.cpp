@@ -215,8 +215,8 @@ namespace Engine {
 			AddImGuiSlider("Light Object", &MainPosition.x);
 		}
 
-		{
 
+		{
 			ModelShader->Bind();
 			const glm::mat4 View = MainCamera->GetCameraLookAt();
 			ModelShader->SetUniformValue4fv("view", View);
@@ -231,7 +231,7 @@ namespace Engine {
 			ModelShader->SetUniformValue4fv("model", ModelModel);
 			AddImGuiSlider("Model", &ModelTranslation.x);
 
-			TheModel->Draw(*ModelShader);
+
 			ModelShader->SetUniformValue1f("UMaterial.Shininess", 32.f);
 
 			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
@@ -247,43 +247,83 @@ namespace Engine {
 			ModelShader->SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
 			ModelShader->SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
 			ModelShader->SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
-		}
 
+			if (TheModel)
+				TheModel->Draw(*ModelShader);
+		}
+// 
+// 		{
+// 			ParserModelShader->Bind();
+// 			const glm::mat4 View = MainCamera->GetCameraLookAt();
+// 			ParserModelShader->SetUniformValue4fv("view", View);
+// 
+// 			glm::mat4 ModelProjection;
+// 			ModelProjection = glm::perspective(glm::radians(45.0f), (float)GetWidth() / (float)GetHeight(), 0.1f, 100.0f);
+// 			ParserModelShader->SetUniformValue4fv("projection", ModelProjection);
+// 
+// 			glm::mat4 ModelModel = glm::mat4(1.0f);
+// 			glm::vec3& ModelTranslation = ParserModelPosition;
+// 			ModelModel = glm::translate(ModelModel, ModelTranslation);
+// 			ParserModelShader->SetUniformValue4fv("model", ModelModel);
+// 			AddImGuiSlider("Model Parser", &ModelTranslation.x);
+// 
+// 			ParserModelShader->SetUniformValue1f("UMaterial.Shininess", 32.f);
+// 
+// 			const glm::vec3 DiffuseColor = glm::vec3(0.5f);
+// 			const glm::vec3 AmbientColor = DiffuseColor * glm::vec3(0.2f);
+// 
+// 
+// 			ParserModelShader->SetUniformValue3fv("USpotLight.Position", MainCamera->GetCameraPos());
+// 			ParserModelShader->SetUniformValue3fv("USpotLight.Direction", MainCamera->GetCameraFront());
+// 			ParserModelShader->SetUniformValue1f("USpotLight.Constant", 1.0f);
+// 			ParserModelShader->SetUniformValue1f("USpotLight.Linear", 0.09f);
+// 			ParserModelShader->SetUniformValue1f("USpotLight.Quadratic", 0.032f);
+// 			ParserModelShader->SetUniformValue1f("USpotLight.InnerCutOff", glm::cos(glm::radians(12.5f)));
+// 			ParserModelShader->SetUniformValue1f("USpotLight.OuterCutOff", glm::cos(glm::radians(17.5f)));
+// 			ParserModelShader->SetUniformValue3fv("USpotLight.Ambient", AmbientColor);
+// 			ParserModelShader->SetUniformValue3fv("USpotLight.Diffuse", DiffuseColor);
+// 			ParserModelShader->SetUniformValue3f("USpotLight.Specular", LightColor.x, LightColor.y, LightColor.z);
+// 
+// 			ParserModel->Draw(*ParserModelShader);
+// 		}
+
+
+	
 	}
 
-	void WindowsWindow::AddImGuiSlider(const std::string& Name, float* Pointer)
+	void WindowsWindow::AddImGuiSlider(const std::string& inName, float* inPtr)
 	{
-		ImGui::SliderFloat3(Name.c_str(), Pointer, -20.0f, 20.0f);
+		ImGui::SliderFloat3(inName.c_str(), inPtr, -20.0f, 20.0f);
 	}
 
 	void WindowsWindow::ProcessInput()
 	{
-		const float Velocity = MainCamera->GetCameraSpeed() * deltaTime;
+		const float velocity = MainCamera->GetCameraSpeed() * static_cast<float>(deltaTime);
 		if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			MainCamera->Move(CameraDirection::Forward, Velocity);
+			MainCamera->Move(CameraDirection::Forward, velocity);
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			MainCamera->Move(CameraDirection::Backward, Velocity);
+			MainCamera->Move(CameraDirection::Backward, velocity);
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			MainCamera->Move(CameraDirection::Left, Velocity);
+			MainCamera->Move(CameraDirection::Left, velocity);
 
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			MainCamera->Move(CameraDirection::Right, Velocity);
+			MainCamera->Move(CameraDirection::Right, velocity);
 
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
-			MainCamera->Move(CameraDirection::Up, Velocity);
+			MainCamera->Move(CameraDirection::Up, velocity);
 		}
 		if (glfwGetKey(m_Window, GLFW_KEY_C) == GLFW_PRESS)
 		{
-			MainCamera->Move(CameraDirection::Down, Velocity);
+			MainCamera->Move(CameraDirection::Down, velocity);
 		}
 	}
 
@@ -331,10 +371,13 @@ namespace Engine {
 		/// /// </summary>
 
 		ModelShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/BackpackFragmentShader.glsl");
-		//TheModel = new Model("Assets/Models/Backpack/backpack.obj");
+		ParserModelShader = new Shader("Assets/Shaders/vertexShader.glsl", "Assets/Shaders/BackpackFragmentShader.glsl");
+		const char* modelPath = "Assets/Models/Backpack/backpack.obj";
+		//TheModel = std::make_unique<class Model>(modelPath);
 
-		//TheModel = GLTFParser::GetInstance().ParseGetModel("Assets/Models/Backpack_glTF/scene.gltf"); //TODO
+		//ParserModel = GLTFParser::GetInstance().ParseGetModel("Assets/Models/Backpack_glTF/scene.gltf"); //TODO
 		TheModel = GLTFParser::GetInstance().ParseGetModel("Assets/Models/TestModelglTF/TestModel.gltf");
+
 
 		MainCamera = std::make_unique<Camera>(GetWidth(), GetHeight(), glm::vec3(0, 0.f, 3.0f), glm::vec3(0, 0.f, -1.0f));
 	}
@@ -449,4 +492,5 @@ namespace Engine {
 				EventManager::GetInstance().SendEvent(Ev);
 			});
 	}
+
 }

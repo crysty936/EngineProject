@@ -31,6 +31,10 @@ namespace Engine
 	public:
 		Mesh(std::vector<Vertex> InVertices, std::vector<unsigned int> InIndices, std::vector<Texture> InTextures);
 		void Draw(class Shader& InShader);
+		void SetupMesh();
+
+	public:
+		std::vector<Vertex>& AccessVertices() { return Vertices; }
 
 	private:
 		std::vector<Vertex> Vertices;
@@ -40,7 +44,6 @@ namespace Engine
 		class VertexArray* VAO;
 
 	private:
-		void SetupMesh();
 
 #define TEXTURE_DIFFUSE  "texture_diffuse"
 #define TEXTURE_SPECULAR "texture_specular"

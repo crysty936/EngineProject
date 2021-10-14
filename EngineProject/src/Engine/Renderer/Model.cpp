@@ -10,7 +10,7 @@ namespace Engine
 {
 	std::vector<Texture> Model::LoadedTextures;
 
-	Model::Model(char* Path)
+	Model::Model(const char* Path)
 	{
 		LoadModel(Path);
 	}
@@ -23,9 +23,9 @@ namespace Engine
 
 	void Model::Draw(Shader& InShader)
 	{
-		for (auto& const Mesh : Meshes)
+		for (Mesh& currentMesh : Meshes)
 		{
-			Mesh.Draw(InShader);
+			currentMesh.Draw(InShader);
 		}
 	}
 
@@ -39,7 +39,7 @@ namespace Engine
 		Meshes.insert(Meshes.end(), InMeshes.begin(), InMeshes.end());
 	}
 
-	void Model::LoadModel(std::string Path)
+	void Model::LoadModel(const std::string Path)
 	{
 		Assimp::Importer Importer;
 		const aiScene* Scene = Importer.ReadFile(Path, aiProcess_Triangulate | aiProcess_FlipUVs);

@@ -11,16 +11,16 @@ namespace Engine
 
 		IndexBuffer();
 
-		void SetData(const uint32_t* Indices, const int count, const GLenum DrawType);
+		void SetData(const uint32_t* inIndices, const size_t inCount, const GLenum inDrawType);
 
 		virtual void Bind() const override;
 
 	public:
 
-		FORCEINLINE uint32_t GetCount() const { return Count; };
+		FORCEINLINE size_t GetCount() const { return Count; };
 
 	private:
-		uint32_t Count;
+		size_t Count;
 		uint32_t Handle;
 	};
 }

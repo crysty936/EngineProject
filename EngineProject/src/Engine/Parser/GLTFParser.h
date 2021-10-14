@@ -2,6 +2,7 @@
 
 #include <string>
 #include "rapidjson/document.h"
+#include "glm/glm.hpp"
 
 namespace Engine
 {
@@ -31,6 +32,16 @@ namespace Engine
 	{
 		uint32_t BufferViewIndex = 0;
 		uint32_t Count = 0;
+		uint32_t ComponentType = 0;
+		uint32_t ViewByteOffset = 0;
+	};
+
+	struct Node
+	{
+		std::vector<uint32_t> Children;
+		glm::mat4 Matrix = glm::mat4(1);
+		std::string Name;
+		int32_t MeshIndex = -1;
 	};
 
 	enum class MemberType
@@ -57,26 +68,25 @@ namespace Engine
 		std::unique_ptr<class Model> ParseGetModel(std::string inPath);
 
 	private:
+		void RecursiveTraverseNodes(const Node& inCurrentNode, glm::mat4 inCurrentMatrix, const std::vector<Node>& InNodes, std::vector<class Mesh>& inMeshes);
+		void GetMeshes(class rapidjson::Value::MemberIterator& inMeshesMember, const std::vector<Accessor>& inAccessors, const std::vector<BufferView>& inBufferViews, const char* inBufferData, OUT std::vector<class Mesh>& outMeshes);
+		void GetIndices(const BufferView& inBufferView, const Accessor& inAccessor, const char* inData, std::vector<uint32_t>& outIndices) const;
 		void GetAccessors(class rapidjson::Value::MemberIterator& inAccessorMember, OUT std::vector<Accessor>& outAccessors) const;
 		void GetBufferViews(class rapidjson::Value::MemberIterator& inbufferViewsMember, OUT std::vector<BufferView>& outBufferViews) const;
-		void GetConvertedBase64(class rapidjson::Value::MemberIterator& inbufferMember, OUT unsigned char*& outData) const;
+		void GetBufferData(rapidjson::Value::MemberIterator& inbufferMember, OUT char*& outData, const std::string& inFilePath) const;
+		void ConvertFromBase64(const char* inData, const uint32_t inSize, OUT char*& outData) const;
 		void GetMaterials(class rapidjson::Value::MemberIterator& inMaterialsMember, OUT std::vector<Material>& outMaterials) const;
 		void GetMember(class rapidjson::Value::ConstObject& inContainer, const char* inMemberName, MemberType Type, OUT void* outMemberAdress) const;
-		unsigned char GetDecimalFromBase64(const char inByte) const;
+		char GetDecimalFromBase64(const char inByte) const;
 
 		template<typename T>
-		void GetVectorFromData(const BufferView& inBufferView, const Accessor& inAccessor, const unsigned char* inData, OUT std::vector<T>& outVector) const
+		void GetVectorFromData(const BufferView& inBufferView, const Accessor& inAccessor, const char* inData, OUT std::vector<T>& outVector) const
 		{
 			const uint32_t count = inAccessor.Count;
-
-			const uint32_t accessorByteLength = count * sizeof(T);
-			if (accessorByteLength != inBufferView.ByteLength)
-			{
-				__debugbreak();
-			}
+			const size_t accessorByteLength = count * sizeof(T);
 
 			outVector.resize(count);
-			memcpy(outVector.data(), inData + inBufferView.ByteOffset, inBufferView.ByteLength);
+			memcpy(outVector.data(), inData + inBufferView.ByteOffset + inAccessor.ViewByteOffset, accessorByteLength);
 		}
 
 	};
