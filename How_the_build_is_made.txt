@@ -1,0 +1,1 @@
+Open cmd here and execute vendor\bin\premake\premake5.exe vs2019 , note de '\' slashes, doesn't work otherwise.
