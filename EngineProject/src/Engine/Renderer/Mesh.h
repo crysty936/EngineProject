@@ -40,8 +40,8 @@ namespace Engine
 		std::vector<Vertex> Vertices;
 		std::vector<unsigned int> Indices;
 		std::vector<Texture> Textures;
-		class IndexBuffer* EBO;
-		class VertexArray* VAO;
+		class IndexBuffer* EBO = nullptr;
+		class VertexArray* VAO = nullptr;
 
 	private:
 

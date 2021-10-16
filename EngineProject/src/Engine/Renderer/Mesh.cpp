@@ -13,6 +13,8 @@ namespace Engine
 		Vertices = InVertices;
 		Indices = InIndices;
 		Textures = InTextures;
+
+		SetupMesh();
 	}
 
 	void Mesh::Draw(Shader& InShader)

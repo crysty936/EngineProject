@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30709.132
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineProject", "EngineProject\EngineProject.vcxproj", "{7292728E-DE52-EEC4-A78D-3742130D33A1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "EngineProject\vendor\GLFW\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
@@ -50,8 +52,8 @@ Global
 		{B4680C8B-201E-8580-A912-7F5715C77B84}.Dist|x64.Build.0 = Dist|x64
 		{B4680C8B-201E-8580-A912-7F5715C77B84}.Release|x64.ActiveCfg = Release|x64
 		{B4680C8B-201E-8580-A912-7F5715C77B84}.Release|x64.Build.0 = Release|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.ActiveCfg = Debug|x64
-		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.Build.0 = Debug|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.ActiveCfg = Release|x64
+		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Debug|x64.Build.0 = Release|x64
 		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Dist|x64.ActiveCfg = Dist|x64
 		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Dist|x64.Build.0 = Dist|x64
 		{724885F2-5EEA-AFC8-47A5-C31C33E63619}.Release|x64.ActiveCfg = Release|x64
@@ -59,5 +61,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B97714B2-D51C-437A-933D-4AA143D12B0E}
 	EndGlobalSection
 EndGlobal
