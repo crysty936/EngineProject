@@ -114,6 +114,9 @@
     <ClInclude Include="src\Engine\Layers\ImGui\ImGuiLayer.h">
       <Filter>src\Engine\Layers\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Parser\GLTFParser.h">
+      <Filter>src\Engine\Parser</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.h">
       <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
     </ClInclude>
@@ -984,9 +987,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Parser\GLTFParser.h">
-      <Filter>src\Engine\Parser</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Core\Application.cpp">
@@ -1015,6 +1015,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Layers\ImGui\ImGuiLayer.cpp">
       <Filter>src\Engine\Layers\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Parser\GLTFParser.cpp">
+      <Filter>src\Engine\Parser</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Platform\RenderingApi\OpenGL\OpenGLContext.cpp">
       <Filter>src\Engine\Platform\RenderingApi\OpenGL</Filter>
@@ -1063,9 +1066,6 @@
     </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Parser\GLTFParser.cpp">
-      <Filter>src\Engine\Parser</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
